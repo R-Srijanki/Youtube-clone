@@ -7,7 +7,7 @@ import appStore from "./utils/store";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
-
+import Register from './components/Register.jsx';
 const router=createBrowserRouter([
       {
         path:"/",
@@ -23,10 +23,10 @@ const router=createBrowserRouter([
         path:"/login",
         element:<Login/>
       },
-      // {
-      //   path:"/Register",
-      //   element:<Register/>
-      // }
+      {
+        path:"/register",
+        element:<Register/>
+      }
 ])
 createRoot(document.getElementById('root')).render(
   <StrictMode>
