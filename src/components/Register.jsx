@@ -5,14 +5,18 @@ import { loginUser, toggelLogin } from "../utils/userSlice";
 import { useState } from "react";
 export default function Register(){
     const navigate = useNavigate();
-    const dispatch=useDispatch();
+    // const dispatch=useDispatch();
     function handleregister(){
-        navigate("/");
-        dispatch(toggelLogin());
+        navigate("/login");
+       //  dispatch(toggelLogin());
     }
     return(
         <div className="min-h-screen flex items-center justify-center"> 
             <form>
+                <div>
+                    <label htmlFor="name">FullName</label>
+                    <input id="name" type="text" placeholder="Enter fullname"/>
+                </div>
                 <div>
                     <label htmlFor="username">Username</label>
                     <input type="text" id="username" placeholder="Enter username"/>
@@ -26,12 +30,13 @@ export default function Register(){
                     <input id="password" type="password" placeholder="Enter your password"/>
                 </div>
                 <div>
-                    <label htmlFor="phone">Contact</label>
-                    <input type="number" id="phone" placeholder="Enter phone number"/>
+                    <label htmlFor="avatar">Avatar</label>
+                    <input type="text" id="avatar" placeholder="Avatar"/>
                 </div>
                 <button onClick={handleregister}>Register</button>
-                <Link to="/login">Login</Link>
+                
             </form>
+            <Link to="/login">Login</Link>
         </div>
     )
 }
