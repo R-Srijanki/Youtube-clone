@@ -1,7 +1,9 @@
-import asidecontext from "../Context/useContext";
-import { useContext } from "react";
+// import asidecontext from "../Context/useContext";
+// import { useContext } from "react";
+import { useSelector } from "react-redux";
 export default function Home(){
-    const {visible}=useContext(asidecontext);
+    // const {visible}=useContext(asidecontext);
+   const visible=useSelector(store=>store.Sidebar.open);
     return(
       
               <div className={visible ? "w-4/5" : "w-full"}>

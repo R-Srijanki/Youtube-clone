@@ -1,15 +1,20 @@
-import { useContext, useState } from "react";
+//import { useContext, useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
-import asidecontext from "../Context/useContext";
+//import asidecontext from "../Context/useContext";
 import { FaYoutube } from "react-icons/fa";
 import { IoSearchOutline } from "react-icons/io5";
 import { MdVideoCameraFront } from "react-icons/md";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { toggleSidebar } from "../utils/sidebarslice";
 export default function Header(){
-    const {visible,setvisible}=useContext(asidecontext);
+ //   const {visible,setvisible}=useContext(asidecontext);
+     const visible=useSelector(store=>store.Sidebar.open);
+    const dispatch=useDispatch();
     function handleclick(){
-        setvisible(!visible);
+       dispatch(toggleSidebar());
     }
     return(
         <div>

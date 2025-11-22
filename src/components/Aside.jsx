@@ -1,7 +1,9 @@
-import { useContext } from "react";
-import asidecontext from "../Context/useContext";
+// import { useContext } from "react";
+// import asidecontext from "../Context/useContext";
+import {useSelector} from "react-redux";
 export default function Aside(){
-    const {visible}=useContext(asidecontext);
+    const visible=useSelector(store=>store.Sidebar.open);
+    // const {visible}=useContext(asidecontext);
     return(
         <>
          {
