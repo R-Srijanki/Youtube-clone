@@ -4,48 +4,60 @@ import { IoSearchOutline } from "react-icons/io5";
 import { MdVideoCameraFront } from "react-icons/md";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { toggleSidebar } from "../utils/sidebarslice";
 import { Link } from "react-router";
 
 export default function Header(){
-    const user=useSelector(store=>store.User.loggedIn);
+    const loggedIn=useSelector(store=>store.User.loggedIn);
     const dispatch=useDispatch();
-    function handleclick(){
-       dispatch(toggleSidebar());
-    }
-    return(
-        <div>
-            <header className="flex justify-between w-screen px-5 py-2.5">
-                <div className="flex">
-                    <button onClick={handleclick}><RxHamburgerMenu/></button>
-                    <Link to="/">
-                    <div className="flex ml-5">
-                        <span className="text-red-500 mt-1 text-2xl"><FaYoutube/></span>
-                        <p className="text-xl font-bold">YouTube</p>
-                    </div>
-                    </Link>
-                </div>
-                <div className="flex">
-                    <div className="flex border rounded-xl w-[400px]">
-                        <input type="text" placeholder="Search" className="outline-none w-[375px] px-2 py-1"/>
-                        <span className="w-[25x] border-l flex items-center justify-center"><IoSearchOutline/></span>
-                    </div>
-                </div>
-                {user?(<div className="flex justify-evenly">
-                   <span className="text-2xl mx-5"><MdVideoCameraFront/></span>
-                   <span className="text-2xl mx-2.5"><IoIosNotificationsOutline/></span>
-                   <span className="text-2xl mx-2.5"><CgProfile/></span>
-                </div>):(
-                    <Link to="/login">
-                    <div className="border rounded-2xl flex px-2 py-0.5">
-                        <span className="mt-0.5 px-0.5 text-2xl"><CgProfile/></span>
-                        <span className="font-semibold">Sign in</span>
-                    </div>
-                    </Link>
-                )}
-            </header>
+
+   return (
+    <header className="flex justify-between items-center w-full px-4 py-2 shadow-md bg-white sticky top-0 z-50">
+      {/* Left section */}
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => dispatch(toggleSidebar())}
+          className="p-2 rounded hover:bg-gray-200"
+        >
+          <RxHamburgerMenu size={22} />
+        </button>
+
+        <Link to="/" className="flex items-center gap-1">
+          <FaYoutube className="text-red-600 text-3xl" />
+          <p className="text-2xl font-bold">YouTube</p>
+        </Link>
+      </div>
+
+      {/* Search bar */}
+      <div className="flex items-center">
+        <div className="flex border rounded-full w-[450px] overflow-hidden bg-gray-100">
+          <input
+            type="text"
+            placeholder="Search"
+            className="flex-1 bg-transparent outline-none px-4 py-2"
+          />
+          <button className="px-4 border-l bg-gray-200 hover:bg-gray-300">
+            <IoSearchOutline size={22} />
+          </button>
         </div>
-    )
+      </div>
+
+      {/* Right section */}
+      {loggedIn ? (
+        <div className="flex items-center gap-6">
+          <MdVideoCameraFront className="text-2xl" />
+          <IoIosNotificationsOutline className="text-2xl" />
+          <CgProfile className="text-2xl" />
+        </div>
+      ) : (
+        <Link to="/login">
+          <div className="border rounded-full flex items-center px-4 py-2 gap-2 hover:bg-gray-100">
+            <CgProfile className="text-xl" />
+            <span className="font-semibold">Sign In</span>
+          </div>
+        </Link>
+      )}
+    </header>
+  );
 }
