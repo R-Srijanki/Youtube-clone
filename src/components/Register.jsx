@@ -5,10 +5,8 @@ import { loginUser, toggelLogin } from "../utils/userSlice";
 import { useState } from "react";
 export default function Register(){
     const navigate = useNavigate();
-    // const dispatch=useDispatch();
     function handleregister(){
         navigate("/login");
-       //  dispatch(toggelLogin());
     }
     return(
         <div className="min-h-screen flex items-center justify-center"> 

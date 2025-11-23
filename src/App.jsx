@@ -1,26 +1,23 @@
 import Header from "./components/header"
 import Home from "./components/Home"
-import { useState } from "react";
-//import asidecontext from "./Context/useContext";
 import Aside from "./components/Aside";
-
-
 import { useSelector } from "react-redux";
-function App() {
+
+export default function App() {
  
-  // const [visible,setvisible]=useState(false);
   const visible=useSelector(store=>store.Sidebar.open);
-  return (
-    // <asidecontext.Provider value={{visible:visible,setvisible}}>
-     <>
+    return (
+    <div className="w-full h-screen overflow-hidden">
       <Header />
-      <div className="flex">
-        {visible&&<Aside/>}
-        <Home />
+      <div className="flex w-full">
+        {visible && <Aside />}
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-4">
+          <Outlet />
+        </main>
       </div>
-      </>
-    // </asidecontext.Provider>
-  )
+    </div>
+  );
+
 }
 
-export default App
+
