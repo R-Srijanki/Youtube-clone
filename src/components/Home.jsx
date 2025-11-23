@@ -5,9 +5,13 @@ export default function Home(){
     // const {visible}=useContext(asidecontext);
    const visible=useSelector(store=>store.Sidebar.open);
     return(
-      
-              <div className={visible ? "w-4/5" : "w-full"}>
-        <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/RX_THUMBNAIL/IMAGES/VENDOR/2025/9/1/8c35e21d-6b03-4702-b9da-8eb4e357b616_442144.JPG"></img>
-        </div>
+       <div className="p-4">
+      <h2 className="text-xl font-semibold mb-4">Recommended Videos</h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {/* Video Cards will load here */}
+        <div className="h-40 bg-gray-300 rounded-lg animate-pulse"></div>
+      </div>
+    </div>
     )
 }
