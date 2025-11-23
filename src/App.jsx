@@ -1,5 +1,5 @@
 import Header from "./components/header"
-import Home from "./components/Home"
+import { Outlet } from "react-router";
 import Aside from "./components/Aside";
 import { useSelector } from "react-redux";
 
@@ -7,7 +7,7 @@ export default function App() {
  
   const visible=useSelector(store=>store.Sidebar.open);
     return (
-    <div className="w-full h-screen overflow-hidden">
+    <div className="w-full h-screen">
       <Header />
       <div className="flex w-full">
         {visible && <Aside />}
