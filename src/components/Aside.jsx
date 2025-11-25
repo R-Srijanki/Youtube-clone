@@ -14,71 +14,45 @@ import { FiFlag } from "react-icons/fi";
 import { MdHelpOutline } from "react-icons/md";
 import { MdOutlineFeedback } from "react-icons/md";
 export default function Aside(){
-    const visible=useSelector(store=>store.Sidebar.open);
-    return(
-      <div className="overflow-y-scroll">
-      {visible && (
-        <aside className="w-60 min-h-screen bg-white border-r px-4 py-4 overflow-y-auto">
-          <ul className="space-y-3 mb-4">
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <TiHomeOutline /> Home
-            </li>
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <SiYoutubeshorts /> Shorts
-            </li>
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <MdOutlineSubscriptions /> Subscriptions
-            </li>
-          </ul>
+     return (
+    <aside className="w-60 min-h-screen bg-white border-r px-4 py-4 overflow-y-auto">
+      <ul className="space-y-3 mb-4">
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
+          <TiHomeOutline /> Home
+        </li>
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
+          <SiYoutubeshorts /> Shorts
+        </li>
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
+          <MdOutlineSubscriptions /> Subscriptions
+        </li>
+      </ul>
 
-          <hr />
+      <hr />
 
-          <span className="block text-gray-500 font-semibold mt-3 mb-2">
-            Explore
-          </span>
+      <span className="block text-gray-500 font-semibold mt-3 mb-2">
+        Explore
+      </span>
 
-          <ul className="space-y-3 mb-4">
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <RiShoppingBag4Line /> Shopping
-            </li>
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <IoMusicalNoteOutline /> Music
-            </li>
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <BiSolidMovie /> Movies
-            </li>
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <SiYoutubegaming /> Gaming
-            </li>
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <FaRegNewspaper /> News
-            </li>
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <FaTrophy /> Sports
-            </li>
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <PiCoatHanger /> Fashion & Beauty
-            </li>
-          </ul>
+      <ul className="space-y-3 mb-4">
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer"><RiShoppingBag4Line /> Shopping</li>
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer"><IoMusicalNoteOutline /> Music</li>
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer"><BiSolidMovie /> Movies</li>
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer"><SiYoutubegaming /> Gaming</li>
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer"><FaRegNewspaper /> News</li>
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer"><FaTrophy /> Sports</li>
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer"><PiCoatHanger /> Fashion & Beauty</li>
+      </ul>
 
-          <hr />
+      <hr />
 
-          <ul className="space-y-3 mt-4">
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <IoSettingsOutline /> Settings
-            </li>
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <FiFlag /> Report History
-            </li>
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <MdHelpOutline /> Help
-            </li>
-            <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
-              <MdOutlineFeedback /> Feedback
-            </li>
-          </ul>
-        </aside>
-      )}
-    </div>
-    );
+      <ul className="space-y-3 mt-4">
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer"><IoSettingsOutline /> Settings</li>
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer"><FiFlag /> Report History</li>
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer"><MdHelpOutline /> Help</li>
+        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer"><MdOutlineFeedback /> Feedback</li>
+      </ul>
+    </aside>
+  );
+
 }
