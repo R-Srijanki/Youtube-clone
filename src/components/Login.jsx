@@ -1,6 +1,33 @@
+import { useState } from "react";
 import { Link } from "react-router";
 
 export default function Login(){
+    const [email,setemail]=useState("");
+    const [password,setpassword]=useState("");
+    const [username,setusername]=useState("");
+    function handleemail(e){
+      setemail(e.target.value);
+    }
+    function handlepassword(e){
+      setpassword(e.target.value);
+    }
+    function handlename(e){
+      setusername(e.target.value);
+    }
+    async function handlelog(){
+      try {
+          const res=await fetch("http://localhost:8000/login",{
+            method:'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({username:username,email:email,password:password})
+          });
+          const json=await res.json();
+      } catch (err) {
+        console.log("error while login")
+      }
+    }
     return(
        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="bg-white p-8 rounded-xl shadow-md w-[350px]">
@@ -10,6 +37,19 @@ export default function Login(){
 
         <form className="space-y-4">
           <div>
+            <label className="block font-medium mb-1" htmlFor="username">
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
+              placeholder="Enter your username"
+              onChange={handlename}
+              value={username}
+            />
+          </div>
+          <div>
             <label className="block font-medium mb-1" htmlFor="email">
               Email
             </label>
@@ -18,6 +58,8 @@ export default function Login(){
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter your email"
+              onChange={handleemail}
+              value={email}
             />
           </div>
 
@@ -30,10 +72,12 @@ export default function Login(){
               type="password"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter your password"
+              onChange={handlepassword}
+              value={password}
             />
           </div>
 
-          <button className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition">
+          <button onClick={handlelog} className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition">
             Login
           </button>
         </form>
