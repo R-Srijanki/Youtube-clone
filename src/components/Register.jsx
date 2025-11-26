@@ -1,8 +1,38 @@
 import { Link,useNavigate } from "react-router";
-
+import { useState } from "react";
 
 export default function Register(){
     const navigate = useNavigate();
+    const [email,setemail]=useState("");
+    const [password,setpassword]=useState("");
+    const [username,setusername]=useState("");
+    const [fullname,setfullname]=useState("");
+        function handleemail(e){
+          setemail(e.target.value);
+        }
+        function handlefullname(e){
+          setfullname(e.target.value);
+        }
+        function handlepassword(e){
+          setpassword(e.target.value);
+        }
+        function handleusername(e){
+          setusername(e.target.value);
+        }
+        async function handleregister(){
+          try {
+              const res=await fetch("http://localhost:8000/register",{
+                method:'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({fullname:fullname,username:username,email:email,password:password})
+              });
+              const json=await res.json();
+          } catch (err) {
+            console.log("error while login")
+          }
+        }
     function handleregister(e){
         e.preventDefault();
         navigate("/login");
@@ -21,6 +51,8 @@ export default function Register(){
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter full name"
+              onChange={handlefullname}
+              value={fullname}
             />
           </div>
 
@@ -30,6 +62,8 @@ export default function Register(){
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter username"
+              onChange={handleusername}
+              value={username}
             />
           </div>
 
@@ -39,6 +73,8 @@ export default function Register(){
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter email"
+              onChange={handleemail}
+              value={email}
             />
           </div>
 
@@ -48,21 +84,15 @@ export default function Register(){
               type="password"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter password"
-            />
-          </div>
-
-          <div>
-            <label className="block font-medium mb-1">Avatar URL</label>
-            <input
-              type="text"
-              className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
-              placeholder="Avatar image url"
+              onChange={handlepassword}
+              value={password}
             />
           </div>
 
           <button
             type="submit"
             className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+            onClick={handleregister}
           >
             Register
           </button>
