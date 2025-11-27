@@ -29,6 +29,11 @@ export default function Register(){
                 body:JSON.stringify({fullname:fullname,username:username,email:email,password:password})
               });
               const json=await res.json();
+              localStorage.setItem("token",json.accessToken);
+              setfullname("");
+              setemail("");
+              setusername("");
+              setpassword("");
           } catch (err) {
             console.log("error while login")
           }

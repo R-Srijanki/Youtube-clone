@@ -24,6 +24,10 @@ export default function Login(){
             body:JSON.stringify({username:username,email:email,password:password})
           });
           const json=await res.json();
+          localStorage.setItem("token",json.accessToken);
+          setemail("");
+          setusername("");
+          setpassword("");
       } catch (err) {
         console.log("error while login")
       }
