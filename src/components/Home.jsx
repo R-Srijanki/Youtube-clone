@@ -1,14 +1,26 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { useEffect, useState, useMemo } from "react";
+import { Link, useParams } from "react-router-dom";
+import VideoCard from "./VideoCard";
 
 export default function Home() {
   const [videos, setVideos] = useState([]);
-
+  const {category}=useParams();
+  const [catMap, setCatMap] = useState({});
   useEffect(() => {
     async function loadVideos() {
       try {
         const res = await fetch("http://localhost:8000/videos");
         const json = await res.json();
+
+       const grouped = json.reduce((acc, item) => {
+          const cat = item.category || "General";
+          if (!acc[cat]) acc[cat] = [];
+          acc[cat].push(item);
+          return acc;
+        }, {});
+
+
+      setcat(grouped);
         setVideos(json);
       } catch (err) {
         console.log("Error while fetching videos");
@@ -16,64 +28,57 @@ export default function Home() {
     }
     loadVideos();
   }, []);
+   const filteredVideos = useMemo(() => {
+    if (!category || category === "All") return videos;
+    return catMap[category] || [];
+  }, [videos, catMap, category]);
 
+  // list of categories, including "All" at start
+  const categories = useMemo(() => {
+    const keys = Object.keys(catMap);
+    const unique = ["All", ...keys];
+    return unique;
+  }, [catMap]);
   return (
     <div className="p-4">
       <h2 className="text-xl font-semibold mb-4">Recommended Videos</h2>
 
       {/* Category Filters */}
-      <ul className="flex gap-4 overflow-x-auto mb-4">
-        {["All", "Music", "Movies", "Cartoons", "Drama", "News", "Adventure"].map(
-          (cat) => (
-            <li
-              key={cat}
-              className="border rounded-lg px-3 py-1 text-sm whitespace-nowrap cursor-pointer hover:bg-gray-100"
-            >
-              {cat}
+     <ul className="flex gap-3 overflow-x-auto mb-4 pb-1">
+        {categories.map((cat) => {
+          const isActive =
+            (!category && cat === "All") || category === cat;
+
+          const to =
+            cat === "All" ? "/" : `/${encodeURIComponent(cat)}`;
+
+          return (
+            <li key={cat}>
+              <Link
+                to={to}
+                className={
+                  "border rounded-full px-4 py-1 text-sm whitespace-nowrap cursor-pointer " +
+                  (isActive
+                    ? "bg-black text-white border-black"
+                    : "bg-gray-100 hover:bg-gray-200")
+                }
+              >
+                {cat}
+              </Link>
             </li>
-          )
-        )}
+          );
+        })}
       </ul>
 
       {/* Video Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {videos.map((video) => (
+        {filteredVideos.map((video) => (
           <Link
             key={video._id}
             to={`/videos/${video._id}`}
             className="block hover:scale-105 transition-transform"
           >
-            <div className="rounded-lg overflow-hidden shadow-sm bg-white">
-              
-              {/* Thumbnail */}
-              <img
-                src={video.thumbnailUrl}
-                alt={video.title}
-                className="w-full h-40 object-cover"
-              />
-
-              {/* Video Info */}
-              <div className="p-3 flex gap-3">
-                {/* Channel Avatar */}
-                <img
-                  src={video.channel?.avatar}
-                  alt={video.channel?.name}
-                  className="h-10 w-10 rounded-full object-cover"
-                />
-
-                <div>
-                  <p className="font-semibold text-sm line-clamp-2">{video.title}</p>
-                  <p className="text-xs text-gray-600">{video.channel?.name}</p>
-
-                  <div className="text-xs text-gray-500 flex gap-2">
-                    <span>{video.views} views</span>
-                    <span>•</span>
-                    <span>{new Date(video.uploadDate).toLocaleDateString()}</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
+            <VideoCard video={video}/>
           </Link>
         ))}
       </div>
