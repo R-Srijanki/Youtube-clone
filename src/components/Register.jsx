@@ -19,14 +19,15 @@ export default function Register(){
         function handleusername(e){
           setusername(e.target.value);
         }
-        async function handleregister(){
+        async function handleregister(e){
           try {
+            e.preventDefault();
               const res=await fetch("http://localhost:8000/register",{
                 method:'POST',
                 headers: {
                 'Content-Type': 'application/json'
                 },
-                body:JSON.stringify({fullname:fullname,username:username,email:email,password:password})
+                body:JSON.stringify({fullname,username,email,password})
               });
               const json=await res.json();
               localStorage.setItem("token",json.accessToken);
@@ -34,14 +35,11 @@ export default function Register(){
               setemail("");
               setusername("");
               setpassword("");
+              navigate("/login");
           } catch (err) {
             console.log("error while login")
           }
         }
-    function handleregister(e){
-        e.preventDefault();
-        navigate("/login");
-    }
     return(
         <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="bg-white p-8 rounded-xl shadow-md w-[400px]">

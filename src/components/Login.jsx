@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function Login(){
     const [email,setemail]=useState("");
     const [password,setpassword]=useState("");
     const [username,setusername]=useState("");
+    const navigate=useNavigate();
     function handleemail(e){
       setemail(e.target.value);
     }
@@ -14,8 +15,9 @@ export default function Login(){
     function handlename(e){
       setusername(e.target.value);
     }
-    async function handlelog(){
+    async function handlelog(e){
       try {
+           e.preventDefault();
           const res=await fetch("http://localhost:8000/login",{
             method:'POST',
             headers: {
@@ -23,11 +25,14 @@ export default function Login(){
             },
             body:JSON.stringify({username:username,email:email,password:password})
           });
+          console.log(res);
           const json=await res.json();
+          console.log(json);
           localStorage.setItem("token",json.accessToken);
           setemail("");
           setusername("");
           setpassword("");
+         navigate("/");
       } catch (err) {
         console.log("error while login")
       }
