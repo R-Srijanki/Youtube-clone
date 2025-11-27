@@ -7,10 +7,12 @@ import { CgProfile } from "react-icons/cg";
 import { useSelector,useDispatch } from "react-redux";
 import { toggleSidebar } from "../utils/sidebarslice";
 import { Link } from "react-router";
+import { useState } from "react";
 
 export default function Header(){
     const loggedIn=useSelector(store=>store.User.loggedIn);
     const dispatch=useDispatch();
+    const [search,setSearch]=useState("");
 
    return (
     <header className="flex justify-between items-center w-full px-4 py-2 shadow-md bg-white sticky top-0 z-50">
@@ -36,9 +38,11 @@ export default function Header(){
             type="text"
             placeholder="Search"
             className="flex-1 bg-transparent outline-none px-4 py-2"
+            value={search}
+            onChange={(e)=>setSearch(e.target.value)}
           />
           <button className="px-4 border-l bg-gray-200 hover:bg-gray-300">
-            <IoSearchOutline size={22} />
+            <Link to={`/search/${search}`}><IoSearchOutline size={22} /></Link>
           </button>
         </div>
       </div>
@@ -52,7 +56,7 @@ export default function Header(){
         </div>
       ) : (
         <Link to="/login">
-          <div className="border rounded-full flex items-center px-4 py-2 gap-2 hover:bg-gray-100">
+          <div className="border rounded-full flex items-center px-2 py-1 gap-2 hover:bg-gray-100">
             <CgProfile className="text-xl" />
             <span className="font-semibold">Sign In</span>
           </div>

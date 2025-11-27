@@ -9,13 +9,14 @@ import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
 import Video from './components/Video.jsx';
+import Search from './components/Search.jsx';
 const router=createBrowserRouter([
       {
         path:"/",
         element:<App/>,
         children:[
           {
-            path:"/",
+            index:true,
             element:<Home/>
           },
           {
@@ -25,6 +26,11 @@ const router=createBrowserRouter([
           {
             path:"/:category",
             element:<Home/>
+          },
+          {
+            path:"/search/:searchtext",
+            element:<Search/>
+
           }
         ]
       },
