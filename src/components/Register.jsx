@@ -1,62 +1,92 @@
-import { Link,useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 
-export default function Register(){
-    const navigate = useNavigate();
-    const [email,setemail]=useState("");
-    const [password,setpassword]=useState("");
-    const [username,setusername]=useState("");
-    const [fullname,setfullname]=useState("");
-        function handleemail(e){
-          setemail(e.target.value);
-        }
-        function handlefullname(e){
-          setfullname(e.target.value);
-        }
-        function handlepassword(e){
-          setpassword(e.target.value);
-        }
-        function handleusername(e){
-          setusername(e.target.value);
-        }
-        async function handleregister(e){
-          try {
-            e.preventDefault();
-              const res=await fetch("http://localhost:8000/register",{
-                method:'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body:JSON.stringify({fullname,username,email,password})
-              });
-              const json=await res.json();
-              localStorage.setItem("token",json.accessToken);
-              setfullname("");
-              setemail("");
-              setusername("");
-              setpassword("");
-              navigate("/login");
-          } catch (err) {
-            console.log("error while login")
-          }
-        }
-    return(
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="bg-white p-8 rounded-xl shadow-md w-[400px]">
-        <h1 className="text-2xl font-bold text-center mb-6">
-          Create Account
-        </h1>
+export default function Register() {
+  const navigate = useNavigate();
+  const [data, setdata] = useState({
+    fullName: "",
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({});
+  function handlechange(e) {
+    const { id, value } = e.target;
+    setdata((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  }
+  async function handleregister(e) {
+    e.preventDefault();
 
-        <form className="space-y-4" onSubmit={()=>handleregister(e)}>
+    const { fullName, username, email, password } = data;
+    const newErrors = {};
+    let hasError = false;
+
+    const emailregex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const passwordregex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const nameregex = /^([a-zA-Z\s]+)$/;
+
+    if (!fullName.trim() || !nameregex.test(fullName.trim())) {
+      newErrors.username = "Name should contain alphabets only";
+      hasError = true;
+    }
+
+    if (!username.trim() || !nameregex.test(username.trim())) {
+      newErrors.username = "Username should contain alphabets only";
+      hasError = true;
+    }
+
+    if (!email.trim() || !emailregex.test(email.trim())) {
+      newErrors.email = "Enter a valid email";
+      hasError = true;
+    }
+
+    if (!password.trim() || !passwordregex.test(password.trim())) {
+      newErrors.password =
+        "Password must be 8+ chars with 1 lowercase, 1 uppercase, 1 digit, and 1 special char";
+      hasError = true;
+    }
+
+    setErrors(newErrors);
+    if (hasError) return;
+
+    try {
+      const res = await fetch("http://localhost:8000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+          setErrors({ server: json.message || "Login failed" });
+          return;
+      }
+      navigate("/login");
+    } catch (err) {
+      console.log("error while register");
+    }
+  }
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="bg-white p-8 rounded-xl shadow-md w-[400px]">
+        <h1 className="text-2xl font-bold text-center mb-6">Create Account</h1>
+
+        <form className="space-y-4" onSubmit={() => handleregister(e)}>
           <div>
             <label className="block font-medium mb-1">Full Name</label>
             <input
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter full name"
-              onChange={handlefullname}
-              value={fullname}
+              onChange={handlechange}
+              value={data.fullName}
             />
+            {errors.fullName&&<p className="mt-1 text-sm text-red-500">{errors.fullName}</p>}
           </div>
 
           <div>
@@ -65,9 +95,10 @@ export default function Register(){
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter username"
-              onChange={handleusername}
-              value={username}
+              onChange={handlechange}
+              value={data.username}
             />
+            {errors.username&&<p className="mt-1 text-sm text-red-500">{errors.username}</p>}
           </div>
 
           <div>
@@ -76,9 +107,10 @@ export default function Register(){
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter email"
-              onChange={handleemail}
-              value={email}
+              onChange={handlechange}
+              value={data.email}
             />
+            {errors.email&&<p className="mt-1 text-sm text-red-500">{errors.email}</p>}
           </div>
 
           <div>
@@ -87,15 +119,15 @@ export default function Register(){
               type="password"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter password"
-              onChange={handlepassword}
-              value={password}
+              onChange={handlechange}
+              value={data.password}
             />
+            {errors.password&&<p className="mt-1 text-sm text-red-500">{errors.password}</p>}
           </div>
 
           <button
             type="submit"
             className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition"
-            onClick={handleregister}
           >
             Register
           </button>
@@ -109,5 +141,5 @@ export default function Register(){
         </p>
       </div>
     </div>
-    )
+  );
 }

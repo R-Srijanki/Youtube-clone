@@ -2,39 +2,71 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 
 export default function Login(){
-    const [email,setemail]=useState("");
-    const [password,setpassword]=useState("");
-    const [username,setusername]=useState("");
+    const [data,setdata]=useState({
+      username:"",
+      email:"",
+      password:""
+    });
+    const [errors,setErrors]=useState({});
     const navigate=useNavigate();
-    function handleemail(e){
-      setemail(e.target.value);
-    }
-    function handlepassword(e){
-      setpassword(e.target.value);
-    }
-    function handlename(e){
-      setusername(e.target.value);
-    }
+    function handlechange(e) {
+    const { id, value } = e.target;
+    setdata((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  }
     async function handlelog(e){
+      e.preventDefault();
+
+    const { username, email, password } = data;
+    const newErrors = {};
+    let hasError = false;
+
+    const emailregex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const passwordregex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const nameregex = /^([a-zA-Z\s]+)$/;
+
+    if (!username.trim() || !nameregex.test(username.trim())) {
+      newErrors.username = "Username should contain alphabets only";
+      hasError = true;
+    }
+
+    if (!email.trim() || !emailregex.test(email.trim())) {
+      newErrors.email = "Enter a valid email";
+      hasError = true;
+    }
+
+    if (!password.trim() || !passwordregex.test(password.trim())) {
+      newErrors.password =
+        "Password must be 8+ chars with 1 lowercase, 1 uppercase, 1 digit, and 1 special char";
+      hasError = true;
+    }
+
+    setErrors(newErrors);
+    if (hasError) return;
       try {
-           e.preventDefault();
+
           const res=await fetch("http://localhost:8000/login",{
-            method:'POST',
+            method:"POST",
             headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
             },
-            body:JSON.stringify({username:username,email:email,password:password})
+            body: JSON.stringify(data)
           });
           console.log(res);
           const json=await res.json();
           console.log(json);
+           if (!res.ok) {
+           setErrors({ server: json.message || "Login failed" });
+            return;
+          }
           localStorage.setItem("token",json.accessToken);
-          setemail("");
-          setusername("");
-          setpassword("");
          navigate("/");
-      } catch (err) {
-        console.log("error while login")
+      } catch (error) {
+        console.log("Error while login", error);
+      setErrors({ server: "Something went wrong" });
       }
     }
     return(
@@ -44,7 +76,10 @@ export default function Login(){
           Sign In
         </h1>
 
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handlelog}>
+          {errors.server && (
+            <p className="text-sm text-red-600">{errors.server}</p>
+          )}
           <div>
             <label className="block font-medium mb-1" htmlFor="username">
               Username
@@ -54,9 +89,10 @@ export default function Login(){
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter your username"
-              onChange={handlename}
-              value={username}
+              onChange={handlechange}
+              value={data.username}
             />
+            {errors.username&&<p className="mt-1 text-sm text-red-500">{errors.username}</p>}
           </div>
           <div>
             <label className="block font-medium mb-1" htmlFor="email">
@@ -67,9 +103,10 @@ export default function Login(){
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter your email"
-              onChange={handleemail}
-              value={email}
+              onChange={handlechange}
+              value={data.email}
             />
+            {errors.email&&<p className="mt-1 text-sm text-red-500">{errors.email}</p>}
           </div>
 
           <div>
@@ -81,12 +118,13 @@ export default function Login(){
               type="password"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter your password"
-              onChange={handlepassword}
-              value={password}
+              onChange={handlechange}
+              value={data.password}
             />
+            {errors.password&&<p className="mt-1 text-sm text-red-500">{errors.password}</p>}
           </div>
 
-          <button onClick={handlelog} className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition">
+          <button type="submit" className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition">
             Login
           </button>
         </form>
