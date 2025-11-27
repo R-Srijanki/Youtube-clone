@@ -30,7 +30,7 @@ export default function Register() {
     const nameregex = /^([a-zA-Z\s]+)$/;
 
     if (!fullName.trim() || !nameregex.test(fullName.trim())) {
-      newErrors.username = "Name should contain alphabets only";
+      newErrors.fullName = "Name should contain alphabets only";
       hasError = true;
     }
 
@@ -76,10 +76,11 @@ export default function Register() {
       <div className="bg-white p-8 rounded-xl shadow-md w-[400px]">
         <h1 className="text-2xl font-bold text-center mb-6">Create Account</h1>
 
-        <form className="space-y-4" onSubmit={() => handleregister(e)}>
+        <form className="space-y-4" onSubmit={handleregister}>
           <div>
-            <label className="block font-medium mb-1">Full Name</label>
+            <label className="block font-medium mb-1" htmlFor="fullName">Full Name</label>
             <input
+              id="fullName"
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter full name"
@@ -90,8 +91,9 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="block font-medium mb-1">Username</label>
+            <label className="block font-medium mb-1" htmlFor="username">Username</label>
             <input
+              id="username"
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter username"
@@ -102,8 +104,9 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="block font-medium mb-1">Email</label>
+            <label className="block font-medium mb-1" htmlFor="email">Email</label>
             <input
+              id="email"
               type="text"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter email"
@@ -114,8 +117,9 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="block font-medium mb-1">Password</label>
+            <label className="block font-medium mb-1" htmlFor="password">Password</label>
             <input
+              id="password"
               type="password"
               className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter password"

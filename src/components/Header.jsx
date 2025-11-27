@@ -11,6 +11,7 @@ import { useState } from "react";
 
 export default function Header(){
     const loggedIn=useSelector(store=>store.User.loggedIn);
+    const avatar=useSelector(store=>store.User.user?.avatar);
     const dispatch=useDispatch();
     const [search,setSearch]=useState("");
 
@@ -52,7 +53,7 @@ export default function Header(){
         <div className="flex items-center gap-6">
           <MdVideoCameraFront className="text-2xl" />
           <IoIosNotificationsOutline className="text-2xl" />
-          <CgProfile className="text-2xl" />
+          <img src={`${avatar}`} className="w-9 h-9 rounded-full object-cover border" />
         </div>
       ) : (
         <Link to="/login">

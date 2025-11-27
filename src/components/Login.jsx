@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { toggelLogin,loginUser } from "../utils/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function Login(){
     const [data,setdata]=useState({
@@ -7,6 +9,7 @@ export default function Login(){
       email:"",
       password:""
     });
+    const dispatch=useDispatch();
     const [errors,setErrors]=useState({});
     const navigate=useNavigate();
     function handlechange(e) {
@@ -63,6 +66,8 @@ export default function Login(){
             return;
           }
           localStorage.setItem("token",json.accessToken);
+          dispatch(toggelLogin());
+          dispatch(loginUser(json.user));
          navigate("/");
       } catch (error) {
         console.log("Error while login", error);
