@@ -83,7 +83,7 @@ export default function Header(){
                   <GoVideo /> Upload Video
                 </li>
                 <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-                  <GrChannel /> View Channel
+                  <Link to="/channel"><GrChannel /> View Channel</Link>
                 </li>
               </ul>
             )}
