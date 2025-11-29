@@ -75,7 +75,7 @@ export default function Home() {
         {filteredVideos.map((video) => (
           <Link
             key={video._id}
-            to={`/videos/${video._id}`}
+            to={`/video/${video._id}`}
             className="block hover:scale-105 transition-transform"
           >
             <VideoCard video={video}/>

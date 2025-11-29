@@ -4,13 +4,17 @@ import { IoMdShareAlt } from "react-icons/io";
 import { RiDownloadLine } from "react-icons/ri";
 import { useState, useEffect } from "react";
 import { IoMdMore } from "react-icons/io";
+import { useSelector } from "react-redux";
 
 export default function Video() {
   const { id } = useParams();
+  const user = useSelector((store) => store.User.user);
   const [video, setVideo] = useState(null);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [moreOpen,setMoreOpen]=useState(false);
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editText, setEditText] = useState("");
+  const [menuOpen, setMenuOpen] = useState(null); // for per-comment menu
 
   useEffect(() => {
     async function loadVideo() {
@@ -34,42 +38,64 @@ export default function Video() {
     loadVideo();
   }, [id]);
 
-
   async function handleSubscribe() {
     try {
       const res = await fetch(
         `http://localhost:8000/channels/${video.channel._id}/subscribe`,
-        { method: "POST", credentials: "include" }
+        { method: "POST", 
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+          },
+         }
       );
       const data = await res.json();
       console.log(data);
-    } catch(error) {
+      setVideo((prev) => ({
+      ...prev,
+      subscribers:data.subscribers
+    }));
+    } catch (error) {
       console.log("Error while subscribing");
     }
   }
 
   async function handleLike() {
     try {
-      const res = await fetch(
-        `http://localhost:8000/videos/${id}/like`,
-        { method: "POST", credentials: "include" }
-      );
+      const res = await fetch(`http://localhost:8000/videos/${id}/like`, {
+        method: "POST",
+       headers: {
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+          },
+      });
       const data = await res.json();
+       setVideo((prev) => ({
+      ...prev,
+      likes: data.likes,
+      dislikes: data.dislikes
+    }));
+    
       console.log(data);
-    } catch(error) {
+    } catch (error) {
       console.log("Error while liking");
     }
   }
 
   async function handleDislike() {
     try {
-      const res = await fetch(
-        `http://localhost:8000/videos/${id}/dislike`,
-        { method: "POST", credentials: "include" }
-      );
+      const res = await fetch(`http://localhost:8000/videos/${id}/dislike`, {
+        method: "POST",
+        headers: {
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+          },
+      });
       const data = await res.json();
       console.log(data);
-    } catch(error) {
+      setVideo((prev) => ({
+      ...prev,
+      likes: data.likes,
+      dislikes: data.dislikes
+    }));
+    } catch (error) {
       console.log("Error while disliking");
     }
   }
@@ -78,11 +104,13 @@ export default function Video() {
     try {
       const res = await fetch(
         `http://localhost:8000/videos/${id}/comments/${commentId}/like`,
-        { method: "POST", credentials: "include" }
+        { method: "POST",headers: {
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+          }, }
       );
       const data = await res.json();
       console.log(data);
-    } catch(error) {
+    } catch (error) {
       console.log("Error while liking comment");
     }
   }
@@ -91,24 +119,30 @@ export default function Video() {
     try {
       const res = await fetch(
         `http://localhost:8000/videos/${id}/comments/${commentId}/dislike`,
-        { method: "POST", credentials: "include" }
+        { method: "POST", headers: {
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+          }, }
       );
       const data = await res.json();
       console.log(data);
-    } catch(error) {
+    } catch (error) {
       console.log("Error while disliking comment");
     }
   }
 
   async function handleCommentDelete(commentId) {
     try {
-      const res=await fetch(`http://localhost:8000/videos/${id}/comments/${commentId}`,{
-        method:"DELETE",
-        headers: {
+      const res = await fetch(
+        `http://localhost:8000/videos/${id}/comments/${commentId}`,
+        {
+          method: "DELETE",
+          headers: {
             Authorization: `JWT ${localStorage.getItem("token")}`,
           },
-        });
+        }
+      );
       const data = await res.json();
+      setComments((prev) => prev.filter((c) => c._id !== commentId));
       console.log(data);
     } catch (error) {
       console.log("Error while deleting comment");
@@ -116,18 +150,40 @@ export default function Video() {
   }
   async function handleCommentEdit(commentId) {
     try {
-      const res=await fetch(`http://localhost:8000/videos/${id}/comments/${commentId}`,{
-        method:"PUT",
-        headers: {
+      const res = await fetch(
+        `http://localhost:8000/videos/${id}/comments/${commentId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
             Authorization: `JWT ${localStorage.getItem("token")}`,
           },
-        
-        });
+          body: JSON.stringify({ text: editText }),
+        }
+      );
+
       const data = await res.json();
       console.log(data);
+
+      // Update UI without full reload
+      setComments((prev) =>
+        prev.map((c) => (c._id === commentId ? { ...c, text: editText } : c))
+      );
+
+      setEditingCommentId(null);
+      setEditText("");
     } catch (error) {
-      console.log("Error while deleting comment");
+      console.log("Error while editing comment");
     }
+  }
+  function startEditing(comment) {
+    setEditingCommentId(comment._id);
+    setEditText(comment.text);
+    setMenuOpen(null); // close dropdown
+  }
+  function cancelEditing() {
+    setEditingCommentId(null);
+    setEditText("");
   }
 
   if (loading) {
@@ -139,11 +195,7 @@ export default function Video() {
   }
 
   if (!video) {
-    return (
-      <div className="text-center text-xl p-10">
-        Video not found.
-      </div>
-    );
+    return <div className="text-center text-xl p-10">Video not found.</div>;
   }
 
   return (
@@ -236,9 +288,34 @@ export default function Video() {
                   className="h-10 w-10 rounded-full object-cover"
                 />
 
-                <div>
+                <div className="w-full">
                   <p className="font-medium">{item.user?.username}</p>
-                  <p>{item.text}</p>
+
+                  {editingCommentId === item._id ? (
+                    <div className="mt-1">
+                      <input
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                        className="w-full border px-3 py-2 rounded-md"
+                      />
+                      <div className="flex gap-3 mt-2">
+                        <button
+                          onClick={() => handleCommentEdit(item._id)}
+                          className="bg-blue-600 text-white px-3 py-1 rounded-md"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={cancelEditing}
+                          className="bg-gray-300 px-3 py-1 rounded-md"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="mt-1">{item.text}</p>
+                  )}
 
                   <div className="flex items-center gap-4 mt-2 text-gray-700">
                     <span
@@ -256,19 +333,35 @@ export default function Video() {
                       <SlDislike />
                       <span>{item.dislike?.length || 0}</span>
                     </span>
-                    <span>
+
+                    {/* MENU */}
+                    {item.user?._id === user?._id && (
                       <div className="relative">
-                      <IoMdMore onClick={()=>setMoreOpen(!moreOpen)}/>
-                        {
-                          moreOpen&&(
-                            <ul>
-                              <li onClick={()=>handleCommentEdit(item._id)}>Edit</li>
-                              <li onClick={()=>handleCommentDelete(item._id)}>Delete</li>
-                            </ul>
-                          )
-                        }
+                        <IoMdMore
+                          className="text-xl cursor-pointer"
+                          onClick={() =>
+                            setMenuOpen(menuOpen === item._id ? null : item._id)
+                          }
+                        />
+
+                        {menuOpen === item._id && (
+                          <ul className="absolute bg-white shadow-md rounded-md right-0 mt-2 w-28 text-sm">
+                            <li
+                              className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                              onClick={() => startEditing(item)}
+                            >
+                              Edit
+                            </li>
+                            <li
+                              className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-red-600"
+                              onClick={() => handleCommentDelete(item._id)}
+                            >
+                              Delete
+                            </li>
+                          </ul>
+                        )}
                       </div>
-                    </span>
+                    )}
                   </div>
                 </div>
               </div>
