@@ -11,6 +11,7 @@ import Register from './components/Register.jsx';
 import Video from './components/Video.jsx';
 import Search from './components/Search.jsx';
 import Channel from './components/channel.jsx';
+import ChannelVideo from './components/ChannelVideo.jsx';
 const router=createBrowserRouter([
       {
         path:"/",
@@ -35,6 +36,10 @@ const router=createBrowserRouter([
           {
             path:"/channel",
             element:<Channel/>
+          },
+          {
+            path:"/channel/upload",
+            element:<ChannelVideo/>
           }
         ]
       },

@@ -20,8 +20,8 @@ import { RiFeedbackLine } from "react-icons/ri";
 import { useSelector,useDispatch } from "react-redux";
 import { toggleSidebar } from "../utils/sidebarslice";
 import { Link } from "react-router";
-import { useEffect, useState } from "react";
-import { toggleTheme } from "../utils/themeslice";
+import { useRef,useEffect, useState } from "react";
+import { toggleTheme } from "../utils/modeSlice";
 import { logoutUser } from "../utils/userSlice";
 
 export default function Header(){
@@ -35,6 +35,22 @@ export default function Header(){
     const [channelMenuOpen,setChannelMenuOpen]=useState(false);
    
     const avatar = user?.avatar || "https://ui-avatars.com/api/?name=User&background=random";
+    const profileRef = useRef();
+    const uploadRef = useRef();
+
+    // Close menus on outside click
+    useEffect(() => {
+      function handleClickOutside(event) {
+        if (profileRef.current && !profileRef.current.contains(event.target)) {
+          setMenuOpen(false);
+        }
+        if (uploadRef.current && !uploadRef.current.contains(event.target)) {
+          setChannelMenuOpen(false);
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
     useEffect(() => {
         if (themeMode === 'dark') {
           document.documentElement.classList.add('dark');
@@ -90,7 +106,7 @@ export default function Header(){
       {loggedIn ? (
         <div className="flex items-center gap-6 relative">
           {/* CHANNEL SUBMENU */}
-          <div className="relative">
+          <div className="relative" ref={uploadRef}>
             <MdVideoCameraFront
               onClick={() => setChannelMenuOpen(!channelMenuOpen)}
               className="text-2xl cursor-pointer dark:text-white"
@@ -98,16 +114,16 @@ export default function Header(){
             {channelMenuOpen && (
               <ul className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2">
                 <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-                  <GoVideo /> Upload Video
+                  <Link to="/channel/upload" className="flex items-center gap-2"><GoVideo /> Upload Video</Link>
                 </li>
                 <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-                  <Link to="/channel"><GrChannel /> View Channel</Link>
+                  <Link to="/channel" className="flex items-center gap-2"><GrChannel /> View Channel</Link>
                 </li>
               </ul>
             )}
           </div>
           <IoIosNotificationsOutline className="text-2xl cursor-pointer dark:text-white"/>
-          <div className="relative">
+          <div className="relative" ref={profileRef}>
             <img
               src={avatar}
               onClick={() => setMenuOpen(!menuOpen)}
@@ -149,7 +165,8 @@ export default function Header(){
                 {/* DARK MODE TOGGLE */}
                 <ul className="text-sm dark:text-white">
                   <li onClick={handletoggle} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded">
-                    <FaSun /> Appearance
+                    {themeMode!='dark' ? <FaSun /> : <FaRegMoon />}
+                    {themeMode!='dark' ? "Light Mode" : "Dark Mode"}
                   </li>
 
                   <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded"><IoLanguage /> Display Language</li>
