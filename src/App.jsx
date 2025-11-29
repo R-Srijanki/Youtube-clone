@@ -2,7 +2,7 @@ import Header from "./components/header"
 import { Outlet } from "react-router";
 import Aside from "./components/Aside";
 import { useSelector } from "react-redux";
-
+import './index.css'
 export default function App() {
  
   const visible=useSelector(store=>store.Sidebar.open);

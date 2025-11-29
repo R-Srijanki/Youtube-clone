@@ -21,10 +21,12 @@ import { useSelector,useDispatch } from "react-redux";
 import { toggleSidebar } from "../utils/sidebarslice";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
+import { toggleTheme } from "../utils/themeslice";
 
 export default function Header(){
     const loggedIn=useSelector(store=>store.User.loggedIn);
     const user=useSelector(store=>store.User.user);
+    const themeMode = useSelector((store) => store.Theme.mode);
     const dispatch=useDispatch();
     
     const [search,setSearch]=useState("");
@@ -32,6 +34,17 @@ export default function Header(){
     const [channelMenuOpen,setChannelMenuOpen]=useState(false);
    
     const avatar = user?.avatar || "https://ui-avatars.com/api/?name=User&background=random";
+    useEffect(() => {
+        if (themeMode === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+    }, [themeMode]);
+    const handletoggle = () => {
+      console.log("toggle");
+        dispatch(toggleTheme());
+    };
     return (
     <header className="flex justify-between items-center w-full px-4 py-2 shadow-md bg-white dark:bg-gray-900 sticky top-0 z-50">
       {/* Left section */}
@@ -130,7 +143,7 @@ export default function Header(){
 
                 {/* DARK MODE TOGGLE */}
                 <ul className="text-sm dark:text-white">
-                  <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded">
+                  <li onClick={handletoggle} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded">
                     <FaSun /> Appearance
                   </li>
 
