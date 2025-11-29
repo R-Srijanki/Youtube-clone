@@ -3,12 +3,14 @@ import { SlLike, SlDislike } from "react-icons/sl";
 import { IoMdShareAlt } from "react-icons/io";
 import { RiDownloadLine } from "react-icons/ri";
 import { useState, useEffect } from "react";
+import { IoMdMore } from "react-icons/io";
 
 export default function Video() {
   const { id } = useParams();
   const [video, setVideo] = useState(null);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [moreOpen,setMoreOpen]=useState(false);
 
   useEffect(() => {
     async function loadVideo() {
@@ -41,7 +43,7 @@ export default function Video() {
       );
       const data = await res.json();
       console.log(data);
-    } catch {
+    } catch(error) {
       console.log("Error while subscribing");
     }
   }
@@ -54,7 +56,7 @@ export default function Video() {
       );
       const data = await res.json();
       console.log(data);
-    } catch {
+    } catch(error) {
       console.log("Error while liking");
     }
   }
@@ -67,7 +69,7 @@ export default function Video() {
       );
       const data = await res.json();
       console.log(data);
-    } catch {
+    } catch(error) {
       console.log("Error while disliking");
     }
   }
@@ -80,7 +82,7 @@ export default function Video() {
       );
       const data = await res.json();
       console.log(data);
-    } catch {
+    } catch(error) {
       console.log("Error while liking comment");
     }
   }
@@ -93,8 +95,38 @@ export default function Video() {
       );
       const data = await res.json();
       console.log(data);
-    } catch {
+    } catch(error) {
       console.log("Error while disliking comment");
+    }
+  }
+
+  async function handleCommentDelete(commentId) {
+    try {
+      const res=await fetch(`http://localhost:8000/videos/${id}/comments/${commentId}`,{
+        method:"DELETE",
+        headers: {
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+          },
+        });
+      const data = await res.json();
+      console.log(data);
+    } catch (error) {
+      console.log("Error while deleting comment");
+    }
+  }
+  async function handleCommentEdit(commentId) {
+    try {
+      const res=await fetch(`http://localhost:8000/videos/${id}/comments/${commentId}`,{
+        method:"PUT",
+        headers: {
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+          },
+        
+        });
+      const data = await res.json();
+      console.log(data);
+    } catch (error) {
+      console.log("Error while deleting comment");
     }
   }
 
@@ -223,6 +255,19 @@ export default function Video() {
                     >
                       <SlDislike />
                       <span>{item.dislike?.length || 0}</span>
+                    </span>
+                    <span>
+                      <div className="relative">
+                      <IoMdMore onClick={()=>setMoreOpen(!moreOpen)}/>
+                        {
+                          moreOpen&&(
+                            <ul>
+                              <li onClick={()=>handleCommentEdit(item._id)}>Edit</li>
+                              <li onClick={()=>handleCommentDelete(item._id)}>Delete</li>
+                            </ul>
+                          )
+                        }
+                      </div>
                     </span>
                   </div>
                 </div>
