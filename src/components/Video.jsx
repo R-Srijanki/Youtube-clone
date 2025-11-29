@@ -11,6 +11,8 @@ export default function Video() {
   const user = useSelector((store) => store.User.user);
   const [video, setVideo] = useState(null);
   const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState("");
+  const [isWriting, setIsWriting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editText, setEditText] = useState("");
@@ -42,18 +44,19 @@ export default function Video() {
     try {
       const res = await fetch(
         `http://localhost:8000/channels/${video.channel._id}/subscribe`,
-        { method: "POST", 
+        {
+          method: "POST",
           headers: {
             Authorization: `JWT ${localStorage.getItem("token")}`,
           },
-         }
+        }
       );
       const data = await res.json();
       console.log(data);
       setVideo((prev) => ({
-      ...prev,
-      subscribers:data.subscribers
-    }));
+        ...prev,
+        subscribers: data.subscribers,
+      }));
     } catch (error) {
       console.log("Error while subscribing");
     }
@@ -63,17 +66,17 @@ export default function Video() {
     try {
       const res = await fetch(`http://localhost:8000/videos/${id}/like`, {
         method: "POST",
-       headers: {
-            Authorization: `JWT ${localStorage.getItem("token")}`,
-          },
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("token")}`,
+        },
       });
       const data = await res.json();
-       setVideo((prev) => ({
-      ...prev,
-      likes: data.likes,
-      dislikes: data.dislikes
-    }));
-    
+      setVideo((prev) => ({
+        ...prev,
+        likes: data.likes,
+        dislikes: data.dislikes,
+      }));
+
       console.log(data);
     } catch (error) {
       console.log("Error while liking");
@@ -85,16 +88,16 @@ export default function Video() {
       const res = await fetch(`http://localhost:8000/videos/${id}/dislike`, {
         method: "POST",
         headers: {
-            Authorization: `JWT ${localStorage.getItem("token")}`,
-          },
+          Authorization: `JWT ${localStorage.getItem("token")}`,
+        },
       });
       const data = await res.json();
       console.log(data);
       setVideo((prev) => ({
-      ...prev,
-      likes: data.likes,
-      dislikes: data.dislikes
-    }));
+        ...prev,
+        likes: data.likes,
+        dislikes: data.dislikes,
+      }));
     } catch (error) {
       console.log("Error while disliking");
     }
@@ -104,12 +107,21 @@ export default function Video() {
     try {
       const res = await fetch(
         `http://localhost:8000/videos/${id}/comments/${commentId}/like`,
-        { method: "POST",headers: {
+        {
+          method: "POST",
+          headers: {
             Authorization: `JWT ${localStorage.getItem("token")}`,
-          }, }
+          },
+        }
       );
       const data = await res.json();
+
       console.log(data);
+      setComments((prev) =>
+      prev.map((c) =>
+        c._id === commentId ? { ...c, likes: data.likes, dislikes: data.dislikes } : c
+      )
+    );
     } catch (error) {
       console.log("Error while liking comment");
     }
@@ -119,12 +131,20 @@ export default function Video() {
     try {
       const res = await fetch(
         `http://localhost:8000/videos/${id}/comments/${commentId}/dislike`,
-        { method: "POST", headers: {
+        {
+          method: "POST",
+          headers: {
             Authorization: `JWT ${localStorage.getItem("token")}`,
-          }, }
+          },
+        }
       );
       const data = await res.json();
       console.log(data);
+      setComments((prev) =>
+      prev.map((c) =>
+        c._id === commentId ? { ...c, likes: data.likes, dislikes: data.dislikes } : c
+      )
+    );
     } catch (error) {
       console.log("Error while disliking comment");
     }
@@ -142,7 +162,7 @@ export default function Video() {
         }
       );
       const data = await res.json();
-      setComments((prev) => prev.filter((c) => c._id !== commentId));
+      setComments((data) => data.filter((c) => c._id !== commentId));
       console.log(data);
     } catch (error) {
       console.log("Error while deleting comment");
@@ -175,6 +195,35 @@ export default function Video() {
     } catch (error) {
       console.log("Error while editing comment");
     }
+  }
+  async function handlecomment() {
+    if (!comment.trim()) return;
+
+    try {
+      const res = await fetch(`http://localhost:8000/videos/${id}/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `JWT ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ text: comment }),
+      });
+
+      const data = await res.json();
+
+      // Update UI instantly
+      setComments((prev) => [data, ...prev]);
+
+      // Reset
+      setComment("");
+      setIsWriting(false);
+    } catch (error) {
+      console.log("Error while adding comment", error);
+    }
+  }
+  function handlecancel() {
+    setComment("");
+    setIsWriting(false);
   }
   function startEditing(comment) {
     setEditingCommentId(comment._id);
@@ -272,11 +321,42 @@ export default function Video() {
           <p className="font-semibold text-lg">{comments.length} Comments</p>
 
           {/* Add Comment */}
-          <div className="flex items-center gap-3 mt-3">
-            <input
-              placeholder="Add a comment..."
-              className="w-full border p-2 rounded-md"
+          <div className="flex gap-3 mt-3">
+            <img
+              src={user?.avatar}
+              className="h-10 w-10 rounded-full object-cover"
             />
+
+            <div className="w-full">
+              <input
+                placeholder="Add a comment..."
+                value={comment}
+                onChange={(e) => {
+                  setComment(e.target.value);
+                  if (!isWriting) setIsWriting(true);
+                }}
+                className="w-full border p-2 rounded-md"
+              />
+
+              {isWriting && (
+                <div className="flex gap-3 justify-end mt-2">
+                  <button
+                    onClick={handlecancel}
+                    className="px-4 py-1 bg-gray-300 rounded-md"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    onClick={handlecomment}
+                    className="px-4 py-1 bg-blue-600 text-white rounded-md disabled:bg-blue-300"
+                    disabled={!comment.trim()}
+                  >
+                    Comment
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* COMMENT LIST */}
