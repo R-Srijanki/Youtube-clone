@@ -7,7 +7,7 @@ export default function App() {
  
   const visible=useSelector(store=>store.Sidebar.open);
     return (
-    <div className="w-full h-screen">
+    <div className="w-full h-screen bg-primary dark:bg-primary-dark">
       <Header />
       <div className="flex w-full">
         {visible && <Aside />}
