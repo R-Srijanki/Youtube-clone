@@ -22,6 +22,7 @@ import { toggleSidebar } from "../utils/sidebarslice";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { toggleTheme } from "../utils/themeslice";
+import { logoutUser } from "../utils/userSlice";
 
 export default function Header(){
     const loggedIn=useSelector(store=>store.User.loggedIn);
@@ -44,6 +45,10 @@ export default function Header(){
     const handletoggle = () => {
       console.log("toggle");
         dispatch(toggleTheme());
+    };
+    const handlelogout=()=>{
+      localStorage.clear();
+      dispatch(logoutUser());
     };
     return (
     <header className="flex justify-between items-center w-full px-4 py-2 shadow-md bg-white dark:bg-gray-900 sticky top-0 z-50">
@@ -129,7 +134,7 @@ export default function Header(){
                 <ul className="text-sm dark:text-white">
                   <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded"><FaGoogle /> Google Account</li>
                   <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded"><MdOutlineSwitchAccount /> Switch Account</li>
-                  <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded"><PiSignOut /> Sign Out</li>
+                  <li onClick={handlelogout} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded"><PiSignOut /> Sign Out</li>
                 </ul>
 
                 <hr className="my-2" />

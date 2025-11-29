@@ -1,11 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
-export default function CreateChannel() {
+export default function CreateChannel({onClose}) {
   const [data, setData] = useState({
     name: "",
     handle: "",
     channelBanner: null
   });
+
+  const navigate=useNavigate();
 
   const [previewBanner, setPreviewBanner] = useState(null);
   const [errors, setErrors] = useState({});
@@ -52,7 +55,7 @@ export default function CreateChannel() {
       const res = await fetch("http://localhost:8000/channels", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
+          Authorization: `JWT ${localStorage.getItem("token")}`
         },
         body: formData
       });
@@ -63,6 +66,7 @@ export default function CreateChannel() {
       if (!res.ok) {
         setErrors({ server: json.message || "Channel creation failed" });
       }
+      navigate('/channel');
     } catch (err) {
       console.log("Error creating channel:", err);
       setErrors({ server: "Something went wrong" });
@@ -151,6 +155,7 @@ export default function CreateChannel() {
         <div className="flex justify-end gap-3 mt-6">
           <button
             type="button"
+            onClick={onClose}
             className="px-5 py-2 rounded-full hover:bg-gray-100"
           >
             Cancel
