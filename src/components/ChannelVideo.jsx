@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 export default function ChannelVideo() {
   const user = useSelector((store) => store.User.user);
+  const navigate=useNavigate();
 
   const [data, setData] = useState({
     title: "",
@@ -80,7 +82,7 @@ export default function ChannelVideo() {
           category: "",
           channel: user.channel || "",
         });
-        
+       navigate('/channel'); 
       }
     } catch (err) {
       console.log("Error during upload:", err);

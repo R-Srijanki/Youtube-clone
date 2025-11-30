@@ -19,7 +19,7 @@ import { RiFeedbackLine } from "react-icons/ri";
 
 import { useSelector,useDispatch } from "react-redux";
 import { toggleSidebar } from "../utils/sidebarslice";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useRef,useEffect, useState } from "react";
 import { toggleTheme } from "../utils/modeSlice";
 import { logoutUser } from "../utils/userSlice";
@@ -29,7 +29,8 @@ export default function Header(){
     const user=useSelector(store=>store.User.user);
     const themeMode = useSelector((store) => store.Theme.mode);
     const dispatch=useDispatch();
-    
+    const navigate=useNavigate();
+
     const [search,setSearch]=useState("");
     const [menuOpen,setMenuOpen]=useState(false);
     const [channelMenuOpen,setChannelMenuOpen]=useState(false);
@@ -64,6 +65,7 @@ export default function Header(){
     };
     const handlelogout=()=>{
       localStorage.clear();
+      navigate('/');
       dispatch(logoutUser());
     };
     return (
