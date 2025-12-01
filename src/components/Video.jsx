@@ -105,7 +105,7 @@ export default function Video() {
   return (
     <div className="md:flex gap-4 p-4">
       {/* LEFT SIDE — VIDEO PLAYER */}
-      <div className="md:w-[75%]">
+      <div className="md:w-[70%]">
         <iframe
           src={video.videoUrl}
           className="w-full h-[350px] md:h-[500px] rounded-lg"
@@ -176,7 +176,7 @@ export default function Video() {
       </div>
 
       {/* RIGHT SIDE — Suggested Videos */}
-      <div className="md:w-[25%]">
+      <div className="md:w-[30%]">
         {/* In future — show recommended videos */}
       </div>
     </div>

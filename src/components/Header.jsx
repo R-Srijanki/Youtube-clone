@@ -81,7 +81,7 @@ export default function Header(){
 
         <Link to="/" className="flex items-center gap-1">
           <FaYoutube className="text-red-600 text-3xl" />
-          <p className="text-2xl font-bold dark:text-white">YouTube</p>
+          <p className="text-2xl font-semibold dark:text-white font-mono">YouTube</p>
         </Link>
       </div>
 
