@@ -20,7 +20,7 @@ export default function ChannelPage() {
         const json = await res.json();
         
         setChannel(json.data);
-        setVideos(json.data?.videos?.slice(0, 3) || []);  // FIX: use slice, not splice
+        setVideos(json.data?.videos?.slice(0, 3) || []);  
       } catch (err) {
         console.log(err.message);
       }
