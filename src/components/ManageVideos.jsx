@@ -17,7 +17,7 @@ export default function ManageVideos(){
         const res = await fetch(`http://localhost:8000/channels/${user.channel._id}`, {
           method: "GET",
           headers: {
-            Authorization: `JWT ${localStorage.getItem("token")}`,
+            'Authorization': `JWT ${localStorage.getItem("token")}`,
           },
         });
 
@@ -47,7 +47,7 @@ export default function ManageVideos(){
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `JWT ${localStorage.getItem("token")}`,
+            'Authorization': `JWT ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify(editData),
         }
@@ -61,7 +61,7 @@ export default function ManageVideos(){
       }
 
       setVideos((prev) =>
-        prev.map((v) => (v._id === editData._id ? editData : v))
+        prev.map((v) => (v._id == editData._id ? editData : v))
       );
 
       setEditData(null);
@@ -78,7 +78,7 @@ export default function ManageVideos(){
       const res = await fetch(`http://localhost:8000/videos/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `JWT ${localStorage.getItem("token")}`,
+          'Authorization': `JWT ${localStorage.getItem("token")}`,
         },
       });
 
@@ -89,7 +89,7 @@ export default function ManageVideos(){
         return;
       }
 
-      setVideos((prev) => prev.filter((v) => v._id !== id));
+      setVideos((prev) => prev.filter((v) => v._id != id));
     } catch (err) {
       console.log(err.message);
     }

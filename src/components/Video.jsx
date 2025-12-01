@@ -34,7 +34,7 @@ export default function Video() {
         {
           method: "POST",
           headers: {
-            Authorization: `JWT ${localStorage.getItem("token")}`,
+            'Authorization': `JWT ${localStorage.getItem("token")}`,
           },
         }
       );
@@ -54,7 +54,7 @@ export default function Video() {
       const res = await fetch(`http://localhost:8000/videos/${id}/like`, {
         method: "POST",
         headers: {
-          Authorization: `JWT ${localStorage.getItem("token")}`,
+          'Authorization': `JWT ${localStorage.getItem("token")}`,
         },
       });
       const data = await res.json();
@@ -75,7 +75,7 @@ export default function Video() {
       const res = await fetch(`http://localhost:8000/videos/${id}/dislike`, {
         method: "POST",
         headers: {
-          Authorization: `JWT ${localStorage.getItem("token")}`,
+          'Authorization': `JWT ${localStorage.getItem("token")}`,
         },
       });
       const data = await res.json();
