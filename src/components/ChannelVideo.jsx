@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import CreateChannel from "./CreateChannel";
 
 export default function ChannelVideo() {
   const user = useSelector((store) => store.User.user);
   const navigate=useNavigate();
+
+  if (!user?.channel) return <CreateChannel />;
 
   const [data, setData] = useState({
     title: "",
@@ -12,7 +15,7 @@ export default function ChannelVideo() {
     videoUrl: "",
     description: "",
     category: "",
-    channel: user.channel || "",
+    channel: user.channel,
   });
 
   const [errors, setErrors] = useState({});
@@ -72,7 +75,8 @@ export default function ChannelVideo() {
       const json = await res.json();
       if (!res.ok) {
         setErrors({ server: json.message || "Video upload failed" });
-      } else {
+        return;
+      } 
         setSuccess("Video uploaded successfully!");
         setData({
           title: "",
@@ -80,10 +84,10 @@ export default function ChannelVideo() {
           videoUrl: "",
           description: "",
           category: "",
-          channel: user.channel || "",
+          channel: user.channel,
         });
        navigate('/channel'); 
-      }
+      
     } catch (err) {
       console.log("Error during upload:", err);
       setErrors({ server: "Something went wrong" });
@@ -93,10 +97,11 @@ export default function ChannelVideo() {
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
       <h2 className="text-xl font-semibold mb-4">Upload Video</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {success && <p className="text-green-600">{success}</p>}
-        {errors.server && <p className="text-red-600">{errors.server}</p>}
+      {success && <p className="text-green-600">{success}</p>}
+      {errors.server && <p className="text-red-600">{errors.server}</p>}
 
+      <form onSubmit={handleSubmit} className="space-y-4">
+       
         <div>
           <label htmlFor="title" className="block font-medium">
             Title
