@@ -13,13 +13,14 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { FiFlag } from "react-icons/fi";
 import { MdHelpOutline } from "react-icons/md";
 import { MdOutlineFeedback } from "react-icons/md";
+import { Link } from "react-router";
 export default function Aside(){
      return (
     <aside className="w-60 min-h-screen bg-white border-r px-4 py-4 overflow-y-auto">
       <ul className="space-y-3 mb-4">
-        <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
+        <Link to="/" className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
           <TiHomeOutline /> Home
-        </li>
+        </Link>
         <li className="flex gap-3 items-center hover:bg-gray-200 rounded-lg p-2 cursor-pointer">
           <SiYoutubeshorts /> Shorts
         </li>

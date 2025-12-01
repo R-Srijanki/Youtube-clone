@@ -84,7 +84,7 @@ export default function ChannelVideo() {
           videoUrl: "",
           description: "",
           category: "",
-          channel: user.channel,
+          channel: "",
         });
        navigate('/channel'); 
       

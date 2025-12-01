@@ -60,7 +60,6 @@ export default function Header(){
         }
     }, [themeMode]);
     const handletoggle = () => {
-      console.log("toggle");
         dispatch(toggleTheme());
     };
     const handlelogout=()=>{

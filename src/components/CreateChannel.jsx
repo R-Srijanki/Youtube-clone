@@ -55,7 +55,7 @@ export default function CreateChannel({onClose}) {
       const res = await fetch("http://localhost:8000/channels", {
         method: "POST",
         headers: {
-          Authorization: `JWT ${localStorage.getItem("token")}`
+          'Authorization': `JWT ${localStorage.getItem("token")}`
         },
         body: formData
       });

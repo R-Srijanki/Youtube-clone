@@ -33,7 +33,7 @@ export default function Comments({id}){
         {
           method: "POST",
           headers: {
-            Authorization: `JWT ${localStorage.getItem("token")}`,
+            'Authorization': `JWT ${localStorage.getItem("token")}`,
           },
         }
       );
@@ -42,7 +42,7 @@ export default function Comments({id}){
       console.log(data);
       setComments((prev) =>
       prev.map((c) =>
-        c._id === commentId ? { ...c, likes: data.likes, dislikes: data.dislikes } : c
+        c._id == commentId ? { ...c, likes: data.likes, dislikes: data.dislikes } : c
       )
     );
     } catch (error) {
@@ -57,7 +57,7 @@ export default function Comments({id}){
         {
           method: "POST",
           headers: {
-            Authorization: `JWT ${localStorage.getItem("token")}`,
+            'Authorization': `JWT ${localStorage.getItem("token")}`,
           },
         }
       );
@@ -65,7 +65,7 @@ export default function Comments({id}){
       console.log(data);
       setComments((prev) =>
       prev.map((c) =>
-        c._id === commentId ? { ...c, likes: data.likes, dislikes: data.dislikes } : c
+        c._id == commentId ? { ...c, likes: data.likes, dislikes: data.dislikes } : c
       )
     );
     } catch (error) {
@@ -80,12 +80,12 @@ export default function Comments({id}){
         {
           method: "DELETE",
           headers: {
-            Authorization: `JWT ${localStorage.getItem("token")}`,
+            'Authorization': `JWT ${localStorage.getItem("token")}`,
           },
         }
       );
       const data = await res.json();
-      setComments((data) => data.filter((c) => c._id !== commentId));
+      setComments((data) => data.filter((c) => c._id != commentId));
       console.log(data);
     } catch (error) {
       console.log("Error while deleting comment");
@@ -99,7 +99,7 @@ export default function Comments({id}){
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `JWT ${localStorage.getItem("token")}`,
+            'Authorization': `JWT ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({ text: editText }),
         }
@@ -110,7 +110,7 @@ export default function Comments({id}){
 
       // Update UI without full reload
       setComments((prev) =>
-        prev.map((c) => (c._id === commentId ? { ...c, text: editText } : c))
+        prev.map((c) => (c._id == commentId ? { ...c, text: editText } : c))
       );
 
       setEditingCommentId(null);
@@ -127,7 +127,7 @@ export default function Comments({id}){
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `JWT ${localStorage.getItem("token")}`,
+          'Authorization': `JWT ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({ text: comment }),
       });
