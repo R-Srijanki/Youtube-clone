@@ -63,9 +63,9 @@ export default function ChannelPage() {
             <button className="px-4 py-2 bg-gray-200 rounded-full font-medium hover:bg-gray-300">
               Customize Channel
             </button>
-            <button className="px-4 py-2 bg-gray-100 border rounded-full font-medium hover:bg-gray-200">
+            <Link to="/managevideos" className="px-4 py-2 bg-gray-100 border rounded-full font-medium hover:bg-gray-200">
               Manage Videos
-            </button>
+            </Link>
           </div>
         </div>
       </div>

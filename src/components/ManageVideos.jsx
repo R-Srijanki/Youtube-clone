@@ -140,7 +140,7 @@ export default function ManageVideos(){
               />
 
               {menuOpen === video._id && (
-                <ul className="absolute bg-white dark:bg-gray-700 shadow-md rounded-md right-2 top-12 w-28 text-sm z-20">
+                <ul className="absolute bg-white dark:bg-gray-700 shadow-md rounded-md right-2 top-8 w-28 text-sm z-20">
                   <li
                     className="px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
                     onClick={() => openEditModal(video)}
