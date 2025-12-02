@@ -57,11 +57,11 @@ export default function ChannelVideo() {
 
     try {
       const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("thumbnailUrl", data.thumbnailUrl);
-      formData.append("videoUrl", data.videoUrl);
-      formData.append("description", data.description);
-      formData.append("category", data.category);
+      formData.append("title", data.title.trim());
+      formData.append("thumbnailUrl", data.thumbnailUrl.trim());
+      formData.append("videoUrl", data.videoUrl.trim());
+      formData.append("description", data.description.trim());
+      formData.append("category", data.category.trim());
       formData.append("channel", data.channel);
 
       const res = await fetch("http://localhost:8000/videos", {
@@ -95,7 +95,7 @@ export default function ChannelVideo() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
+    <div className="max-w-2xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md mt-10 text-gray-900 dark:text-gray-100">
       <h2 className="text-xl font-semibold mb-4">Upload Video</h2>
       
 
@@ -111,7 +111,7 @@ export default function ChannelVideo() {
             id="title"
             value={data.title}
             onChange={handleChange}
-            className="w-full border p-2 rounded mt-1"
+            className="w-full border p-2 rounded mt-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             placeholder="Enter video title"
           />
           {errors.title && <p className="text-red-600 text-sm">{errors.title}</p>}
@@ -126,7 +126,7 @@ export default function ChannelVideo() {
             id="thumbnailUrl"
             value={data.thumbnailUrl}
             onChange={handleChange}
-            className="w-full border p-2 rounded mt-1"
+            className="w-full border p-2 rounded mt-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             placeholder="Enter thumbnail URL"
           />
           {errors.thumbnailUrl && <p className="text-red-600 text-sm">{errors.thumbnailUrl}</p>}
@@ -141,7 +141,7 @@ export default function ChannelVideo() {
             id="videoUrl"
             value={data.videoUrl}
             onChange={handleChange}
-            className="w-full border p-2 rounded mt-1"
+            className="w-full border p-2 rounded mt-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             placeholder="Enter video URL"
           />
           {errors.videoUrl && <p className="text-red-600 text-sm">{errors.videoUrl}</p>}
@@ -155,7 +155,7 @@ export default function ChannelVideo() {
             id="description"
             value={data.description}
             onChange={handleChange}
-            className="w-full border p-2 rounded mt-1"
+            className="w-full border p-2 rounded mt-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             placeholder="Enter description"
           />
           {errors.description && <p className="text-red-600 text-sm">{errors.description}</p>}
@@ -170,7 +170,7 @@ export default function ChannelVideo() {
             id="category"
             value={data.category}
             onChange={handleChange}
-            className="w-full border p-2 rounded mt-1"
+            className="w-full border p-2 rounded mt-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             placeholder="Enter category"
           />
           {errors.category && <p className="text-red-600 text-sm">{errors.category}</p>}

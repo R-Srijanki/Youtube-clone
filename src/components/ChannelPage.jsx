@@ -28,13 +28,13 @@ export default function ChannelPage() {
     if (user.channel._id) call();
   }, [user.channel._id]);
 
-  if (!channel) return <p className="p-10 text-lg">Loading...</p>;
+  if (!channel) return <p className="p-10 text-lp-10 text-lg text-gray-900 dark:text-gray-100g">Loading...</p>;
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
 
       {/* Banner Section */}
-      <div className="w-full h-60 bg-gray-200 relative">
+      <div className="w-full h-60 bg-gray-200 dark:bg-gray-700 relative">
         <img
           src={channel.channelBanner}
           className="w-full h-full object-cover"
@@ -54,38 +54,38 @@ export default function ChannelPage() {
         {/* Channel Details */}
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold">{channel.name}</h1>
-          <p className="text-gray-600 text-sm">{channel.handle}</p>
-          <p className="text-gray-500 text-xs">
+          <p className="text-gray-600 dark:text-gray-300 text-sm">{channel.handle}</p>
+          <p className="text-gray-500 dark:text-gray-400 text-xs">
             {channel.subscribers?.length || 0} subscribers
           </p>
 
           <div className="flex gap-3 mt-4">
-            <button className="px-4 py-2 bg-gray-200 rounded-full font-medium hover:bg-gray-300">
+            <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-full font-medium hover:bg-gray-300 dark:hover:bg-gray-600">
               Customize Channel
             </button>
-            <Link to="/managevideos" className="px-4 py-2 bg-gray-100 border rounded-full font-medium hover:bg-gray-200">
+            <Link to="/managevideos" className="px-4 py-2 bg-gray-100 dark:bg-gray-800 border rounded-full font-medium hover:bg-gray-200 dark:hover:bg-gray-700">
               Manage Videos
             </Link>
           </div>
         </div>
       </div>
 
-      <hr className="my-4" />
+      <hr className="my-4 border-gray-300 dark:border-gray-600" />
 
       {/* Description */}
       <div className="px-10">
         <h2 className="text-xl font-semibold mb-2">Description</h2>
-        <p className="text-gray-700">{channel.description || "No description added."}</p>
+        <p className="text-gray-700 dark:text-gray-300">{channel.description || "No description added."}</p>
       </div>
 
-      <hr className="my-6" />
+      <hr className="my-6 border-gray-300 dark:border-gray-600" />
 
       {/* Videos Section */}
       <div className="px-10 mb-10">
         <h2 className="text-2xl font-semibold mb-4">Videos</h2>
 
         {videos.length === 0 && (
-          <p className="text-gray-500">No videos uploaded yet.</p>
+          <p className="text-gray-500 dark:text-gray-400">No videos uploaded yet.</p>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -95,7 +95,7 @@ export default function ChannelPage() {
               to={`/videos/${video._id}`}
               className="hover:scale-[1.03] transition-transform"
             >
-              <div className="rounded-lg overflow-hidden shadow-sm bg-white">
+              <div className="rounded-lg overflow-hidden shadow-sm bg-white dark:bg-gray-800">
               
               {/* Thumbnail */}
               <img
@@ -115,9 +115,9 @@ export default function ChannelPage() {
 
                 <div>
                   <p className="font-semibold text-sm line-clamp-2">{video.title}</p>
-                  <p className="text-xs text-gray-600">{channel?.name}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">{channel?.name}</p>
 
-                  <div className="text-xs text-gray-500 flex gap-2">
+                  <div className="text-xs text-gray-500 flex gap-2 dark:text-gray-400">
                     <span>{video.views} views</span>
                     <span>•</span>
                     <span>{new Date(video.uploadDate).toLocaleDateString()}</span>

@@ -77,7 +77,7 @@ export default function CreateChannel({onClose}) {
     <div className="w-full flex justify-center mt-10">
       <form
         onSubmit={handleSubmit}
-        className="w-[550px] bg-white shadow-lg rounded-xl p-8 relative"
+        className="w-[550px] bg-white dark:bg-gray-800 shadow-lg rounded-xl p-8 relative text-gray-900 dark:text-gray-100"
       >
         {/* Banner with blur */}
         <div className="w-full h-40 rounded-xl overflow-hidden relative">
@@ -88,7 +88,7 @@ export default function CreateChannel({onClose}) {
               className="w-full h-full object-cover blur-[1px]"
             />
           ) : (
-            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+            <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-300">
               Select a banner
             </div>
           )}
@@ -112,7 +112,7 @@ export default function CreateChannel({onClose}) {
             type="file"
             accept="image/*"
             onChange={handleChange}
-            className="block mt-1"
+            className="block mt-1 text-gray-900 dark:text-gray-100"
           />
           {errors.channelBanner && (
             <p className="text-red-600 text-sm">{errors.channelBanner}</p>
@@ -125,7 +125,7 @@ export default function CreateChannel({onClose}) {
             id="name"
             type="text"
             onChange={handleChange}
-            className="w-full border p-2 rounded mt-1"
+            className="w-full border p-2 rounded mt-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           />
           {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
         </div>
@@ -136,7 +136,7 @@ export default function CreateChannel({onClose}) {
             id="handle"
             type="text"
             onChange={handleChange}
-            className="w-full border p-2 rounded mt-1"
+            className="w-full border p-2 rounded mt-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             placeholder="@username"
           />
           {errors.handle && (
@@ -144,7 +144,7 @@ export default function CreateChannel({onClose}) {
           )}
         </div>
 
-        <p className="text-gray-500 text-xs mt-3 leading-5">
+        <p className="text-gray-500 dark:text-gray-400 text-xs mt-3 leading-5">
           By clicking Create, you agree to YouTube's Terms of Service.
         </p>
 
@@ -156,7 +156,7 @@ export default function CreateChannel({onClose}) {
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2 rounded-full hover:bg-gray-100"
+            className="px-5 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             Cancel
           </button>

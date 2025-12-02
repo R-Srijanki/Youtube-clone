@@ -11,7 +11,10 @@ export default function ManageVideos(){
   const [editData, setEditData] = useState(null);
   const navigate = useNavigate();
 
+  
   useEffect(() => {
+    if (!user?.channel?._id) return;
+
     async function loadChannel() {
       try {
         const res = await fetch(`http://localhost:8000/channels/${user.channel._id}`, {
@@ -29,10 +32,11 @@ export default function ManageVideos(){
         console.log(err.message);
       }
     }
-    if (user.channel._id) loadChannel();
-  }, [user.channel._id]);
+    loadChannel();
+  }, [user?.channel?._id]);
+  
   function handleMenu(videoId) {
-    setMenuOpen(menuOpen === videoId ? null : videoId);
+    setMenuOpen((prev) => (prev === videoId ? null : videoId));
   }
   
   function openEditModal(video) {
@@ -60,9 +64,11 @@ export default function ManageVideos(){
         return;
       }
 
-      setVideos((prev) =>
-        prev.map((v) => (v._id == editData._id ? editData : v))
-      );
+     setVideos((prev) =>
+        prev.map((v) =>
+          v._id === editData._id ? { ...v, ...editData } : v
+        )
+      )
 
       setEditData(null);
     } catch (err) {
