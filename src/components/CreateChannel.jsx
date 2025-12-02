@@ -60,7 +60,7 @@ export default function CreateChannel({onClose}) {
         } 
       });
 
-      console.log(res);
+      console.log(res.data);
       navigate('/channel');
     } catch (err) {
       console.log("Error creating channel:", err);
@@ -91,7 +91,7 @@ export default function CreateChannel({onClose}) {
         </div>
 
         {/* Avatar overlay */}
-        <div className="w-full flex justify-center -mt-14">
+        <div className="w-full flex justify-center -mt-8">
           <img
             src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
               data.name || "User"

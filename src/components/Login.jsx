@@ -53,10 +53,10 @@ export default function Login(){
             }
           });
       
-          console.log(res);
-          localStorage.setItem("token",json.accessToken);
+          console.log(res.data);
+          localStorage.setItem("token",res.data.accessToken);
           dispatch(toggelLogin());
-          dispatch(loginUser(json.user));
+          dispatch(loginUser(res.data.user));
          navigate("/");
       } catch (error) {
         console.log("Error while login", error);

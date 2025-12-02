@@ -8,7 +8,7 @@ export default function VideoSection({ category, currentVideoId }) {
     async function loadVideos() {
       try {
         const res = await axios.get("http://localhost:8000/videos");
-        setVideos(res);
+        setVideos(res.data);
       } catch (err) {
         console.log("Error while fetching videos", err);
       }

@@ -20,7 +20,7 @@ export default function Comments({id}){
           `http://localhost:8000/videos/${id}/comments`
         );
       
-        setComments(resComments);
+        setComments(resComments.data);
       } catch (err) {
         console.log("Error while fetching video", err);
       }
@@ -40,10 +40,10 @@ export default function Comments({id}){
       );
      
 
-      console.log(res);
+      console.log(res.data);
       setComments((prev) =>
       prev.map((c) =>
-        c._id == commentId ? { ...c, likes: res.likes, dislikes: res.dislikes } : c
+        c._id == commentId ? { ...c, likes: res.data.likes, dislikes: res.data.dislikes } : c
       )
     );
     } catch (error) {
@@ -63,10 +63,10 @@ export default function Comments({id}){
         }
       );
      
-      console.log(res);
+      console.log(res.data);
       setComments((prev) =>
       prev.map((c) =>
-        c._id == commentId ? { ...c, likes: res.likes, dislikes: res.dislikes } : c
+        c._id == commentId ? { ...c, likes: res.data.likes, dislikes: res.data.dislikes } : c
       )
     );
     } catch (error) {
@@ -105,7 +105,7 @@ export default function Comments({id}){
       );
 
       
-      console.log(res);
+      console.log(res.data);
 
       // Update UI without full reload
       setComments((prev) =>
@@ -131,7 +131,7 @@ export default function Comments({id}){
 
      
       // Update UI instantly
-      setComments((prev) => [res, ...prev]);
+      setComments((prev) => [res.data, ...prev]);
 
       // Reset
       setComment("");

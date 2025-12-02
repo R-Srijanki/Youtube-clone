@@ -18,16 +18,15 @@ export default function ManageVideos(){
 
     async function loadChannel() {
       try {
-        const res = await axios.get(`http://localhost:8000/channels/${user.channel._id}`, {},{
+        const res = await axios.get(`http://localhost:8000/channels/${user.channel._id}`,{
           headers: {
             'Authorization': `JWT ${localStorage.getItem("token")}`,
             "Content-Type": "application/json"
           },
         });
 
-        
-        setChannel(res.data);
-        setVideos(res.data?.videos||[]); 
+        setChannel(res.data.data);
+        setVideos(res.data?.data.videos||[]); 
       } catch (err) {
         console.log(err.message);
       }

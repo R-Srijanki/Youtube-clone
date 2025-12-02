@@ -12,7 +12,7 @@ export default function Home() {
       try {
         const res = await axios.get("http://localhost:8000/videos");
         
-       const grouped = res.reduce((acc, item) => {
+       const grouped = res.data.reduce((acc, item) => {
           const cat = item.category || "General";
           if (!acc[cat]) acc[cat] = [];
           acc[cat].push(item);
@@ -21,7 +21,7 @@ export default function Home() {
 
 
        setCatMap(grouped);
-        setVideos(res)
+        setVideos(res.data)
       } catch (err) {
         console.log("Error while fetching videos");
       }
@@ -44,7 +44,7 @@ export default function Home() {
       <h2 className="text-xl font-semibold mb-4">Recommended Videos</h2>
 
       {/* Category Filters */}
-       <ul className="flex gap-3 overflow-x-auto no-scrollbar mb-4 pb-1">
+       <ul className="flex gap-3 overflow-x-auto no-scrollbar mb-4 pb-1 pt-1">
         {categories.map((cat) => {
           const isActive =
             (!category && cat === "All") || category === cat;

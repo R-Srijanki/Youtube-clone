@@ -10,7 +10,7 @@ export default function Search(){
           try {
             const res = await axios.get("http://localhost:8000/videos");
         
-            const searchrelated = res.filter((item) =>
+            const searchrelated = res.data.filter((item) =>
                       item.category.toLowerCase().includes(searchtext.toLowerCase()) ||
                       item.title.toLowerCase().includes(searchtext.toLowerCase())
             );
@@ -22,8 +22,12 @@ export default function Search(){
         loadVideos();
       }, [searchtext]);
     return(
+      <>
+        {videos.length === 0 && (
+          <p className="text-gray-800 dark:text-gray-400 text-center">No videos related to {searchtext}</p>
+        )}
        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {videos.map((video) => (
+         {videos.map((video) => (
           <Link
             key={video._id}
             to={`/videos/${video._id}`}
@@ -33,5 +37,6 @@ export default function Search(){
           </Link>
         ))}
       </div>
+      </>
     )
 }

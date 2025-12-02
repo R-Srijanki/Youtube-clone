@@ -17,7 +17,7 @@ export default function Video() {
       try {
         const resVideo = await axios.get(`http://localhost:8000/videos/${id}`);
         
-        setVideo(resVideo);
+        setVideo(resVideo.data);
         setLoading(false);
       } catch (err) {
         console.log("Error while fetching video", err);
@@ -39,10 +39,10 @@ export default function Video() {
         }
       );
       
-      console.log(res);
+      console.log(res.data);
       setVideo((prev) => ({
         ...prev,
-        subscribers: res.subscribers,
+        subscribers: res.data.subscribers,
       }));
     } catch (error) {
       console.log("Error while subscribing");
@@ -61,11 +61,11 @@ export default function Video() {
       
       setVideo((prev) => ({
         ...prev,
-        likes: res.likes,
+        likes: res.data.likes,
         dislikes: res.dislikes,
       }));
 
-      console.log(res);
+      console.log(res.data);
     } catch (error) {
       console.log("Error while liking");
     }
@@ -79,11 +79,11 @@ export default function Video() {
           'Content-Type': 'application/json'
         },
       });
-      console.log(res);
+      console.log(res.data);
       setVideo((prev) => ({
         ...prev,
-        likes: res.likes,
-        dislikes: res.dislikes,
+        likes: res.data.likes,
+        dislikes: res.data.dislikes,
       }));
     } catch (error) {
       console.log("Error while disliking");

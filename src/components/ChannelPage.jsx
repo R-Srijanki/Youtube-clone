@@ -11,14 +11,14 @@ export default function ChannelPage() {
   useEffect(() => {
     async function call() {
       try {
-        const res = await axios.get(`http://localhost:8000/channels/${user.channel._id}`,{}, {
+        const res = await axios.get(`http://localhost:8000/channels/${user.channel._id}`, {
           headers: {
             "Authorization": `JWT ${localStorage.getItem("token")}`,
              "Content-Type": "application/json"
           }
         });
-        setChannel(res.data);
-        setVideos(res.data?.videos?.slice(0, 3) || []);  
+        setChannel(res.data.data);
+        setVideos(res.data?.data.videos?.slice(0, 3) || []);  
       } catch (err) {
         console.log(err.message);
       }
