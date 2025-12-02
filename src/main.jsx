@@ -4,15 +4,22 @@ import './index.css'
 import App from './App.jsx'
 import { Provider } from "react-redux";
 import appStore from "./utils/store";
+import { lazy,Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Home from './components/Home.jsx';
-import Login from './components/Login.jsx';
-import Register from './components/Register.jsx';
-import Video from './components/Video.jsx';
-import Search from './components/Search.jsx';
-import Channel from './components/channel.jsx';
-import ChannelVideo from './components/ChannelVideo.jsx';
-import ManageVideos from './components/ManageVideos.jsx';
+const Home = lazy(() => import('./components/Home.jsx'));
+const Login = lazy(() => import('./components/Login.jsx'));
+const Register = lazy(() => import('./components/Register.jsx'));
+const Video = lazy(() => import('./components/Video.jsx'));
+const Search = lazy(() => import('./components/Search.jsx'));
+const Channel = lazy(() => import('./components/channel.jsx'));
+const ChannelVideo = lazy(() => import('./components/ChannelVideo.jsx'));
+const ManageVideos = lazy(() => import('./components/ManageVideos.jsx'))
+
+const LazyWrapper = (Component) => (
+  <Suspense fallback={<div className="text-center py-10 text-gray-600">Loading...</div>}>
+    <Component />
+  </Suspense>
+)
 const router=createBrowserRouter([
       {
         path:"/",
@@ -20,40 +27,40 @@ const router=createBrowserRouter([
         children:[
           {
             index:true,
-            element:<Home/>
+            element:LazyWrapper(Home)
           },
           {
             path:"/video/:id",
-            element:<Video/>
+            element:LazyWrapper(Video)
           },
           {
             path:"/:category",
-            element:<Home/>
+            element:LazyWrapper(Home)
           },
           {
             path:"/search/:searchtext",
-            element:<Search/>
+            element:LazyWrapper(Search)
           },
           {
             path:"/channel",
-            element:<Channel/>
+            element:LazyWrapper(Channel)
           },
           {
             path:"/channel/upload",
-            element:<ChannelVideo/>
+            element:LazyWrapper(ChannelVideo)
           },
           {
             path:"/managevideos",
-            element:<ManageVideos/>
+            element:LazyWrapper(ManageVideos)
           },
           {
-        path:"/login",
-        element:<Login/>
-      },
-      {
-        path:"/register",
-        element:<Register/>
-      }
+            path:"/login",
+            element:LazyWrapper(Login)
+          },
+          {
+            path:"/register",
+            element:LazyWrapper(Register)
+          }
         ]
       },
       

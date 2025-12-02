@@ -40,7 +40,7 @@ export default function Home() {
     return unique;
   }, [catMap]);
   return (
-    <div className="p-4">
+    <div className="p-4 text-black dark:text-primary">
       <h2 className="text-xl font-semibold mb-4">Recommended Videos</h2>
 
       {/* Category Filters */}
@@ -59,8 +59,8 @@ export default function Home() {
                 className={
                   "border rounded-full px-4 py-1 text-sm whitespace-nowrap cursor-pointer " +
                   (isActive
-                    ? "bg-black text-white border-black"
-                    : "bg-gray-100 hover:bg-gray-200")
+                    ? "bg-black text-white border-black dark:bg-primary dark:text-primary-dark dark:border-primary-dark"
+                    : "bg-gray-100 dark:bg-primary-dark/40 hover:bg-gray-200 dark:hover:bg-primary-dark/60")
                 }
               >
                 {cat}
