@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState,useEffect } from "react";
 import { IoMdMore } from "react-icons/io";
 import { useSelector } from "react-redux";
@@ -17,17 +18,16 @@ export default function ManageVideos(){
 
     async function loadChannel() {
       try {
-        const res = await fetch(`http://localhost:8000/channels/${user.channel._id}`, {
-          method: "GET",
+        const res = await axios.get(`http://localhost:8000/channels/${user.channel._id}`, {},{
           headers: {
             'Authorization': `JWT ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json"
           },
         });
 
-        const json = await res.json();
         
-        setChannel(json.data);
-        setVideos(json.data?.videos||[]); 
+        setChannel(res.data);
+        setVideos(res.data?.videos||[]); 
       } catch (err) {
         console.log(err.message);
       }
@@ -45,24 +45,15 @@ export default function ManageVideos(){
   }
   async function handleUpdate() {
     try {
-      const res = await fetch(
-        `http://localhost:8000/videos/${editData._id}`,
+      const res = await axios.put(
+        `http://localhost:8000/videos/${editData._id}`,editData,
         {
-          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             'Authorization': `JWT ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify(editData),
+          }
         }
       );
-
-      const json = await res.json();
-
-      if (!res.ok) {
-        alert(json.message || "Update failed");
-        return;
-      }
 
      setVideos((prev) =>
         prev.map((v) =>
@@ -81,19 +72,12 @@ export default function ManageVideos(){
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:8000/videos/${id}`, {
-        method: "DELETE",
+      const res = await axios.delete(`http://localhost:8000/videos/${id}`,{}, {
         headers: {
           'Authorization': `JWT ${localStorage.getItem("token")}`,
+           "Content-Type": "application/json"
         },
       });
-
-      const json = await res.json();
-
-      if (!res.ok) {
-        alert(json.message || "Delete failed");
-        return;
-      }
 
       setVideos((prev) => prev.filter((v) => v._id != id));
     } catch (err) {

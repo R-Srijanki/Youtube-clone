@@ -6,19 +6,18 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Comments from "./Comments";
 import VideoSection from "./VideoSection";
-
+import axios from "axios";
 export default function Video() {
   const { id } = useParams();
-  const user = useSelector((store) => store.User.user);
+  const user = useSelector((store) => store.User);
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function loadVideo() {
       try {
-        const resVideo = await fetch(`http://localhost:8000/videos/${id}`);
-        const videoData = await resVideo.json();
+        const resVideo = await axios.get(`http://localhost:8000/videos/${id}`);
         
-        setVideo(videoData);
+        setVideo(resVideo);
         setLoading(false);
       } catch (err) {
         console.log("Error while fetching video", err);
@@ -30,20 +29,20 @@ export default function Video() {
 
   async function handleSubscribe() {
     try {
-      const res = await fetch(
-        `http://localhost:8000/channels/${video.channel._id}/subscribe`,
+      const res = await axios.post(
+        `http://localhost:8000/channels/${video.channel._id}/subscribe`,{},
         {
-          method: "POST",
           headers: {
             'Authorization': `JWT ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json'
           },
         }
       );
-      const data = await res.json();
-      console.log(data);
+      
+      console.log(res);
       setVideo((prev) => ({
         ...prev,
-        subscribers: data.subscribers,
+        subscribers: res.subscribers,
       }));
     } catch (error) {
       console.log("Error while subscribing");
@@ -52,20 +51,21 @@ export default function Video() {
 
   async function handleLike() {
     try {
-      const res = await fetch(`http://localhost:8000/videos/${id}/like`, {
-        method: "POST",
+      const res = await axios.post(`http://localhost:8000/videos/${id}/like`, 
+        {},{
         headers: {
           'Authorization': `JWT ${localStorage.getItem("token")}`,
+          'Content-Type': 'application/json'
         },
       });
-      const data = await res.json();
+      
       setVideo((prev) => ({
         ...prev,
-        likes: data.likes,
-        dislikes: data.dislikes,
+        likes: res.likes,
+        dislikes: res.dislikes,
       }));
 
-      console.log(data);
+      console.log(res);
     } catch (error) {
       console.log("Error while liking");
     }
@@ -73,18 +73,17 @@ export default function Video() {
 
   async function handleDislike() {
     try {
-      const res = await fetch(`http://localhost:8000/videos/${id}/dislike`, {
-        method: "POST",
+      const res = await axios.post(`http://localhost:8000/videos/${id}/dislike`, {},{
         headers: {
           'Authorization': `JWT ${localStorage.getItem("token")}`,
+          'Content-Type': 'application/json'
         },
       });
-      const data = await res.json();
-      console.log(data);
+      console.log(res);
       setVideo((prev) => ({
         ...prev,
-        likes: data.likes,
-        dislikes: data.dislikes,
+        likes: res.likes,
+        dislikes: res.dislikes,
       }));
     } catch (error) {
       console.log("Error while disliking");
@@ -174,7 +173,7 @@ export default function Video() {
         </div>
 
         {/* COMMENTS */}
-        <Comments id={id}/>
+        {user.loggedIn && <Comments id={id}/>}
       </div>
 
       {/* RIGHT SIDE — Suggested Videos */}

@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import VideoCard from "./VideoCard";
+import axios from "axios";
 
 export default function Home() {
   const [videos, setVideos] = useState([]);
@@ -9,10 +10,9 @@ export default function Home() {
   useEffect(() => {
     async function loadVideos() {
       try {
-        const res = await fetch("http://localhost:8000/videos");
-        const json = await res.json();
-
-       const grouped = json.reduce((acc, item) => {
+        const res = await axios.get("http://localhost:8000/videos");
+        
+       const grouped = res.reduce((acc, item) => {
           const cat = item.category || "General";
           if (!acc[cat]) acc[cat] = [];
           acc[cat].push(item);
@@ -21,7 +21,7 @@ export default function Home() {
 
 
        setCatMap(grouped);
-        setVideos(json)
+        setVideos(res)
       } catch (err) {
         console.log("Error while fetching videos");
       }

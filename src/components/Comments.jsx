@@ -2,6 +2,7 @@ import { SlLike, SlDislike } from "react-icons/sl";
 import { IoMdMore } from "react-icons/io";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
 export default function Comments({id}){
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
@@ -15,11 +16,11 @@ export default function Comments({id}){
     useEffect(() => {
     async function loadComments() {
       try {
-        const resComments = await fetch(
+        const resComments = await axios.get(
           `http://localhost:8000/videos/${id}/comments`
         );
-        const commentData = await resComments.json();
-        setComments(commentData);
+      
+        setComments(resComments);
       } catch (err) {
         console.log("Error while fetching video", err);
       }
@@ -28,21 +29,21 @@ export default function Comments({id}){
   }, [id]);
       async function handleCommentLike(commentId) {
     try {
-      const res = await fetch(
-        `http://localhost:8000/videos/${id}/comments/${commentId}/like`,
+      const res = await axios.post(
+        `http://localhost:8000/videos/${id}/comments/${commentId}/like`,{},
         {
-          method: "POST",
           headers: {
             'Authorization': `JWT ${localStorage.getItem("token")}`,
-          },
+             "Content-Type": "application/json"
+          }
         }
       );
-      const data = await res.json();
+     
 
-      console.log(data);
+      console.log(res);
       setComments((prev) =>
       prev.map((c) =>
-        c._id == commentId ? { ...c, likes: data.likes, dislikes: data.dislikes } : c
+        c._id == commentId ? { ...c, likes: res.likes, dislikes: res.dislikes } : c
       )
     );
     } catch (error) {
@@ -52,20 +53,20 @@ export default function Comments({id}){
 
   async function handleCommentDislike(commentId) {
     try {
-      const res = await fetch(
-        `http://localhost:8000/videos/${id}/comments/${commentId}/dislike`,
+      const res = await axios.post(
+        `http://localhost:8000/videos/${id}/comments/${commentId}/dislike`,{},
         {
-          method: "POST",
           headers: {
             'Authorization': `JWT ${localStorage.getItem("token")}`,
-          },
+             "Content-Type": "application/json"
+          }
         }
       );
-      const data = await res.json();
-      console.log(data);
+     
+      console.log(res);
       setComments((prev) =>
       prev.map((c) =>
-        c._id == commentId ? { ...c, likes: data.likes, dislikes: data.dislikes } : c
+        c._id == commentId ? { ...c, likes: res.likes, dislikes: res.dislikes } : c
       )
     );
     } catch (error) {
@@ -75,38 +76,36 @@ export default function Comments({id}){
 
   async function handleCommentDelete(commentId) {
     try {
-      const res = await fetch(
-        `http://localhost:8000/videos/${id}/comments/${commentId}`,
+      const res = await axios.delete(
+        `http://localhost:8000/videos/${id}/comments/${commentId}`,{},
         {
-          method: "DELETE",
           headers: {
             'Authorization': `JWT ${localStorage.getItem("token")}`,
-          },
+             "Content-Type": "application/json"
+          }
         }
       );
-      const data = await res.json();
-      setComments((data) => data.filter((c) => c._id != commentId));
-      console.log(data);
+     
+      setComments((res) => res.filter((c) => c._id != commentId));
+      console.log(res);
     } catch (error) {
       console.log("Error while deleting comment");
     }
   }
   async function handleCommentEdit(commentId) {
     try {
-      const res = await fetch(
-        `http://localhost:8000/videos/${id}/comments/${commentId}`,
+      const res = await axios.put(
+        `http://localhost:8000/videos/${id}/comments/${commentId}`,{ text: editText },
         {
-          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             'Authorization': `JWT ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({ text: editText }),
+          }
         }
       );
 
-      const data = await res.json();
-      console.log(data);
+      
+      console.log(res);
 
       // Update UI without full reload
       setComments((prev) =>
@@ -123,19 +122,16 @@ export default function Comments({id}){
     if (!comment.trim()) return;
 
     try {
-      const res = await fetch(`http://localhost:8000/videos/${id}/comments`, {
-        method: "POST",
+      const res = await axios.post(`http://localhost:8000/videos/${id}/comments`,{ text: comment }, {
         headers: {
           "Content-Type": "application/json",
           'Authorization': `JWT ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ text: comment }),
+        }
       });
 
-      const data = await res.json();
-
+     
       // Update UI instantly
-      setComments((prev) => [data, ...prev]);
+      setComments((prev) => [res, ...prev]);
 
       // Reset
       setComment("");

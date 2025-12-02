@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -54,21 +55,16 @@ export default function Register() {
     if (hasError) return;
 
     try {
-      const res = await fetch("http://localhost:8000/register", {
-        method: "POST",
+      const res = await axios.post("http://localhost:8000/register",data, {
         headers: {
           "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        }
       });
-      const json = await res.json();
-      if (!res.ok) {
-          setErrors({ server: json.message || "Login failed" });
-          return;
-      }
       navigate("/login");
     } catch (err) {
       console.log("error while register");
+      const serverMessage = err.response?.data?.message || "Registration failed";
+      setErrors({ server: serverMessage });
     }
   }
   return (

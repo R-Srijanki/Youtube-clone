@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import CreateChannel from "./CreateChannel";
+import axios from "axios";
 
 export default function ChannelVideo() {
   const user = useSelector((store) => store.User.user);
@@ -64,19 +65,13 @@ export default function ChannelVideo() {
       formData.append("category", data.category.trim());
       formData.append("channel", data.channel);
 
-      const res = await fetch("http://localhost:8000/videos", {
-        method: "POST",
+      const res = await axios.post("http://localhost:8000/videos", formData,{
         headers: {
-          Authorization: `JWT ${localStorage.getItem("token")}`,
-        },
-        body: formData,
+          'Authorization': `JWT ${localStorage.getItem("token")}`,
+           "Content-Type": "multipart/form-data"
+        }
       });
 
-      const json = await res.json();
-      if (!res.ok) {
-        setErrors({ server: json.message || "Video upload failed" });
-        return;
-      } 
         setSuccess("Video uploaded successfully!");
         setData({
           title: "",

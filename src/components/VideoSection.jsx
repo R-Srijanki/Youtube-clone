@@ -1,15 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router";
-
+import axios from "axios";
 export default function VideoSection({ category, currentVideoId }) {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
     async function loadVideos() {
       try {
-        const res = await fetch("http://localhost:8000/videos");
-        const data = await res.json();
-        setVideos(data);
+        const res = await axios.get("http://localhost:8000/videos");
+        setVideos(res);
       } catch (err) {
         console.log("Error while fetching videos", err);
       }

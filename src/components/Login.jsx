@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { toggelLogin,loginUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 export default function Login(){
     const [data,setdata]=useState({
@@ -46,20 +47,13 @@ export default function Login(){
     if (hasError) return;
       try {
 
-          const res=await fetch("http://localhost:8000/login",{
-            method:"POST",
+          const res=await axios.post("http://localhost:8000/login",data,{
             headers: {
             "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
+            }
           });
+      
           console.log(res);
-          const json=await res.json();
-          console.log(json);
-           if (!res.ok) {
-           setErrors({ server: json.message || "Login failed" });
-            return;
-          }
           localStorage.setItem("token",json.accessToken);
           dispatch(toggelLogin());
           dispatch(loginUser(json.user));

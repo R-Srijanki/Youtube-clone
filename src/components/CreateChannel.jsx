@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -52,23 +53,18 @@ export default function CreateChannel({onClose}) {
       formData.append("handle", data.handle);
       formData.append("channelBanner", data.channelBanner);
 
-      const res = await fetch("http://localhost:8000/channels", {
-        method: "POST",
+      const res = await axios.post("http://localhost:8000/channels", formData,{
         headers: {
-          'Authorization': `JWT ${localStorage.getItem("token")}`
-        },
-        body: formData
+          'Authorization': `JWT ${localStorage.getItem("token")}`,
+          'Content-Type': 'multipart/form-data'
+        } 
       });
 
-      const json = await res.json();
-      console.log(json);
-
-      if (!res.ok) {
-        setErrors({ server: json.message || "Channel creation failed" });
-      }
+      console.log(res);
       navigate('/channel');
     } catch (err) {
       console.log("Error creating channel:", err);
+       setErrors({ server: json.message || "Channel creation failed" });
       setErrors({ server: "Something went wrong" });
     }
   }

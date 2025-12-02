@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router";
@@ -10,17 +11,14 @@ export default function ChannelPage() {
   useEffect(() => {
     async function call() {
       try {
-        const res = await fetch(`http://localhost:8000/channels/${user.channel._id}`, {
-          method: "GET",
+        const res = await axios.get(`http://localhost:8000/channels/${user.channel._id}`,{}, {
           headers: {
-            Authorization: `JWT ${localStorage.getItem("token")}`,
-          },
+            "Authorization": `JWT ${localStorage.getItem("token")}`,
+             "Content-Type": "application/json"
+          }
         });
-
-        const json = await res.json();
-        
-        setChannel(json.data);
-        setVideos(json.data?.videos?.slice(0, 3) || []);  
+        setChannel(res.data);
+        setVideos(res.data?.videos?.slice(0, 3) || []);  
       } catch (err) {
         console.log(err.message);
       }

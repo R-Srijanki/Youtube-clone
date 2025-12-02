@@ -1,15 +1,16 @@
 import { Link,useParams } from "react-router"
 import { useState,useEffect } from "react";
 import VideoCard from "./VideoCard";
+import axios from "axios";
 export default function Search(){
     const {searchtext}=useParams();
     const [videos, setVideos] = useState([]);
      useEffect(() => {
         async function loadVideos() {
           try {
-            const res = await fetch("http://localhost:8000/videos");
-            const json = await res.json();
-            const searchrelated = json.filter((item) =>
+            const res = await axios.get("http://localhost:8000/videos");
+        
+            const searchrelated = res.filter((item) =>
                       item.category.toLowerCase().includes(searchtext.toLowerCase()) ||
                       item.title.toLowerCase().includes(searchtext.toLowerCase())
             );
