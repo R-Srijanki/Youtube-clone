@@ -77,6 +77,9 @@ export default function Register() {
         <h1 className="text-2xl font-bold text-center mb-6">Create Account</h1>
 
         <form className="space-y-4" onSubmit={handleregister}>
+          {errors.server && (
+            <p className="text-sm text-red-600">{errors.server}</p>
+          )}
           <div>
             <label className="block font-medium mb-1" htmlFor="fullName">Full Name</label>
             <input

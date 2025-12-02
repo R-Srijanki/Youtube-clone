@@ -97,11 +97,11 @@ export default function ChannelVideo() {
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
       <h2 className="text-xl font-semibold mb-4">Upload Video</h2>
-      {success && <p className="text-green-600">{success}</p>}
-      {errors.server && <p className="text-red-600">{errors.server}</p>}
+      
 
       <form onSubmit={handleSubmit} className="space-y-4">
-       
+       {success && <p className="text-green-600">{success}</p>}
+      {errors.server && <p className="text-red-600">{errors.server}</p>}
         <div>
           <label htmlFor="title" className="block font-medium">
             Title
