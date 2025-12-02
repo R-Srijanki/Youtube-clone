@@ -93,18 +93,19 @@ export default function Video() {
 
   if (loading) {
     return (
-      <div className="text-center text-xl p-10 font-semibold">
+      <div className="text-center text-xl p-10 font-semibold text-gray-900 dark:text-gray-100">
         Loading video...
       </div>
     );
   }
 
   if (!video) {
-    return <div className="text-center text-xl p-10">Video not found.</div>;
+    return <div className="text-center text-xl p-10 text-gray-900 dark:text-gray-100">Video not found.</div>;
   }
 
   return (
-    <div className="md:flex gap-4 p-4">
+    <div className="md:flex gap-4 p-4 bg-white dark:bg-gray-900 
+                    text-gray-900 dark:text-gray-100">
       {/* LEFT SIDE — VIDEO PLAYER */}
       <div className="md:w-[70%]">
         <iframe
@@ -124,7 +125,7 @@ export default function Video() {
             />
             <div>
               <p className="font-medium">{video.channel?.name}</p>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
                 {video.channel?.subscribers?.length} subscribers
               </p>
             </div>
@@ -141,7 +142,7 @@ export default function Video() {
         {/* LIKE / DISLIKE */}
         <div className="flex items-center gap-4 mt-5">
           <div
-            className="flex items-center gap-1 cursor-pointer bg-gray-200 rounded-full px-3 py-2"
+            className="flex items-center gap-1 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-2"
             onClick={handleLike}
           >
             <SlLike />
@@ -149,26 +150,26 @@ export default function Video() {
           </div>
 
           <div
-            className="flex items-center gap-1 cursor-pointer bg-gray-200 rounded-full px-3 py-2"
+            className="flex items-center gap-1 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-2"
             onClick={handleDislike}
           >
             <SlDislike />
             <span>{video.dislikes?.length}</span>
           </div>
 
-          <div className="flex items-center gap-1 cursor-pointer bg-gray-200 rounded-full px-3 py-2">
+          <div className="flex items-center gap-1 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-2">
             <IoMdShareAlt />
             <span>Share</span>
           </div>
 
-          <div className="flex items-center gap-1 cursor-pointer bg-gray-200 rounded-full px-3 py-2">
+          <div className="flex items-center gap-1 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-2">
             <RiDownloadLine />
             <span>Download</span>
           </div>
         </div>
 
         {/* DESCRIPTION */}
-        <div className="bg-gray-100 p-4 rounded-lg mt-4">
+        <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mt-4 text-gray-900 dark:text-gray-200">
           <p>{video.description}</p>
         </div>
 

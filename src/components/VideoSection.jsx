@@ -64,7 +64,7 @@ export default function VideoSection({ category, currentVideoId }) {
             <div className="text-xs text-gray-500 dark:text-gray-400 flex gap-1">
               <span>{item.views} views</span>
               <span>•</span>
-              <span>{item.uploadDate}</span>
+              <span>{new Date(item.uploadDate).toLocaleDateString()}</span>
             </div>
           </div>
         </Link>

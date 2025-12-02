@@ -1,6 +1,9 @@
 export default function VideoCard({video}){
     return(
-        <div className="rounded-lg overflow-hidden shadow-sm bg-white">
+        <div className="rounded-lg overflow-hidden shadow-sm 
+                 bg-white dark:bg-gray-900 
+                 border border-gray-200 dark:border-gray-700 
+                 hover:shadow-md transition">
               
               {/* Thumbnail */}
               <img
@@ -18,11 +21,11 @@ export default function VideoCard({video}){
                   className="h-10 w-10 rounded-full object-cover"
                 />
 
-                <div>
-                  <p className="font-semibold text-sm line-clamp-2">{video.title}</p>
-                  <p className="text-xs text-gray-600">{video.channel?.name}</p>
+                <div  className="flex flex-col">
+                  <p className="font-semibold text-sm line-clamp-2 text-gray-900 dark:text-gray-100">{video.title}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">{video.channel?.name}</p>
 
-                  <div className="text-xs text-gray-500 flex gap-2">
+                  <div className="text-xs text-gray-500 dark:text-gray-400 flex gap-2">
                     <span>{video.views} views</span>
                     <span>•</span>
                     <span>{new Date(video.uploadDate).toLocaleDateString()}</span>
