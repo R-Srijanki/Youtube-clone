@@ -6,12 +6,13 @@ import { Provider } from "react-redux";
 import appStore from "./utils/store";
 import { lazy,Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+const CustomizeChannel = lazy(() => import('./components/CustomizeChannel.jsx'));
 const Home = lazy(() => import('./components/Home.jsx'));
 const Login = lazy(() => import('./components/Login.jsx'));
 const Register = lazy(() => import('./components/Register.jsx'));
 const Video = lazy(() => import('./components/Video.jsx'));
 const Search = lazy(() => import('./components/Search.jsx'));
-const Channel = lazy(() => import('./components/channel.jsx'));
+const Channel = lazy(() => import('./components/Channel.jsx'));
 const ChannelVideo = lazy(() => import('./components/ChannelVideo.jsx'));
 const ManageVideos = lazy(() => import('./components/ManageVideos.jsx'))
 
@@ -52,6 +53,10 @@ const router=createBrowserRouter([
           {
             path:"/managevideos",
             element:LazyWrapper(ManageVideos)
+          },
+          {
+            path:"/customizechannel",
+            element:LazyWrapper(CustomizeChannel)
           },
           {
             path:"/login",

@@ -45,7 +45,7 @@ export default function ChannelPage() {
         {/* Avatar */}
         <img
           src={channel.avatar}
-          className="w-32 h-32 rounded-full border-4 border-white object-cover -mt-20 shadow-md"
+          className="w-32 h-32 rounded-full border-4 border-white object-cover -mt-20 shadow-md z-20"
           alt="Channel Avatar"
         />
 
@@ -58,9 +58,9 @@ export default function ChannelPage() {
           </p>
 
           <div className="flex gap-3 mt-4">
-            <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-full font-medium hover:bg-gray-300 dark:hover:bg-gray-600">
+            <Link to="/customizechannel" className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-full font-medium hover:bg-gray-300 dark:hover:bg-gray-600">
               Customize Channel
-            </button>
+            </Link>
             <Link to="/managevideos" className="px-4 py-2 bg-gray-100 dark:bg-gray-800 border rounded-full font-medium hover:bg-gray-200 dark:hover:bg-gray-700">
               Manage Videos
             </Link>

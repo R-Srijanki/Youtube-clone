@@ -77,7 +77,7 @@ export default function Comments({id}){
   async function handleCommentDelete(commentId) {
     try {
       const res = await axios.delete(
-        `http://localhost:8000/videos/${id}/comments/${commentId}`,{},
+        `http://localhost:8000/videos/${id}/comments/${commentId}`,
         {
           headers: {
             'Authorization': `JWT ${localStorage.getItem("token")}`,
@@ -115,7 +115,7 @@ export default function Comments({id}){
       setEditingCommentId(null);
       setEditText("");
     } catch (error) {
-      console.log("Error while editing comment");
+      console.log("Error while editing comment",error);
     }
   }
   async function handlecomment() {
@@ -241,7 +241,7 @@ export default function Comments({id}){
                       onClick={() => handleCommentLike(item._id)}
                     >
                       <SlLike />
-                      <span>{item.like?.length || 0}</span>
+                      <span>{item.likes?.length || 0}</span>
                     </span>
 
                     <span
@@ -249,7 +249,7 @@ export default function Comments({id}){
                       onClick={() => handleCommentDislike(item._id)}
                     >
                       <SlDislike />
-                      <span>{item.dislike?.length || 0}</span>
+                      <span>{item.dislikes?.length || 0}</span>
                     </span>
 
                     {/* MENU */}

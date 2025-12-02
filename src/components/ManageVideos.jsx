@@ -71,7 +71,7 @@ export default function ManageVideos(){
     if (!confirmDelete) return;
 
     try {
-      const res = await axios.delete(`http://localhost:8000/videos/${id}`,{}, {
+      const res = await axios.delete(`http://localhost:8000/videos/${id}`, {
         headers: {
           'Authorization': `JWT ${localStorage.getItem("token")}`,
            "Content-Type": "application/json"
