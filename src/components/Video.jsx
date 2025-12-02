@@ -5,6 +5,7 @@ import { RiDownloadLine } from "react-icons/ri";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Comments from "./Comments";
+import VideoSection from "./VideoSection";
 
 export default function Video() {
   const { id } = useParams();
@@ -178,6 +179,7 @@ export default function Video() {
       {/* RIGHT SIDE — Suggested Videos */}
       <div className="md:w-[30%]">
         {/* In future — show recommended videos */}
+        <VideoSection category={video.category} currentVideoId={video._id}/>
       </div>
     </div>
   );

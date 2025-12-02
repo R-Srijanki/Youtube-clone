@@ -26,24 +26,19 @@ export default function Login(){
     const newErrors = {};
     let hasError = false;
 
-    const emailregex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const passwordregex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const nameregex = /^([a-zA-Z\s]+)$/;
-
-    if (!username.trim() || !nameregex.test(username.trim())) {
-      newErrors.username = "Username should contain alphabets only";
+    if (!username.trim()) {
+      newErrors.username = "Username is required";
       hasError = true;
     }
 
-    if (!email.trim() || !emailregex.test(email.trim())) {
+    if (!email.trim()) {
       newErrors.email = "Enter a valid email";
       hasError = true;
     }
 
-    if (!password.trim() || !passwordregex.test(password.trim())) {
+    if (!password.trim()) {
       newErrors.password =
-        "Password must be 8+ chars with 1 lowercase, 1 uppercase, 1 digit, and 1 special char";
+        "Password is required";
       hasError = true;
     }
 
