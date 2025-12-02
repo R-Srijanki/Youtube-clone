@@ -4,3 +4,6 @@
     --color-primary:#F9F8F6;
     --color-primary-dark:#393E46;
 }
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}

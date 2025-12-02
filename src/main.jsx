@@ -45,10 +45,8 @@ const router=createBrowserRouter([
           {
             path:"/managevideos",
             element:<ManageVideos/>
-          }
-        ]
-      },
-      {
+          },
+          {
         path:"/login",
         element:<Login/>
       },
@@ -56,6 +54,9 @@ const router=createBrowserRouter([
         path:"/register",
         element:<Register/>
       }
+        ]
+      },
+      
 ])
 createRoot(document.getElementById('root')).render(
   <StrictMode>

@@ -44,7 +44,7 @@ export default function Home() {
       <h2 className="text-xl font-semibold mb-4">Recommended Videos</h2>
 
       {/* Category Filters */}
-       <ul className="flex gap-3 overflow-x-auto mb-4 pb-1">
+       <ul className="flex gap-3 overflow-x-auto no-scrollbar mb-4 pb-1">
         {categories.map((cat) => {
           const isActive =
             (!category && cat === "All") || category === cat;
@@ -53,7 +53,7 @@ export default function Home() {
             cat === "All" ? "/" : `/${encodeURIComponent(cat)}`;
 
           return (
-            <li key={cat}>
+            <li key={cat} className="">
               <Link
                 to={to}
                 className={
