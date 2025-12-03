@@ -34,7 +34,8 @@ export default function Header(){
     const [search,setSearch]=useState("");
     const [menuOpen,setMenuOpen]=useState(false);
     const [channelMenuOpen,setChannelMenuOpen]=useState(false);
-   
+    const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+
     const avatar = user?.avatar || "https://ui-avatars.com/api/?name=User&background=random";
     const profileRef = useRef();
     const uploadRef = useRef();
@@ -68,7 +69,8 @@ export default function Header(){
       dispatch(logoutUser());
     };
     return (
-    <header className="flex justify-between items-center w-full px-4 py-2 shadow-md bg-white dark:bg-gray-900 sticky top-0 z-50">
+    <header className="flex flex-col sm:flex-row justify-between items-center w-full px-4 py-2 shadow-md bg-white dark:bg-gray-900 sticky top-0 z-50">
+       <div className="flex items-center w-full sm:w-auto justify-between">
       {/* Left section */}
       <div className="flex items-center gap-4">
         <button
@@ -80,12 +82,18 @@ export default function Header(){
 
         <Link to="/" className="flex items-center gap-1">
           <FaYoutube className="text-red-600 text-3xl" />
-          <p className="text-2xl font-semibold dark:text-white font-mono">YouTube</p>
+          <p className="text-2xl font-semibold dark:text-white font-mono hidden sm:inline">YouTube</p>
         </Link>
       </div>
-
-      {/* Search bar */}
-      <div className="flex items-center w-[450px] max-sm:w-[250px]">
+      {/* Mobile search icon */}
+        <div className="sm:hidden flex items-center">
+          <button onClick={() => setMobileSearchOpen(prev => !prev)}>
+            <IoSearchOutline size={24} className="text-gray-700 dark:text-white" />
+          </button>
+        </div>
+      </div>
+       {/* Desktop search bar */}
+      <div className={`flex-1 max-w-xl mx-4 transition-all duration-300 ${mobileSearchOpen ? "hidden sm:flex" : "hidden sm:flex"}`}>
         <div className="flex border rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 w-full">
           <input
             type="text"
@@ -102,10 +110,31 @@ export default function Header(){
           </Link>
         </div>
       </div>
+       {/* Mobile search input */}
+      {mobileSearchOpen && (
+        <div className="sm:hidden w-full mt-2">
+          <div className="flex border rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 w-full">
+            <input
+              type="text"
+              placeholder="Search"
+              className="flex-1 bg-transparent outline-none px-4 py-2 dark:text-white"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+            <Link
+              className="px-4 border-l bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 flex items-center justify-center"
+              to={`/search/${search}`}
+              onClick={() => setMobileSearchOpen(false)}
+            >
+              <IoSearchOutline size={22} />
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Right section */}
       {loggedIn ? (
-        <div className="flex items-center gap-6 relative">
+        <div className="flex items-center gap-4 mt-2 sm:mt-0 relative">
           {/* CHANNEL SUBMENU */}
           <div className="relative" ref={uploadRef}>
             <MdVideoCameraFront
@@ -113,7 +142,7 @@ export default function Header(){
               className="text-2xl cursor-pointer dark:text-white"
             />
             {channelMenuOpen && (
-              <ul className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2">
+              <ul className="absolute -right-2 md:right-0 mt-4 w-44 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2 z-50">
                 <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
                   <Link to="/channel/upload" className="flex items-center gap-2"><GoVideo /> Upload Video</Link>
                 </li>
@@ -133,7 +162,7 @@ export default function Header(){
 
             {/* USER DROPDOWN */}
             {menuOpen && (
-              <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 shadow-xl rounded-xl p-3">
+              <div className="absolute right-0 mt-4 w-64 bg-white dark:bg-gray-800 shadow-xl rounded-xl p-3">
                 {/* USER BLOCK */}
                 <div className="flex items-center gap-3 p-3">
                   <img src={avatar} className="w-10 h-10 rounded-full border" />

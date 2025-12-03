@@ -135,7 +135,7 @@ export default function Video() {
 
   return (
     <div
-      className="md:flex gap-4 p-4 bg-white dark:bg-gray-900 
+      className="lg:flex gap-4 p-4 bg-white dark:bg-gray-900 
                     text-gray-900 dark:text-gray-100"
     >
       {/* LEFT SIDE — VIDEO PLAYER */}

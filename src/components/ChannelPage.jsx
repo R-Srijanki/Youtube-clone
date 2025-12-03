@@ -42,11 +42,11 @@ export default function ChannelPage() {
       </div>
 
       {/* Channel Profile + Info */}
-      <div className="px-10 py-6 flex gap-6 items-center">
+      <div className="px-10 py-6 flex-col md:flex gap-6 md:items-center">
         {/* Avatar */}
         <img
           src={channel.avatar}
-          className="w-32 h-32 rounded-full border-4 border-white object-cover -mt-20 shadow-md z-20"
+          className="w-32 h-32 rounded-full border-4 border-white object-cover md:-mt-20 shadow-md z-20"
           alt="Channel Avatar"
         />
 
