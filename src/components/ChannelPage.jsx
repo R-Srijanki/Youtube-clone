@@ -18,6 +18,7 @@ export default function ChannelPage() {
           }
         });
         setChannel(res.data.data);
+        console.log(res.data.data);
         setVideos(res.data?.data.videos?.slice(0, 3) || []);  
       } catch (err) {
         console.log(err.message);

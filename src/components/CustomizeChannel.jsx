@@ -4,6 +4,9 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
 export default function CustomizeChannel() {
+  const navigate = useNavigate();
+  const user = useSelector(store => store.User.user);
+
   const [channel, setChannel] = useState(null);
   const [form, setForm] = useState({
     name: "",
@@ -12,41 +15,39 @@ export default function CustomizeChannel() {
     channelBanner: null
   });
 
-  const user = useSelector(store => store.User.user);
   const [previewBanner, setPreviewBanner] = useState(null);
-  const navigate = useNavigate();
 
-  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  const [errors, setErrors] = useState({});
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
   useEffect(() => {
-    fetchMyChannel();
+    loadChannel();
   }, []);
 
-  async function fetchMyChannel() {
+  async function loadChannel() {
     try {
       const res = await axios.get(
         `http://localhost:8000/channels/${user.channel._id}`,
-        {
-          headers: {
-            Authorization: `JWT ${localStorage.getItem("token")}`
-          }
-        }
+        { headers: { Authorization: `JWT ${localStorage.getItem("token")}` } }
       );
 
-      setChannel(res.data);
+      const c = res.data;
+
+      setChannel(c);
+
       setForm({
-        name: res.data.name,
-        handle: res.data.handle,
-        description: res.data.description,
-        channelBanner: res.data.channelBanner
+        name: c.name || "",
+        handle: c.handle || "",
+        description: c.description || "",
+        channelBanner: c.channelBanner || null
       });
-      setPreviewBanner(res.data.channelBanner);
+
+      setPreviewBanner(c.channelBanner || null);
     } catch (err) {
-      console.log("Error loading channel:", err);
       setErrors({ server: "Failed to load channel" });
     } finally {
       setLoading(false);
@@ -58,8 +59,9 @@ export default function CustomizeChannel() {
 
     if (id === "channelBanner") {
       const file = files[0];
+      if (!file) return;
 
-      if (file && file.size > 6 * 1024 * 1024) {
+      if (file.size > 6 * 1024 * 1024) {
         setErrors({ channelBanner: "File must be under 6MB" });
         return;
       }
@@ -80,27 +82,35 @@ export default function CustomizeChannel() {
     try {
       const fd = new FormData();
 
-      fd.append("name", form.name.trim());
-      fd.append("handle", form.handle.trim());
-      fd.append("description", form.description);
+      const safeName = form.name?.trim() || "";
+      const safeHandle = form.handle?.trim() || "";
+      const safeDesc = form.description?.trim() || "";
+
+      if (safeName) fd.append("name", safeName);
+      if (safeHandle) fd.append("handle", safeHandle);
+      if (safeDesc) fd.append("description", safeDesc);
 
       if (form.channelBanner instanceof File) {
         fd.append("banner", form.channelBanner);
       }
-
+      console.log(fd);
       await axios.patch(
-        `http://localhost:8000/channels/${channel._id}`,
+        `http://localhost:8000/channels/${user.channel._id}`,
         fd,
         {
           headers: {
-            Authorization: `JWT ${localStorage.getItem("token")}`,
+            "Authorization": `JWT ${localStorage.getItem("token")}`,
             "Content-Type": "multipart/form-data"
           }
         }
       );
+      navigate("/channel");
     } catch (err) {
+      console.log(err.response.data.error);
       setErrors({
-        server: err.response?.data?.message || "Update failed"
+        server:
+          err.response?.data?.message ||
+          `Update failed: ${err.message}`
       });
     }
 
@@ -110,19 +120,22 @@ export default function CustomizeChannel() {
   function handleCancel() {
     if (!channel) return;
 
+    // reset form back to loaded channel data
     setForm({
-      name: channel.name,
-      handle: channel.handle,
-      description: channel.description,
-      channelBanner: channel.channelBanner
+      name: channel.name || "",
+      handle: channel.handle || "",
+      description: channel.description || "",
+      channelBanner: channel.channelBanner || null
     });
 
-    setPreviewBanner(channel.channelBanner);
+    setPreviewBanner(channel.channelBanner || null);
+
     navigate("/channel");
   }
 
   async function handleDelete() {
     setDeleteLoading(true);
+
     try {
       await axios.delete(
         `http://localhost:8000/channels/${channel._id}`,
@@ -135,6 +148,7 @@ export default function CustomizeChannel() {
     } catch (err) {
       setErrors({ server: "Unable to delete channel" });
     }
+
     setDeleteLoading(false);
   }
 
@@ -170,26 +184,22 @@ export default function CustomizeChannel() {
             />
           )}
 
-          <div className="mt-4">
-            <input
-              id="channelBanner"
-              type="file"
-              accept="image/*"
-              onChange={handleChange}
-            />
-            {errors.channelBanner && (
-              <p className="text-red-600 text-sm">{errors.channelBanner}</p>
-            )}
-          </div>
+          <input
+            id="channelBanner"
+            type="file"
+            accept="image/*"
+            onChange={handleChange}
+            className="mt-4"
+          />
+
+          {errors.channelBanner && (
+            <p className="text-red-600 text-sm">{errors.channelBanner}</p>
+          )}
         </div>
 
         {/* Name */}
         <div>
           <h2 className="text-lg font-semibold">Name</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Choose a name that represents your content.
-          </p>
-
           <input
             id="name"
             type="text"
@@ -202,31 +212,31 @@ export default function CustomizeChannel() {
         {/* Handle */}
         <div>
           <h2 className="text-lg font-semibold">Handle</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Unique identifier for your channel.
-          </p>
 
           <input
             id="handle"
             type="text"
             value={form.handle}
             onChange={handleChange}
-            placeholder="@username"
+            placeholder="@handle"
             className="w-full border p-2 rounded mt-3 bg-white dark:bg-gray-700"
           />
 
-          <label className="text-lg font-semibold mt-4 block">Description</label>
+          <label className="text-lg font-semibold mt-4 block">
+            Description
+          </label>
+
           <textarea
             id="description"
             value={form.description}
             onChange={handleChange}
-            placeholder="Tell viewers about your channel"
             rows={4}
+            placeholder="Tell viewers about your channel"
             className="border w-full p-2 rounded mt-2 dark:bg-gray-700"
           />
         </div>
 
-        {/* Actions */}
+        {/* Buttons */}
         <div className="flex justify-between items-center pt-5">
           <button
             type="button"
@@ -256,11 +266,14 @@ export default function CustomizeChannel() {
         </div>
       </form>
 
-      {/* Delete Confirmation */}
+      {/* Delete Modal */}
       {confirmDelete && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl w-96">
-            <h3 className="text-xl font-semibold text-red-600">Delete Channel?</h3>
+            <h3 className="text-xl font-semibold text-red-600">
+              Delete Channel?
+            </h3>
+
             <p className="text-sm mt-2 text-gray-700 dark:text-gray-300">
               This will permanently delete your channel, videos, and comments.
             </p>

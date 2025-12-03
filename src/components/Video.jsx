@@ -50,12 +50,13 @@ export default function Video() {
       // Case 2: User subscribed → full channel returned
       const updatedSubscribers = res.data.subscribers || [];
 
-       if (updatedSubscribers.includes(user.user._id)) {
-        setSubscribe(true);console.log("in");
+      if (updatedSubscribers.includes(user.user._id)) {
+        setSubscribe(true);
+        console.log("in");
       } else {
-        setSubscribe(false);console.log("out");
+        setSubscribe(false);
+        console.log("out");
       }
-    console.log(subscribe);
       setVideo((prev) => ({
         ...prev,
         channel: {
@@ -162,14 +163,14 @@ export default function Video() {
             </div>
           </div>
 
-          {!(video?.uploader == user.user._id) && (
-  <button
-    onClick={handleSubscribe}
-    className="bg-red-600 text-white px-4 py-2 rounded-md cursor-pointer"
-  >
-    {subscribe ? "Subscribed" : "Subscribe"}
-  </button>
-)}
+          {!(video?.uploader._id == user.user._id) && (
+            <button
+              onClick={handleSubscribe}
+              className="bg-red-600 text-white px-4 py-2 rounded-md cursor-pointer"
+            >
+              {subscribe ? "Subscribed" : "Subscribe"}
+            </button>
+          )}
         </div>
 
         {/* LIKE / DISLIKE */}
