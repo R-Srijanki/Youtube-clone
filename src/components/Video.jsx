@@ -12,12 +12,18 @@ export default function Video() {
   const user = useSelector((store) => store.User);
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [subscribe, setSubscribe] = useState(false);
   useEffect(() => {
     async function loadVideo() {
       try {
         const resVideo = await axios.get(`http://localhost:8000/videos/${id}`);
-        
         setVideo(resVideo.data);
+        if (resVideo.data.channel.subscribers.includes(user.user._id)) {
+          setSubscribe(true);
+        } else {
+          setSubscribe(false);
+        }
+
         setLoading(false);
       } catch (err) {
         console.log("Error while fetching video", err);
@@ -25,40 +31,56 @@ export default function Video() {
       }
     }
     loadVideo();
-  }, [id]);
+  }, [id, user.user._id]);
 
   async function handleSubscribe() {
     try {
       const res = await axios.post(
-        `http://localhost:8000/channels/${video.channel._id}/subscribe`,{},
+        `http://localhost:8000/channels/${video.channel._id}/subscribe`,
+        {},
         {
           headers: {
-            'Authorization': `JWT ${localStorage.getItem("token")}`,
-            'Content-Type': 'application/json'
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
           },
         }
       );
-      
       console.log(res.data);
+
+      // Case 2: User subscribed → full channel returned
+      const updatedSubscribers = res.data.subscribers || [];
+
+       if (updatedSubscribers.includes(user.user._id)) {
+        setSubscribe(true);console.log("in");
+      } else {
+        setSubscribe(false);console.log("out");
+      }
+    console.log(subscribe);
       setVideo((prev) => ({
         ...prev,
-        subscribers: res.data.subscribers,
+        channel: {
+          ...prev.channel,
+          subscribers: updatedSubscribers,
+        },
       }));
     } catch (error) {
-      console.log("Error while subscribing");
+      console.log("Error while subscribing", error);
     }
   }
 
   async function handleLike() {
     try {
-      const res = await axios.post(`http://localhost:8000/videos/${id}/like`, 
-        {},{
-        headers: {
-          'Authorization': `JWT ${localStorage.getItem("token")}`,
-          'Content-Type': 'application/json'
-        },
-      });
-      
+      const res = await axios.post(
+        `http://localhost:8000/videos/${id}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       setVideo((prev) => ({
         ...prev,
         likes: res.data.likes,
@@ -73,12 +95,16 @@ export default function Video() {
 
   async function handleDislike() {
     try {
-      const res = await axios.post(`http://localhost:8000/videos/${id}/dislike`, {},{
-        headers: {
-          'Authorization': `JWT ${localStorage.getItem("token")}`,
-          'Content-Type': 'application/json'
-        },
-      });
+      const res = await axios.post(
+        `http://localhost:8000/videos/${id}/dislike`,
+        {},
+        {
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log(res.data);
       setVideo((prev) => ({
         ...prev,
@@ -99,12 +125,18 @@ export default function Video() {
   }
 
   if (!video) {
-    return <div className="text-center text-xl p-10 text-gray-900 dark:text-gray-100">Video not found.</div>;
+    return (
+      <div className="text-center text-xl p-10 text-gray-900 dark:text-gray-100">
+        Video not found.
+      </div>
+    );
   }
 
   return (
-    <div className="md:flex gap-4 p-4 bg-white dark:bg-gray-900 
-                    text-gray-900 dark:text-gray-100">
+    <div
+      className="md:flex gap-4 p-4 bg-white dark:bg-gray-900 
+                    text-gray-900 dark:text-gray-100"
+    >
       {/* LEFT SIDE — VIDEO PLAYER */}
       <div className="md:w-[70%]">
         <iframe
@@ -130,12 +162,14 @@ export default function Video() {
             </div>
           </div>
 
-          <button
-            onClick={handleSubscribe}
-            className="bg-red-600 text-white px-4 py-2 rounded-md"
-          >
-            Subscribe
-          </button>
+          {!(video?.uploader == user.user._id) && (
+  <button
+    onClick={handleSubscribe}
+    className="bg-red-600 text-white px-4 py-2 rounded-md cursor-pointer"
+  >
+    {subscribe ? "Subscribed" : "Subscribe"}
+  </button>
+)}
         </div>
 
         {/* LIKE / DISLIKE */}
@@ -173,13 +207,13 @@ export default function Video() {
         </div>
 
         {/* COMMENTS */}
-        {user.loggedIn && <Comments id={id}/>}
+        {user.loggedIn && <Comments id={id} />}
       </div>
 
       {/* RIGHT SIDE — Suggested Videos */}
       <div className="md:w-[30%]">
         {/* In future — show recommended videos */}
-        <VideoSection category={video.category} currentVideoId={video._id}/>
+        <VideoSection category={video.category} currentVideoId={video._id} />
       </div>
     </div>
   );

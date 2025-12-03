@@ -44,7 +44,7 @@ export default function ManageVideos(){
   }
   async function handleUpdate() {
     try {
-      const res = await axios.put(
+      const res = await axios.patch(
         `http://localhost:8000/videos/${editData._id}`,editData,
         {
           headers: {

@@ -94,7 +94,7 @@ export default function Comments({id}){
   }
   async function handleCommentEdit(commentId) {
     try {
-      const res = await axios.put(
+      const res = await axios.patch(
         `http://localhost:8000/videos/${id}/comments/${commentId}`,{ text: editText },
         {
           headers: {

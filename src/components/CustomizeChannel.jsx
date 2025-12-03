@@ -1,21 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
-export default function CustomizeChannel({ channel, onClose, refresh }) {
+export default function CustomizeChannel() {
+  const [channel, setChannel] = useState(null);
   const [form, setForm] = useState({
-    name: channel?.name || "",
-    handle: channel?.handle || "",
+    name: "",
+    handle: "",
+    description: "",
     channelBanner: null
   });
 
-  const [previewBanner, setPreviewBanner] = useState(
-    channel?.bannerUrl || null
-  );
+  const user = useSelector(store => store.User.user);
+  const [previewBanner, setPreviewBanner] = useState(null);
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  useEffect(() => {
+    fetchMyChannel();
+  }, []);
+
+  async function fetchMyChannel() {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/channels/${user.channel._id}`,
+        {
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("token")}`
+          }
+        }
+      );
+
+      setChannel(res.data);
+      setForm({
+        name: res.data.name,
+        handle: res.data.handle,
+        description: res.data.description,
+        channelBanner: res.data.channelBanner
+      });
+      setPreviewBanner(res.data.channelBanner);
+    } catch (err) {
+      console.log("Error loading channel:", err);
+      setErrors({ server: "Failed to load channel" });
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function handleChange(e) {
     const { id, value, files } = e.target;
@@ -38,31 +74,51 @@ export default function CustomizeChannel({ channel, onClose, refresh }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setSaving(true);
     setErrors({});
-    setLoading(true);
 
     try {
       const fd = new FormData();
 
-      fd.append("name", form.name);
-      fd.append("handle", form.handle);
-      if (form.channelBanner) fd.append("banner", form.channelBanner);
+      fd.append("name", form.name.trim());
+      fd.append("handle", form.handle.trim());
+      fd.append("description", form.description);
 
-      const res = await axios.put(
+      if (form.channelBanner instanceof File) {
+        fd.append("banner", form.channelBanner);
+      }
+
+      await axios.patch(
         `http://localhost:8000/channels/${channel._id}`,
         fd,
         {
-          headers: { Authorization: `JWT ${localStorage.getItem("token")}` }
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data"
+          }
         }
       );
-
-      refresh();  
-      onClose();  
     } catch (err) {
-      setErrors({ server: err.response?.data?.message || "Update failed" });
+      setErrors({
+        server: err.response?.data?.message || "Update failed"
+      });
     }
 
-    setLoading(false);
+    setSaving(false);
+  }
+
+  function handleCancel() {
+    if (!channel) return;
+
+    setForm({
+      name: channel.name,
+      handle: channel.handle,
+      description: channel.description,
+      channelBanner: channel.channelBanner
+    });
+
+    setPreviewBanner(channel.channelBanner);
+    navigate("/channel");
   }
 
   async function handleDelete() {
@@ -75,11 +131,19 @@ export default function CustomizeChannel({ channel, onClose, refresh }) {
         }
       );
 
-      window.location.href = "/";
+      navigate("/channel");
     } catch (err) {
       setErrors({ server: "Unable to delete channel" });
     }
     setDeleteLoading(false);
+  }
+
+  if (loading) {
+    return (
+      <div className="p-6 text-center text-gray-500">
+        Loading channel customization...
+      </div>
+    );
   }
 
   return (
@@ -103,18 +167,15 @@ export default function CustomizeChannel({ channel, onClose, refresh }) {
             <img
               src={previewBanner}
               className="w-full h-40 object-cover rounded-lg mt-4"
-              alt="banner"
             />
           )}
 
           <div className="mt-4">
-            <label className="font-medium">Channel Banner</label>
             <input
               id="channelBanner"
               type="file"
               accept="image/*"
               onChange={handleChange}
-              className="block mt-1"
             />
             {errors.channelBanner && (
               <p className="text-red-600 text-sm">{errors.channelBanner}</p>
@@ -129,19 +190,13 @@ export default function CustomizeChannel({ channel, onClose, refresh }) {
             Choose a name that represents your content.
           </p>
 
-          <div className="mt-3">
-            <label className="font-medium">Name</label>
-            <input
-              id="name"
-              type="text"
-              value={form.name}
-              onChange={handleChange}
-              className="w-full border p-2 rounded mt-1 bg-white dark:bg-gray-700"
-            />
-            {errors.name && (
-              <p className="text-red-600 text-sm">{errors.name}</p>
-            )}
-          </div>
+          <input
+            id="name"
+            type="text"
+            value={form.name}
+            onChange={handleChange}
+            className="w-full border p-2 rounded mt-3 bg-white dark:bg-gray-700"
+          />
         </div>
 
         {/* Handle */}
@@ -151,20 +206,24 @@ export default function CustomizeChannel({ channel, onClose, refresh }) {
             Unique identifier for your channel.
           </p>
 
-          <div className="mt-3">
-            <label className="font-medium">Handle</label>
-            <input
-              id="handle"
-              type="text"
-              value={form.handle}
-              onChange={handleChange}
-              placeholder="@username"
-              className="w-full border p-2 rounded mt-1 bg-white dark:bg-gray-700"
-            />
-            {errors.handle && (
-              <p className="text-red-600 text-sm">{errors.handle}</p>
-            )}
-          </div>
+          <input
+            id="handle"
+            type="text"
+            value={form.handle}
+            onChange={handleChange}
+            placeholder="@username"
+            className="w-full border p-2 rounded mt-3 bg-white dark:bg-gray-700"
+          />
+
+          <label className="text-lg font-semibold mt-4 block">Description</label>
+          <textarea
+            id="description"
+            value={form.description}
+            onChange={handleChange}
+            placeholder="Tell viewers about your channel"
+            rows={4}
+            className="border w-full p-2 rounded mt-2 dark:bg-gray-700"
+          />
         </div>
 
         {/* Actions */}
@@ -180,7 +239,7 @@ export default function CustomizeChannel({ channel, onClose, refresh }) {
           <div className="flex gap-3">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleCancel}
               className="px-5 py-2 rounded-full border hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               Cancel
@@ -188,24 +247,22 @@ export default function CustomizeChannel({ channel, onClose, refresh }) {
 
             <button
               type="submit"
+              disabled={saving}
               className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
-              disabled={loading}
             >
-              {loading ? "Updating..." : "Update"}
+              {saving ? "Updating..." : "Update"}
             </button>
           </div>
         </div>
       </form>
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Confirmation */}
       {confirmDelete && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl w-96">
-            <h3 className="text-xl font-semibold text-red-600">
-              Delete Channel?
-            </h3>
+            <h3 className="text-xl font-semibold text-red-600">Delete Channel?</h3>
             <p className="text-sm mt-2 text-gray-700 dark:text-gray-300">
-              This will permanently delete your channel, all videos, and comments.
+              This will permanently delete your channel, videos, and comments.
             </p>
 
             <div className="mt-5 flex justify-end gap-3">
@@ -218,8 +275,8 @@ export default function CustomizeChannel({ channel, onClose, refresh }) {
 
               <button
                 onClick={handleDelete}
-                className="px-5 py-2 bg-red-600 text-white rounded-full hover:bg-red-700"
                 disabled={deleteLoading}
+                className="px-5 py-2 bg-red-600 text-white rounded-full hover:bg-red-700"
               >
                 {deleteLoading ? "Deleting..." : "Delete"}
               </button>
