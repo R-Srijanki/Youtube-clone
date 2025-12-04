@@ -1,4 +1,4 @@
-import Header from "./components/header"
+import Header from "./components/Header"
 import { Outlet } from "react-router";
 import Aside from "./components/Aside";
 import { useSelector } from "react-redux";

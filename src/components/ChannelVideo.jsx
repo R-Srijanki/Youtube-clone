@@ -58,17 +58,20 @@ export default function ChannelVideo() {
 
     try {
       const formData = new FormData();
-      formData.append("title", data.title.trim());
-      formData.append("thumbnailUrl", data.thumbnailUrl.trim());
-      formData.append("videoUrl", data.videoUrl.trim());
-      formData.append("description", data.description.trim());
-      formData.append("category", data.category.trim());
-      formData.append("channel", data.channel);
+      const trimmeddata={
+          title:data.title.trim(),
+        thumbnailUrl:data.thumbnailUrl.trim(),
+         videoUrl:data.videoUrl.trim(),
+         description:data.description.trim(),
+        category:data.category.trim(),
+        channel:data.channel
+      };
+      setData(trimmeddata);
 
-      const res = await axios.post("http://localhost:8000/videos", formData,{
+      const res = await axios.post("http://localhost:8000/videos", data,{
         headers: {
           'Authorization': `JWT ${localStorage.getItem("token")}`,
-           "Content-Type": "multipart/form-data"
+           "Content-Type": "application/json"
         }
       });
 

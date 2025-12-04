@@ -60,7 +60,8 @@ export default function Login(){
          navigate("/");
       } catch (error) {
         console.log("Error while login", error);
-      setErrors({ server: "Something went wrong" });
+        const serverMessage = err.response?.data?.message || "Login failed";
+         setErrors({ server: serverMessage });
       }
     }
     return(
