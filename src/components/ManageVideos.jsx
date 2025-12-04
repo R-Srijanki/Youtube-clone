@@ -6,13 +6,14 @@ import { Link,useNavigate } from "react-router";
 
 export default function ManageVideos(){
   const user = useSelector((store) => store.User.user);
+  //store channel,videos details 
   const [channel, setChannel] = useState(null);
   const [videos, setVideos] = useState([]);
+  //to open menu for edit , delete options on video
   const [menuOpen, setMenuOpen] = useState(null);
   const [editData, setEditData] = useState(null);
-  const navigate = useNavigate();
 
-  
+  //to get channel details and store
   useEffect(() => {
     if (!user?.channel?._id) return;
 
@@ -33,15 +34,16 @@ export default function ManageVideos(){
     }
     loadChannel();
   }, [user?.channel?._id]);
-  
+  //to open menu for edit options
   function handleMenu(videoId) {
     setMenuOpen((prev) => (prev === videoId ? null : videoId));
   }
-  
+  //to open edit modal  for video
   function openEditModal(video) {
     setEditData({ ...video });
     setMenuOpen(null);
   }
+  //to change video details 
   async function handleUpdate() {
     try {
       const res = await axios.patch(
@@ -59,13 +61,12 @@ export default function ManageVideos(){
           v._id === editData._id ? { ...v, ...editData } : v
         )
       )
-
       setEditData(null);
     } catch (err) {
       console.log(err.message);
     }
   }
-
+//to delete video from channel
   async function handleDelete(id) {
     const confirmDelete = window.confirm("Delete this video permanently?");
     if (!confirmDelete) return;
@@ -99,7 +100,7 @@ export default function ManageVideos(){
                 className="w-full h-40 object-cover"
               />
             </Link>
-
+            {/*video details */}
             <div className="p-3 flex gap-3 relative">
               <img
                 src={channel?.avatar}
@@ -127,7 +128,7 @@ export default function ManageVideos(){
                   handleMenu(video._id);
                 }}
               />
-
+              {/**to handle edit and delete video */}
               {menuOpen === video._id && (
                 <ul className="absolute bg-white dark:bg-gray-700 shadow-md rounded-md right-2 top-8 w-28 text-sm z-20">
                   <li
@@ -154,7 +155,7 @@ export default function ManageVideos(){
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg w-[400px]">
             <h2 className="text-lg font-semibold mb-4">Edit Video</h2>
-
+            {/**title */}
             <label className="text-sm">Title</label>
             <input
               type="text"
@@ -164,7 +165,7 @@ export default function ManageVideos(){
               }
               className="border w-full p-2 rounded mb-3 dark:bg-gray-700"
             />
-
+            {/**description */}
             <label className="text-sm">Description</label>
             <textarea
               value={editData.description}
@@ -173,7 +174,7 @@ export default function ManageVideos(){
               }
               className="border w-full p-2 rounded mb-3 dark:bg-gray-700"
             />
-
+            {/**category */}
             <label className="text-sm">Category</label>
             <input
               type="text"
@@ -183,7 +184,7 @@ export default function ManageVideos(){
               }
               className="border w-full p-2 rounded mb-3 dark:bg-gray-700"
             />
-
+            {/**to not change anything */}
             <div className="flex justify-end gap-3 mt-4">
               <button
                 className="px-4 py-2 rounded bg-gray-300 dark:bg-gray-600"
@@ -191,6 +192,7 @@ export default function ManageVideos(){
               >
                 Cancel
               </button>
+              {/**to update video changes */}
               <button
                 className="px-4 py-2 rounded bg-blue-600 text-white"
                 onClick={handleUpdate}

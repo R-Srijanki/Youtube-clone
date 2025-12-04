@@ -5,13 +5,17 @@ import axios from "axios";
 
 export default function Home() {
   const [videos, setVideos] = useState([]);
+  //to store videos 
   const {category}=useParams();
+  //to get category if present from url
+  //to get all types of category in videos
   const [catMap, setCatMap] = useState({});
+  //to get videos from api
   useEffect(() => {
     async function loadVideos() {
       try {
         const res = await axios.get("http://localhost:8000/videos");
-        
+        //groups videos by category
        const grouped = res.data.reduce((acc, item) => {
           const cat = item.category || "General";
           if (!acc[cat]) acc[cat] = [];
@@ -28,6 +32,7 @@ export default function Home() {
     }
     loadVideos();
   }, []);
+  //filter if category present
    const filteredVideos = useMemo(() => {
     if (!category || category === "All") return videos;
     return catMap[category] || [];

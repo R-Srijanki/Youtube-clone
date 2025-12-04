@@ -9,15 +9,18 @@ import VideoSection from "./VideoSection";
 import axios from "axios";
 export default function Video() {
   const { id } = useParams();
+  //get video data by id from url
   const user = useSelector((store) => store.User);
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [subscribe, setSubscribe] = useState(false);
+  //to get video details 
   useEffect(() => {
     async function loadVideo() {
       try {
         const resVideo = await axios.get(`http://localhost:8000/videos/${id}`);
         setVideo(resVideo.data);
+        //handle subscribe 
         if (resVideo.data.channel.subscribers.includes(user.user._id)) {
           setSubscribe(true);
         } else {
@@ -32,7 +35,7 @@ export default function Video() {
     }
     loadVideo();
   }, [id, user.user._id]);
-
+//to handle subscribe
   async function handleSubscribe() {
     try {
       const res = await axios.post(
@@ -46,17 +49,15 @@ export default function Video() {
         }
       );
       console.log(res.data);
-
-      // Case 2: User subscribed → full channel returned
+      //to get updated subscribers details
       const updatedSubscribers = res.data.subscribers || [];
 
       if (updatedSubscribers.includes(user.user._id)) {
         setSubscribe(true);
-        console.log("in");
       } else {
         setSubscribe(false);
-        console.log("out");
       }
+      //update details
       setVideo((prev) => ({
         ...prev,
         channel: {
@@ -68,7 +69,7 @@ export default function Video() {
       console.log("Error while subscribing", error);
     }
   }
-
+//handle like of video
   async function handleLike() {
     try {
       const res = await axios.post(
@@ -81,7 +82,7 @@ export default function Video() {
           },
         }
       );
-
+     //update details
       setVideo((prev) => ({
         ...prev,
         likes: res.data.likes,
@@ -93,7 +94,7 @@ export default function Video() {
       console.log("Error while liking");
     }
   }
-
+//handle dislike of video
   async function handleDislike() {
     try {
       const res = await axios.post(
@@ -107,6 +108,7 @@ export default function Video() {
         }
       );
       console.log(res.data);
+      //update details
       setVideo((prev) => ({
         ...prev,
         likes: res.data.likes,
@@ -190,12 +192,12 @@ export default function Video() {
             <SlDislike />
             <span>{video.dislikes?.length}</span>
           </div>
-
+            {/**share */}
           <div className="flex items-center gap-1 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-2">
             <IoMdShareAlt />
             <span>Share</span>
           </div>
-
+            {/**download */}
           <div className="flex items-center gap-1 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-2">
             <RiDownloadLine />
             <span>Download</span>

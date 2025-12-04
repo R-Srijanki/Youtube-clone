@@ -24,7 +24,7 @@ export default function VideoCard({video}){
                 <div  className="flex flex-col">
                   <p className="font-semibold text-sm line-clamp-2 text-gray-900 dark:text-gray-100">{video.title}</p>
                   <p className="text-xs text-gray-600 dark:text-gray-400">{video.channel?.name}</p>
-
+                  {/**views and upload date of video */}
                   <div className="text-xs text-gray-500 dark:text-gray-400 flex gap-2">
                     <span>{video.views} views</span>
                     <span>•</span>

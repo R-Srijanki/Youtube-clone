@@ -4,6 +4,7 @@ import axios from "axios";
 
 export default function Register() {
   const navigate = useNavigate();
+  //to store register details
   const [data, setdata] = useState({
     fullName: "",
     username: "",
@@ -11,6 +12,7 @@ export default function Register() {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  //to handle change on input
   function handlechange(e) {
     const { id, value } = e.target;
     setdata((prevData) => ({
@@ -18,6 +20,7 @@ export default function Register() {
       [id]: value,
     }));
   }
+  //on submit from details it helps register by checking errors
   async function handleregister(e) {
     e.preventDefault();
 
@@ -53,7 +56,7 @@ export default function Register() {
 
     setErrors(newErrors);
     if (hasError) return;
-
+    //if no errors it sends data 
     try {
       const res = await axios.post("http://localhost:8000/register",data, {
         headers: {
@@ -71,11 +74,12 @@ export default function Register() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="bg-white p-8 rounded-xl shadow-md w-[400px]">
         <h1 className="text-2xl font-bold text-center mb-6">Create Account</h1>
-
+        {/**form */}
         <form className="space-y-4" onSubmit={handleregister}>
           {errors.server && (
             <p className="text-sm text-red-600">{errors.server}</p>
           )}
+          {/**full name */}
           <div>
             <label className="block font-medium mb-1" htmlFor="fullName">Full Name</label>
             <input
@@ -88,7 +92,7 @@ export default function Register() {
             />
             {errors.fullName&&<p className="mt-1 text-sm text-red-500">{errors.fullName}</p>}
           </div>
-
+            {/**username */}
           <div>
             <label className="block font-medium mb-1" htmlFor="username">Username</label>
             <input
@@ -101,7 +105,7 @@ export default function Register() {
             />
             {errors.username&&<p className="mt-1 text-sm text-red-500">{errors.username}</p>}
           </div>
-
+          {/* email*/}
           <div>
             <label className="block font-medium mb-1" htmlFor="email">Email</label>
             <input
@@ -114,7 +118,7 @@ export default function Register() {
             />
             {errors.email&&<p className="mt-1 text-sm text-red-500">{errors.email}</p>}
           </div>
-
+          {/*password*/}
           <div>
             <label className="block font-medium mb-1" htmlFor="password">Password</label>
             <input
@@ -127,7 +131,7 @@ export default function Register() {
             />
             {errors.password&&<p className="mt-1 text-sm text-red-500">{errors.password}</p>}
           </div>
-
+          {/*register user*/}
           <button
             type="submit"
             className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition"
@@ -135,7 +139,7 @@ export default function Register() {
             Register
           </button>
         </form>
-
+          {/*if account exists then login */}
         <p className="text-center mt-4 text-sm">
           Already have an account?
           <Link to="/login" className="text-red-600 ml-1 font-medium">

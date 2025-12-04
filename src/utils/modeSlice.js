@@ -1,5 +1,5 @@
  import { createSlice } from '@reduxjs/toolkit';
-  
+  //handle mode
 const initialState = {
     mode: localStorage.getItem('theme') || 'light', // Load from localStorage or default to 'light'
 };

@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import axios from "axios";
 export default function VideoSection({ category, currentVideoId }) {
   const [videos, setVideos] = useState([]);
-
+//get videos details by api call
   useEffect(() => {
     async function loadVideos() {
       try {
@@ -15,7 +15,7 @@ export default function VideoSection({ category, currentVideoId }) {
     }
     loadVideos();
   }, []);
-
+  //filter videos based current playing video
   const filteredVideos = useMemo(() => {
     // Remove the current video from suggestions
     const others = videos.filter((v) => v._id !== currentVideoId);
@@ -44,18 +44,18 @@ export default function VideoSection({ category, currentVideoId }) {
           key={item._id}
           to={`/video/${item._id}`}
           className="flex gap-3 hover:bg-gray-100 dark:hover:bg-primary-dark/30 p-2 rounded-lg transition-all"
-        >
+        >{/**thumbnail url */}
           <img
             src={item.thumbnailUrl}
             alt={item.title}
             className="w-40 h-24 object-cover rounded-md"
           />
-
+          {/**title */}
           <div className="flex flex-col justify-between">
             <p className="font-medium text-black dark:text-primary line-clamp-2">
               {item.title}
             </p>
-
+            {/**channel name,views upload date */}
             <p className="text-sm text-gray-600 dark:text-gray-300">
               {item.channel?.name}
             </p>

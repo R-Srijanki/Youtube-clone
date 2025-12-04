@@ -26,11 +26,13 @@ import { logoutUser } from "../utils/userSlice";
 
 export default function Header(){
     const loggedIn=useSelector(store=>store.User.loggedIn);
+    //to get loggedIn and user value
     const user=useSelector(store=>store.User.user);
+    //to handle dark mode
     const themeMode = useSelector((store) => store.Theme.mode);
     const dispatch=useDispatch();
     const navigate=useNavigate();
-
+  //search,menu open on click channel,profile on screen
     const [search,setSearch]=useState("");
     const [menuOpen,setMenuOpen]=useState(false);
     const [channelMenuOpen,setChannelMenuOpen]=useState(false);
@@ -53,6 +55,7 @@ export default function Header(){
       document.addEventListener("mousedown", handleClickOutside);
       return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+    //to handle dark and light mode
     useEffect(() => {
         if (themeMode === 'dark') {
           document.documentElement.classList.add('dark');
@@ -60,9 +63,11 @@ export default function Header(){
           document.documentElement.classList.remove('dark');
         }
     }, [themeMode]);
+    //toggle mode
     const handletoggle = () => {
         dispatch(toggleTheme());
     };
+    //on logout 
     const handlelogout=()=>{
       localStorage.clear();
       navigate('/');
@@ -79,7 +84,7 @@ export default function Header(){
         >
           <RxHamburgerMenu size={22} />
         </button>
-
+        {/*youtube icon */}
         <Link to="/" className="flex items-center gap-1">
           <FaYoutube className="text-red-600 text-3xl" />
           <p className="text-2xl font-semibold dark:text-white font-mono hidden sm:inline">YouTube</p>
@@ -152,7 +157,9 @@ export default function Header(){
               </ul>
             )}
           </div>
+          {/**notification icon */}
           <IoIosNotificationsOutline className="text-2xl cursor-pointer dark:text-white"/>
+          {/**profile icon */}
           <div className="relative" ref={profileRef}>
             <img
               src={avatar}
@@ -180,6 +187,7 @@ export default function Header(){
                 <ul className="text-sm dark:text-white">
                   <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded"><FaGoogle /> Google Account</li>
                   <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded"><MdOutlineSwitchAccount /> Switch Account</li>
+                 {/*to logout option */} 
                   <li onClick={handlelogout} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded"><PiSignOut /> Sign Out</li>
                 </ul>
 
@@ -203,7 +211,7 @@ export default function Header(){
                 </ul>
 
                 <hr className="my-2" />
-
+                {/**help setting options */}
                 <ul className="text-sm dark:text-white">
                   <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded"><CiSettings /> Settings</li>
                   <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded"><IoMdHelpCircleOutline /> Help</li>
@@ -213,8 +221,9 @@ export default function Header(){
             )}
           </div>
         </div>
-      ) : (
-        <Link to="/login">
+        
+      ) : ( 
+        <Link to="/login">{/*handles when not login */}
           <div className="border rounded-full flex items-center px-2 py-1 gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
             <CgProfile className="text-xl dark:text-white" />
             <span className="font-semibold dark:text-white">Sign In</span>

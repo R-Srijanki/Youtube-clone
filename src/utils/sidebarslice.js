@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+//to handle sidebar
 const sidebarSlice = createSlice(
     {
         name: "Sidebar",

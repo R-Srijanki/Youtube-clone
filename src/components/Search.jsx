@@ -4,12 +4,15 @@ import VideoCard from "./VideoCard";
 import axios from "axios";
 export default function Search(){
     const {searchtext}=useParams();
+    //get searchtext from url
+    //store videos
     const [videos, setVideos] = useState([]);
+    //get videos from api
      useEffect(() => {
         async function loadVideos() {
           try {
             const res = await axios.get("http://localhost:8000/videos");
-        
+            //search based on title
             const searchrelated = res.data.filter((item) =>
                       item.category.toLowerCase().includes(searchtext.toLowerCase()) ||
                       item.title.toLowerCase().includes(searchtext.toLowerCase())

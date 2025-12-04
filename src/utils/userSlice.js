@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+//to store user details after login and delete after logout
 const userSlice = createSlice(
     {
         name: "User",

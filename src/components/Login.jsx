@@ -10,9 +10,12 @@ export default function Login(){
       email:"",
       password:""
     });
+    //store login details
     const dispatch=useDispatch();
     const [errors,setErrors]=useState({});
+    //handle errors
     const navigate=useNavigate();
+    //to handle input change
     function handlechange(e) {
     const { id, value } = e.target;
     setdata((prevData) => ({
@@ -20,13 +23,14 @@ export default function Login(){
       [id]: value,
     }));
   }
+  //on submit form handles login 
     async function handlelog(e){
       e.preventDefault();
 
     const { username, email, password } = data;
     const newErrors = {};
     let hasError = false;
-
+//checks for errors 
     if (!username.trim()) {
       newErrors.username = "Username is required";
       hasError = true;
@@ -45,8 +49,9 @@ export default function Login(){
 
     setErrors(newErrors);
     if (hasError) return;
-      try {
 
+      try {
+            //send login details and get accessToken
           const res=await axios.post("http://localhost:8000/login",data,{
             headers: {
             "Content-Type": "application/json"
@@ -54,8 +59,10 @@ export default function Login(){
           });
       
           console.log(res.data);
+          //store token in local storage
           localStorage.setItem("token",res.data.accessToken);
           dispatch(toggelLogin());
+          //login successful so toggle and store details
           dispatch(loginUser(res.data.user));
          navigate("/");
       } catch (error) {
@@ -75,6 +82,7 @@ export default function Login(){
           {errors.server && (
             <p className="text-sm text-red-600">{errors.server}</p>
           )}
+          {/*username */}
           <div>
             <label className="block font-medium mb-1" htmlFor="username">
               Username
@@ -89,6 +97,7 @@ export default function Login(){
             />
             {errors.username&&<p className="mt-1 text-sm text-red-500">{errors.username}</p>}
           </div>
+          {/*email */}
           <div>
             <label className="block font-medium mb-1" htmlFor="email">
               Email
@@ -103,7 +112,7 @@ export default function Login(){
             />
             {errors.email&&<p className="mt-1 text-sm text-red-500">{errors.email}</p>}
           </div>
-
+          {/*password */}
           <div>
             <label className="block font-medium mb-1" htmlFor="password">
               Password
@@ -118,12 +127,12 @@ export default function Login(){
             />
             {errors.password&&<p className="mt-1 text-sm text-red-500">{errors.password}</p>}
           </div>
-
+          {/*login button */}
           <button type="submit" className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition">
             Login
           </button>
         </form>
-
+          {/**if don't have account click on register */}
         <p className="text-center mt-4 text-sm">
           Don't have an account?
           <Link to="/register" className="text-red-600 ml-1 font-medium">

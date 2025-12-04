@@ -4,7 +4,7 @@ import Aside from "./components/Aside";
 import { useSelector } from "react-redux";
 import './index.css'
 export default function App() {
- 
+ //to check if sidebar open
   const visible=useSelector(store=>store.Sidebar.open);
     return (
     <div className="w-full h-screen bg-primary dark:bg-primary-dark text-black dark:text-primary">
