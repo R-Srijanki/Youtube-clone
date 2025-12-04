@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import appStore from "./utils/store";
 import { lazy,Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+const NotFound = lazy(() => import('./components/NotFound.jsx'));
 const CustomizeChannel = lazy(() => import('./components/CustomizeChannel.jsx'));
 const Home = lazy(() => import('./components/Home.jsx'));
 const Login = lazy(() => import('./components/Login.jsx'));
@@ -66,7 +67,8 @@ const router=createBrowserRouter([
             path:"/register",
             element:LazyWrapper(Register)
           }
-        ]
+        ],
+        errorElement:LazyWrapper(NotFound)
       },
       
 ])
