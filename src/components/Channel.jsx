@@ -5,9 +5,11 @@ import { useState } from "react";
 useState
 export default function Channel(){
     const user=useSelector((store)=>store.User.user);
+    //to get user details
      const [showCreate, setShowCreate] = useState(!user?.channel);
-    console.log(user);
-    return(
+     //to check if channel exists
+    //console.log(user);
+    return(//this opens channel page if exists else create channel page
         <div>
              {user?.channel ? (
         <ChannelPage />

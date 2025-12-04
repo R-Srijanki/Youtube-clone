@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 export default function CreateChannel({onClose}) {
+  //to store channel details
   const [data, setData] = useState({
     name: "",
     handle: "",
@@ -10,10 +11,10 @@ export default function CreateChannel({onClose}) {
   });
 
   const navigate=useNavigate();
-
+//to preview channel banner
   const [previewBanner, setPreviewBanner] = useState(null);
   const [errors, setErrors] = useState({});
-
+//to handle changes in input 
   function handleChange(e) {
     const { id, value, files } = e.target;
 
@@ -25,12 +26,12 @@ export default function CreateChannel({onClose}) {
       setData({ ...data, [id]: value });
     }
   }
-
+// functions when we click on submit form
   async function handleSubmit(e) {
     e.preventDefault();
     const error = {};
     let hasError = false;
-
+//to check errors in details
     if (!data.name.trim()) {
       error.name = "Enter valid channel name";
       hasError = true;
@@ -46,13 +47,13 @@ export default function CreateChannel({onClose}) {
 
     setErrors(error);
     if (hasError) return;
-
+//after error check
     try {
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("handle", data.handle);
       formData.append("channelBanner", data.channelBanner);
-
+//send data to backend 
       const res = await axios.post("http://localhost:8000/channels", formData,{
         headers: {
           'Authorization': `JWT ${localStorage.getItem("token")}`,
@@ -64,8 +65,8 @@ export default function CreateChannel({onClose}) {
       navigate('/channel');
     } catch (err) {
       console.log("Error creating channel:", err);
-       setErrors({ server: json.message || "Channel creation failed" });
-      setErrors({ server: "Something went wrong" });
+       const serverMessage = err.response?.data?.message || "Channel creation failed";
+         setErrors({ server: serverMessage });
     }
   }
 
@@ -100,7 +101,7 @@ export default function CreateChannel({onClose}) {
             className="w-28 h-28 rounded-full border-4 border-white shadow-md"
           />
         </div>
-
+            {/**channel banner */}
         <div className="mt-6">
           <label className="font-medium">Channel Banner</label>
           <input
@@ -115,6 +116,7 @@ export default function CreateChannel({onClose}) {
           )}
         </div>
 
+            {/**channel name */}
         <div className="mt-4">
           <label className="font-medium">Name</label>
           <input
@@ -126,6 +128,7 @@ export default function CreateChannel({onClose}) {
           {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
         </div>
 
+            {/**channel handle */}
         <div className="mt-4">
           <label className="font-medium">Handle</label>
           <input
@@ -147,7 +150,7 @@ export default function CreateChannel({onClose}) {
         {errors.server && (
           <p className="text-red-600 text-sm mt-2">{errors.server}</p>
         )}
-
+         {/*cancel on no creation */}
         <div className="flex justify-end gap-3 mt-6">
           <button
             type="button"
@@ -156,7 +159,7 @@ export default function CreateChannel({onClose}) {
           >
             Cancel
           </button>
-
+          {/**submit form on click create */}
           <button
             type="submit"
             className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"

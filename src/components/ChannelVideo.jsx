@@ -7,9 +7,9 @@ import axios from "axios";
 export default function ChannelVideo() {
   const user = useSelector((store) => store.User.user);
   const navigate=useNavigate();
-
+//if user channel does not exists it goes to create channel page 
   if (!user?.channel) return <CreateChannel />;
-
+//to store video details in useState
   const [data, setData] = useState({
     title: "",
     thumbnailUrl: "",
@@ -21,17 +21,17 @@ export default function ChannelVideo() {
 
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState("");
-
+//handle changes in input
   function handleChange(e) {
     const { id, value } = e.target;
     setData((prev) => ({ ...prev, [id]: value }));
   }
-
+//when form submit it handles error and returns to channel page
   async function handleSubmit(e) {
     e.preventDefault();
     const error = {};
     let hasError = false;
-
+//handles errors in input fields
     if (!data.title.trim()) {
       error.title = "Enter valid title";
       hasError = true;
@@ -57,7 +57,6 @@ export default function ChannelVideo() {
     if (hasError) return;
 
     try {
-      const formData = new FormData();
       const trimmeddata={
           title:data.title.trim(),
         thumbnailUrl:data.thumbnailUrl.trim(),
@@ -67,7 +66,7 @@ export default function ChannelVideo() {
         channel:data.channel
       };
       setData(trimmeddata);
-
+//send data to backend to update database of videos and channel video
       const res = await axios.post("http://localhost:8000/videos", data,{
         headers: {
           'Authorization': `JWT ${localStorage.getItem("token")}`,
@@ -84,11 +83,12 @@ export default function ChannelVideo() {
           category: "",
           channel: "",
         });
-       navigate('/channel'); 
-      
+       setTimeout(()=>navigate('/channel'),300); 
+   //handles error incase   
     } catch (err) {
       console.log("Error during upload:", err);
-      setErrors({ server: "Something went wrong" });
+      const serverMessage = err.response?.data?.message || "Upload failed";
+         setErrors({ server: serverMessage });
     }
   }
 
@@ -96,10 +96,11 @@ export default function ChannelVideo() {
     <div className="max-w-2xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md mt-10 text-gray-900 dark:text-gray-100">
       <h2 className="text-xl font-semibold mb-4">Upload Video</h2>
       
-
+{/*form to get details from user */}
       <form onSubmit={handleSubmit} className="space-y-4">
        {success && <p className="text-green-600">{success}</p>}
       {errors.server && <p className="text-red-600">{errors.server}</p>}
+        {/**title */}
         <div>
           <label htmlFor="title" className="block font-medium">
             Title
@@ -114,7 +115,7 @@ export default function ChannelVideo() {
           />
           {errors.title && <p className="text-red-600 text-sm">{errors.title}</p>}
         </div>
-
+      {/* thumbnail url */}
         <div>
           <label htmlFor="thumbnailUrl" className="block font-medium">
             Thumbnail URL
@@ -129,7 +130,7 @@ export default function ChannelVideo() {
           />
           {errors.thumbnailUrl && <p className="text-red-600 text-sm">{errors.thumbnailUrl}</p>}
         </div>
-
+        {/* video url */}
         <div>
           <label htmlFor="videoUrl" className="block font-medium">
             Video URL
@@ -144,7 +145,7 @@ export default function ChannelVideo() {
           />
           {errors.videoUrl && <p className="text-red-600 text-sm">{errors.videoUrl}</p>}
         </div>
-
+        {/* description of video*/}
         <div>
           <label htmlFor="description" className="block font-medium">
             Description
@@ -158,7 +159,7 @@ export default function ChannelVideo() {
           />
           {errors.description && <p className="text-red-600 text-sm">{errors.description}</p>}
         </div>
-
+        {/* category of video */}
         <div>
           <label htmlFor="category" className="block font-medium">
             Category
@@ -173,7 +174,7 @@ export default function ChannelVideo() {
           />
           {errors.category && <p className="text-red-600 text-sm">{errors.category}</p>}
         </div>
-
+  {/*on click upload form submits */}
         <button
           type="submit"
           className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"

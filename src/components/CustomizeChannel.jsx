@@ -6,15 +6,16 @@ import { useNavigate } from "react-router";
 export default function CustomizeChannel() {
   const navigate = useNavigate();
   const user = useSelector(store => store.User.user);
-
+//store channel details from api call
   const [channel, setChannel] = useState(null);
+  //store channel details values to be changed
   const [form, setForm] = useState({
     name: "",
     handle: "",
     description: "",
     channelBanner: null
   });
-
+//preview of banner
   const [previewBanner, setPreviewBanner] = useState(null);
 
   const [loading, setLoading] = useState(true);
@@ -27,7 +28,7 @@ export default function CustomizeChannel() {
   useEffect(() => {
     loadChannel();
   }, []);
-
+//to get channel details from api
   async function loadChannel() {
     try {
       const res = await axios.get(
@@ -53,7 +54,7 @@ export default function CustomizeChannel() {
       setLoading(false);
     }
   }
-
+//to handle change on input
   function handleChange(e) {
     const { id, value, files } = e.target;
 
@@ -73,7 +74,7 @@ export default function CustomizeChannel() {
 
     setForm(prev => ({ ...prev, [id]: value }));
   }
-
+//to handle on submit of form
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
@@ -81,7 +82,7 @@ export default function CustomizeChannel() {
 
     try {
       const fd = new FormData();
-
+      //store trim values
       const safeName = form.name?.trim() || "";
       const safeHandle = form.handle?.trim() || "";
       const safeDesc = form.description?.trim() || "";
@@ -94,6 +95,7 @@ export default function CustomizeChannel() {
         fd.append("banner", form.channelBanner);
       }
       console.log(fd);
+      //to save changes back to database
       await axios.patch(
         `http://localhost:8000/channels/${user.channel._id}`,
         fd,
@@ -132,10 +134,10 @@ export default function CustomizeChannel() {
 
     navigate("/channel");
   }
-
+//to delete channel 
   async function handleDelete() {
     setDeleteLoading(true);
-
+//call api to delete channel from database
     try {
       await axios.delete(
         `http://localhost:8000/channels/${channel._id}`,
@@ -221,7 +223,9 @@ export default function CustomizeChannel() {
             placeholder="@handle"
             className="w-full border p-2 rounded mt-3 bg-white dark:bg-gray-700"
           />
-
+           </div>
+           <div>
+          {/**description */}
           <label className="text-lg font-semibold mt-4 block">
             Description
           </label>

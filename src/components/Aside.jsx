@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import { TiHomeOutline } from "react-icons/ti";
 import { SiYoutubeshorts } from "react-icons/si";
 import { MdOutlineSubscriptions } from "react-icons/md";
@@ -16,6 +15,7 @@ import { MdOutlineFeedback } from "react-icons/md";
 import { Link } from "react-router";
 export default function Aside() {
   return (
+    //side bar to open when click on hamburger in header (only home works)
     <aside
       className="w-60 min-h-screen bg-white dark:bg-gray-900 border-r dark:border-gray-700 px-4 py-4 overflow-y-auto">
       <ul className="space-y-3 mb-4">

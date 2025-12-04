@@ -7,7 +7,7 @@ export default function ChannelPage() {
   const user = useSelector((store) => store.User.user);
   const [channel, setChannel] = useState(null);
   const [videos, setVideos] = useState([]);
-
+  const [description,setDescription]=useState("");
   useEffect(() => {
     async function call() {
       try {
@@ -19,6 +19,7 @@ export default function ChannelPage() {
         });
         setChannel(res.data.data);
         console.log(res.data.data);
+        setDescription(`${res.data.data.name} is a channel that delivers engaging and easy-to-watch content for all audiences. With over ${res.data.data.videos.length} videos uploaded so far and a growing community of ${res.data.data.subscribers.length} subscribers, this channel shares fresh perspectives, reviews, reactions, and interesting breakdowns across different topics. Stay connected for more updates, new uploads, and enjoyable content from ${res.data.data.handle}.`);
         setVideos(res.data?.data.videos|| []);  
       } catch (err) {
         console.log(err.message);
@@ -73,8 +74,8 @@ export default function ChannelPage() {
 
       {/* Description */}
       <div className="px-10">
-        <h2 className="text-xl font-semibold mb-2">Description</h2>
-        <p className="text-gray-700 dark:text-gray-300">{channel.description || "No description added."}</p>
+        <h2 className="text-xl font-semibold mb-2">About</h2>
+        <p className="text-gray-700 dark:text-gray-300">{channel.description || description}</p>
       </div>
 
       <hr className="my-6 border-gray-300 dark:border-gray-600" />

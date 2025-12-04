@@ -5,14 +5,18 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 export default function Comments({id}){
     const [comment, setComment] = useState("");
+    //add comment 
     const [comments, setComments] = useState([]);
+    //store comments after fetching from backend
     const [isWriting, setIsWriting] = useState(false);
+    //to handle edit comment
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editText, setEditText] = useState("");
+    //to open options edit and delete on click on : near comment only on comments made by user
     const [menuOpen, setMenuOpen] = useState(null); // for per-comment menu
 
     const user = useSelector((store) => store.User.user);
-
+//to fetch comments from backend 
     useEffect(() => {
     async function loadComments() {
       try {
@@ -27,6 +31,7 @@ export default function Comments({id}){
     }
     loadComments();
   }, [id]);
+  //handles like on comment and saves its back to database
       async function handleCommentLike(commentId) {
     try {
       const res = await axios.post(
@@ -38,8 +43,7 @@ export default function Comments({id}){
           }
         }
       );
-     
-
+    
       console.log(res.data);
       setComments((prev) =>
       prev.map((c) =>
@@ -50,7 +54,7 @@ export default function Comments({id}){
       console.log("Error while liking comment");
     }
   }
-
+ //handles dislike on comment and saves its back to database
   async function handleCommentDislike(commentId) {
     try {
       const res = await axios.post(
@@ -73,7 +77,7 @@ export default function Comments({id}){
       console.log("Error while disliking comment");
     }
   }
-
+ //deletes comment from database and updates comments
   async function handleCommentDelete(commentId) {
     try {
       const res = await axios.delete(
@@ -92,6 +96,8 @@ export default function Comments({id}){
       console.log("Error while deleting comment");
     }
   }
+
+   //handles edit on comment and saves its back to database
   async function handleCommentEdit(commentId) {
     try {
       const res = await axios.patch(
@@ -118,6 +124,7 @@ export default function Comments({id}){
       console.log("Error while editing comment",error);
     }
   }
+   //write new comment and saves its back to database
   async function handlecomment() {
     if (!comment.trim()) return;
 
@@ -129,10 +136,8 @@ export default function Comments({id}){
         }
       });
 
-     
       // Update UI instantly
       setComments((prev) => [res.data, ...prev]);
-
       // Reset
       setComment("");
       setIsWriting(false);
@@ -140,15 +145,18 @@ export default function Comments({id}){
       console.log("Error while adding comment", error);
     }
   }
+  //to cancel new comment update
   function handlecancel() {
     setComment("");
     setIsWriting(false);
   }
+  //to handle edit comment
   function startEditing(comment) {
     setEditingCommentId(comment._id);
     setEditText(comment.text);
     setMenuOpen(null); // close dropdown
   }
+  //to cancel edit changes
   function cancelEditing() {
     setEditingCommentId(null);
     setEditText("");
@@ -175,7 +183,7 @@ export default function Comments({id}){
                 }}
                 className="w-full border p-2 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
-
+            {/*opens on add comment */}
               {isWriting && (
                 <div className="flex gap-3 justify-end mt-2">
                   <button
@@ -208,7 +216,7 @@ export default function Comments({id}){
 
                 <div className="w-full">
                   <p className="font-medium">{item.user?.username}</p>
-
+                {/*opens when you click on edit option else shows comment text*/}
                   {editingCommentId === item._id ? (
                     <div className="mt-1">
                       <input
@@ -234,7 +242,7 @@ export default function Comments({id}){
                   ) : (
                     <p className="mt-1">{item.text}</p>
                   )}
-
+              {/**like comment */}
                   <div className="flex items-center gap-4 mt-2 text-gray-700 dark:text-gray-300">
                     <span
                       className="flex items-center gap-1 cursor-pointer"
@@ -243,7 +251,7 @@ export default function Comments({id}){
                       <SlLike />
                       <span>{item.likes?.length || 0}</span>
                     </span>
-
+                {/**dislike comment */}
                     <span
                       className="flex items-center gap-1 cursor-pointer"
                       onClick={() => handleCommentDislike(item._id)}
@@ -252,7 +260,7 @@ export default function Comments({id}){
                       <span>{item.dislikes?.length || 0}</span>
                     </span>
 
-                    {/* MENU */}
+                    {/* MENU for edit and delete only visible if written by user*/}
                     {item.user?._id === user?._id && (
                       <div className="relative">
                         <IoMdMore
@@ -261,7 +269,7 @@ export default function Comments({id}){
                             setMenuOpen(menuOpen === item._id ? null : item._id)
                           }
                         />
-
+                        {/**select edit or delete */}
                         {menuOpen === item._id && (
                           <ul className="absolute bg-white dark:bg-gray-700 shadow-md rounded-md right-0 mt-2 w-28 text-sm z-10">
                             <li
