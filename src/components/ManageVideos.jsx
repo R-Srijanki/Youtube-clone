@@ -6,6 +6,8 @@ import { Link,useNavigate } from "react-router";
 
 export default function ManageVideos(){
   const user = useSelector((store) => store.User.user);
+  const visible=useSelector(store=>store.Sidebar.open);
+  
   //store channel,videos details 
   const [channel, setChannel] = useState(null);
   const [videos, setVideos] = useState([]);
@@ -87,7 +89,7 @@ export default function ManageVideos(){
     return(
           <>
       {/* Videos Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className={!visible?"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6":"grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
         {videos.map((video) => (
           <div
             key={video._id}

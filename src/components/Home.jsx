@@ -2,8 +2,10 @@ import { useEffect, useState, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import VideoCard from "./VideoCard";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function Home() {
+  const visible=useSelector(store=>store.Sidebar.open);
   const [videos, setVideos] = useState([]);
   //to store videos 
   const {category}=useParams();
@@ -76,7 +78,7 @@ export default function Home() {
       </ul>
 
       {/* Video Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className={!visible?"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6":"grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
         {filteredVideos.map((video) => (
           <Link
             key={video._id}

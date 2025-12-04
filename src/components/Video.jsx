@@ -141,10 +141,10 @@ export default function Video() {
                     text-gray-900 dark:text-gray-100"
     >
       {/* LEFT SIDE — VIDEO PLAYER */}
-      <div className="md:w-[70%]">
+      <div className="md:w-full lg:w-[70%]">
         <iframe
           src={video.videoUrl}
-          className="w-full h-[350px] md:h-[500px] rounded-lg"
+          className="w-full h-[250px] md:h-[350px] lg:h-[500px] rounded-lg"
           allowFullScreen
         />
 
@@ -214,7 +214,7 @@ export default function Video() {
       </div>
 
       {/* RIGHT SIDE — Suggested Videos */}
-      <div className="md:w-[30%]">
+      <div className="md:w-full lg:w-[30%]">
         {/* In future — show recommended videos */}
         <VideoSection category={video.category} currentVideoId={video._id} />
       </div>

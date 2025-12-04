@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router";
 
 export default function ChannelPage() {
+  const visible=useSelector(store=>store.Sidebar.open);
   const user = useSelector((store) => store.User.user);
   const [channel, setChannel] = useState(null);
   const [videos, setVideos] = useState([]);
@@ -88,7 +89,7 @@ export default function ChannelPage() {
           <p className="text-gray-500 dark:text-gray-400">No videos uploaded yet.</p>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className={!visible?"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6":"grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
           {videos.map((video) => (
             <Link
               key={video._id}
