@@ -90,7 +90,7 @@ export default function Comments({id}){
         }
       );
      
-      setComments((res) => res.filter((c) => c._id != commentId));
+      setComments((prev) => prev.filter((c) => c._id !== commentId));
       console.log(res);
     } catch (error) {
       console.log("Error while deleting comment");

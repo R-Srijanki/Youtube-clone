@@ -3,10 +3,12 @@ import { Link, useParams } from "react-router-dom";
 import VideoCard from "./VideoCard";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import LoadingVideos from "./LoadingVideos";
 
 export default function Home() {
   const visible=useSelector(store=>store.Sidebar.open);
   const [videos, setVideos] = useState([]);
+  const [loading,setLoading]=useState(true);
   //to store videos 
   const {category}=useParams();
   //to get category if present from url
@@ -31,6 +33,9 @@ export default function Home() {
       } catch (err) {
         console.log("Error while fetching videos");
       }
+      finally{
+        setLoading(false);
+      }
     }
     loadVideos();
   }, []);
@@ -46,6 +51,9 @@ export default function Home() {
     const unique = ["All", ...keys];
     return unique;
   }, [catMap]);
+  if(loading){
+    return (<LoadingVideos/>)
+  }
   return (
     <div className="p-4 text-black dark:text-primary">
       <h2 className="text-xl font-semibold mb-4">Recommended Videos</h2>

@@ -17,11 +17,13 @@ const Channel = lazy(() => import('./components/Channel.jsx'));
 const ChannelVideo = lazy(() => import('./components/ChannelVideo.jsx'));
 const ManageVideos = lazy(() => import('./components/ManageVideos.jsx'))
 
-const LazyWrapper = (Component) => (
-  <Suspense fallback={<div className="text-center py-10 text-gray-600">Loading...</div>}>
-    <Component />
-  </Suspense>
-)
+const LazyWrapper = ({ Component }) => {
+  return (
+    <Suspense fallback={<div className="text-center py-10 text-gray-600">Loading...</div>}>
+      <Component />
+    </Suspense>
+  );
+};
 const router=createBrowserRouter([
       {
         path:"/",
@@ -29,46 +31,46 @@ const router=createBrowserRouter([
         children:[
           {
             index:true,
-            element:LazyWrapper(Home)
+            element:<LazyWrapper Component={Home} />
           },
           {
             path:"/video/:id",
-            element:LazyWrapper(Video)
+            element:<LazyWrapper Component={Video} />
           },
           {
             path:"/:category",
-            element:LazyWrapper(Home)
+            element:<LazyWrapper Component={Home} />
           },
           {
             path:"/search/:searchtext",
-            element:LazyWrapper(Search)
+            element:<LazyWrapper Component={Search} />
           },
           {
             path:"/channel",
-            element:LazyWrapper(Channel)
+            element:<LazyWrapper Component={Channel} />
           },
           {
             path:"/channel/upload",
-            element:LazyWrapper(ChannelVideo)
+            element:<LazyWrapper Component={ChannelVideo} />
           },
           {
             path:"/managevideos",
-            element:LazyWrapper(ManageVideos)
+            element:<LazyWrapper Component={ManageVideos} />
           },
           {
             path:"/customizechannel",
-            element:LazyWrapper(CustomizeChannel)
+            element:<LazyWrapper Component={CustomizeChannel} />
           },
           {
             path:"/login",
-            element:LazyWrapper(Login)
+            element:<LazyWrapper Component={Login} />
           },
           {
             path:"/register",
-            element:LazyWrapper(Register)
+            element:<LazyWrapper Component={Register} />
           }
         ],
-        errorElement:LazyWrapper(NotFound)
+        errorElement:<LazyWrapper Component={NotFound} />
       },
       
 ])

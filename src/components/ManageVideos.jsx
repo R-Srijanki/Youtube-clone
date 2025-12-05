@@ -3,18 +3,19 @@ import { useState,useEffect } from "react";
 import { IoMdMore } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { Link,useNavigate } from "react-router";
+import LoadingVideos from "./LoadingVideos";
 
 export default function ManageVideos(){
   const user = useSelector((store) => store.User.user);
   const visible=useSelector(store=>store.Sidebar.open);
-  
+  const [loading, setLoading] = useState(true);
   //store channel,videos details 
   const [channel, setChannel] = useState(null);
   const [videos, setVideos] = useState([]);
   //to open menu for edit , delete options on video
   const [menuOpen, setMenuOpen] = useState(null);
   const [editData, setEditData] = useState(null);
-
+  const [errors,setErrors]=useState({});
   //to get channel details and store
   useEffect(() => {
     if (!user?.channel?._id) return;
@@ -33,6 +34,9 @@ export default function ManageVideos(){
       } catch (err) {
         console.log(err.message);
       }
+      finally{
+        setLoading(false);
+      }
     }
     loadChannel();
   }, [user?.channel?._id]);
@@ -45,9 +49,23 @@ export default function ManageVideos(){
     setEditData({ ...video });
     setMenuOpen(null);
   }
+  function validateVideoEdit(data) {
+  const errs = {};
+
+  if (data.title.trim() && data.title.length < 3) {
+    errs.title = "Title must be at least 3 characters";
+  }
+
+  return errs;
+}
   //to change video details 
   async function handleUpdate() {
-    try {
+    const v = validateVideoEdit(editData);
+if (Object.keys(v).length > 0) {
+  setErrors(v);
+  return;
+}
+  try {
       const res = await axios.patch(
         `http://localhost:8000/videos/${editData._id}`,editData,
         {
@@ -85,6 +103,9 @@ export default function ManageVideos(){
     } catch (err) {
       console.log(err.message);
     }
+  }
+  if(loading){
+    return (<LoadingVideos/>)
   }
     return(
           <>
@@ -167,6 +188,9 @@ export default function ManageVideos(){
               }
               className="border w-full p-2 rounded mb-3 dark:bg-gray-700"
             />
+            {errors.title && (
+            <p className="text-red-600 text-sm">{errors.title}</p>
+          )}
             {/**description */}
             <label className="text-sm">Description</label>
             <textarea
@@ -176,6 +200,9 @@ export default function ManageVideos(){
               }
               className="border w-full p-2 rounded mb-3 dark:bg-gray-700"
             />
+            {errors.description && (
+            <p className="text-red-600 text-sm">{errors.description}</p>
+          )}
             {/**category */}
             <label className="text-sm">Category</label>
             <input
@@ -186,6 +213,9 @@ export default function ManageVideos(){
               }
               className="border w-full p-2 rounded mb-3 dark:bg-gray-700"
             />
+            {errors.category && (
+            <p className="text-red-600 text-sm">{errors.category}</p>
+          )}
             {/**to not change anything */}
             <div className="flex justify-end gap-3 mt-4">
               <button

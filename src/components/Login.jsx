@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { toggelLogin,loginUser } from "../utils/userSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { toggleLogin,loginUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
@@ -61,13 +61,13 @@ export default function Login(){
           console.log(res.data);
           //store token in local storage
           localStorage.setItem("token",res.data.accessToken);
-          dispatch(toggelLogin());
+          dispatch(toggleLogin());
           //login successful so toggle and store details
           dispatch(loginUser(res.data.user));
          navigate("/");
       } catch (error) {
         console.log("Error while login", error);
-        const serverMessage = err.response?.data?.message || "Login failed";
+        const serverMessage = error.response?.data?.message || "Login failed";
          setErrors({ server: serverMessage });
       }
     }

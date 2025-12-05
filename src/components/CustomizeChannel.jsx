@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import Loading from "./Loading";
 
 export default function CustomizeChannel() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function CustomizeChannel() {
         { headers: { Authorization: `JWT ${localStorage.getItem("token")}` } }
       );
 
-      const c = res.data;
+      const c = res.data.data;
 
       setChannel(c);
 
@@ -74,12 +75,33 @@ export default function CustomizeChannel() {
 
     setForm(prev => ({ ...prev, [id]: value }));
   }
+  function validateForm() {
+  const newErrors = {};
+
+  if (form.name.trim()&& form.name.trim().length < 3) {
+    newErrors.name = "Name must be at least 3 characters";
+  }
+
+  if (form.handle.trim()&&!/^@[A-Za-z0-9_]{3,30}$/.test(form.handle.trim())) {
+    newErrors.handle = "Handle must start with @ and contain 3–30 letters, numbers, underscores";
+  }
+
+  if (form.description.trim() && (form.description.length > 500||form.description.length<50)) {
+    newErrors.description = "Description cannot exceed 500 characters";
+  }
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+}
 //to handle on submit of form
   async function handleSubmit(e) {
     e.preventDefault();
-    setSaving(true);
-    setErrors({});
-
+    if (!validateForm()) {
+    setSaving(false);
+    return;
+  }
+  setSaving(true);
+    
     try {
       const fd = new FormData();
       //store trim values
@@ -140,7 +162,7 @@ export default function CustomizeChannel() {
 //call api to delete channel from database
     try {
       await axios.delete(
-        `http://localhost:8000/channels/${channel._id}`,
+        `http://localhost:8000/channels/${user.channel._id}`,
         {
           headers: { Authorization: `JWT ${localStorage.getItem("token")}` }
         }
@@ -155,11 +177,7 @@ export default function CustomizeChannel() {
   }
 
   if (loading) {
-    return (
-      <div className="p-6 text-center text-gray-500">
-        Loading channel customization...
-      </div>
-    );
+    <Loading/>
   }
 
   return (
@@ -209,6 +227,9 @@ export default function CustomizeChannel() {
             onChange={handleChange}
             className="w-full border p-2 rounded mt-3 bg-white dark:bg-gray-700"
           />
+          {errors.name && (
+            <p className="text-red-600 text-sm">{errors.name}</p>
+          )}
         </div>
 
         {/* Handle */}
@@ -223,6 +244,9 @@ export default function CustomizeChannel() {
             placeholder="@handle"
             className="w-full border p-2 rounded mt-3 bg-white dark:bg-gray-700"
           />
+            {errors.handle && (
+            <p className="text-red-600 text-sm">{errors.handle}</p>
+          )}
            </div>
            <div>
           {/**description */}
@@ -238,6 +262,9 @@ export default function CustomizeChannel() {
             placeholder="Tell viewers about your channel"
             className="border w-full p-2 rounded mt-2 dark:bg-gray-700"
           />
+          {errors.description && (
+            <p className="text-red-600 text-sm">{errors.description}</p>
+          )}
         </div>
 
         {/* Buttons */}

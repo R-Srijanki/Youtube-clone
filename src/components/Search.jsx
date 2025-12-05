@@ -3,9 +3,11 @@ import { useState,useEffect } from "react";
 import VideoCard from "./VideoCard";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import LoadingVideos from "./LoadingVideos";
 export default function Search(){
     const visible=useSelector(store=>store.Sidebar.open);
     const {searchtext}=useParams();
+    const [loading,setLoading]=useState(true);
     //get searchtext from url
     //store videos
     const [videos, setVideos] = useState([]);
@@ -23,9 +25,15 @@ export default function Search(){
           } catch (err) {
             console.log("Error while fetching videos");
           }
+          finally{
+            setLoading(false);
+          }
         }
         loadVideos();
       }, [searchtext]);
+      if(loading){
+        return (<LoadingVideos/>)
+      }
     return(
       <>
         {videos.length === 0 && (

@@ -65,9 +65,9 @@ export default function ChannelVideo() {
         category:data.category.trim(),
         channel:data.channel
       };
-      setData(trimmeddata);
+     
 //send data to backend to update database of videos and channel video
-      const res = await axios.post("http://localhost:8000/videos", data,{
+      const res = await axios.post("http://localhost:8000/videos", trimmeddata,{
         headers: {
           'Authorization': `JWT ${localStorage.getItem("token")}`,
            "Content-Type": "application/json"
@@ -81,7 +81,7 @@ export default function ChannelVideo() {
           videoUrl: "",
           description: "",
           category: "",
-          channel: "",
+          channel: user.channel
         });
        setTimeout(()=>navigate('/channel'),300); 
    //handles error incase   

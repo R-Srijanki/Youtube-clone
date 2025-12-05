@@ -32,13 +32,13 @@ export default function Register() {
     const passwordregex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const nameregex = /^([a-zA-Z\s]+)$/;
-
+    const usernameregex = /^([a-zA-Z\s1-9_]+)$/;
     if (!fullName.trim() || !nameregex.test(fullName.trim())) {
       newErrors.fullName = "Name should contain alphabets only";
       hasError = true;
     }
 
-    if (!username.trim() || !nameregex.test(username.trim())) {
+    if (!username.trim() || !usernameregex.test(username.trim())) {
       newErrors.username = "Username should contain alphabets only";
       hasError = true;
     }

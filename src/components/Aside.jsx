@@ -12,12 +12,12 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { FiFlag } from "react-icons/fi";
 import { MdHelpOutline } from "react-icons/md";
 import { MdOutlineFeedback } from "react-icons/md";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";;
 export default function Aside() {
   return (
     //side bar to open when click on hamburger in header (only home works)
     <aside
-      className="w-60 absolute md:static min-h-screen bg-white dark:bg-gray-900 border-r dark:border-gray-700 px-4 py-4 overflow-y-auto">
+      className="w-60 absolute z-40 md:static min-h-screen bg-white dark:bg-gray-900 border-r dark:border-gray-700 px-4 py-4 overflow-y-auto">
       <ul className="space-y-3 mb-4">
         <Link
           to="/"

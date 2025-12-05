@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";import Loading from "./Loading";
+;
 
 export default function ChannelPage() {
   const visible=useSelector(store=>store.Sidebar.open);
+  const [loading,setLoading]=useState(true);
   const user = useSelector((store) => store.User.user);
   const [channel, setChannel] = useState(null);
   const [videos, setVideos] = useState([]);
@@ -25,17 +27,21 @@ export default function ChannelPage() {
       } catch (err) {
         console.log(err.message);
       }
+      finally{
+        setLoading(false);
+      }
     }
-    if (user.channel._id) call();
-  }, [user.channel._id]);
+   if (user?.channel?._id) call();
+  }, [user?.channel?._id]);
 
-  if (!channel) return <p className="p-10 text-lp-10 text-lg text-gray-900 dark:text-gray-100g">Loading...</p>;
+  
+  if (!channel) return <Loading/>;
 
   return (
     <div className="w-full flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
 
       {/* Banner Section */}
-      <div className="w-full h-60 bg-gray-200 dark:bg-gray-700 relative">
+      <div className="w-full h-60 bg-gray-200 dark:bg-gray-700 ">
         <img
           src={channel.channelBanner}
           className="w-full h-full object-cover"

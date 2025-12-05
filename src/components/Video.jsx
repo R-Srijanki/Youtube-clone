@@ -21,7 +21,7 @@ export default function Video() {
         const resVideo = await axios.get(`http://localhost:8000/videos/${id}`);
         setVideo(resVideo.data);
         //handle subscribe 
-        if (resVideo.data.channel.subscribers.includes(user.user._id)) {
+        if (resVideo.data.channel?.subscribers?.includes(user?.user?._id)) {
           setSubscribe(true);
         } else {
           setSubscribe(false);
@@ -86,7 +86,7 @@ export default function Video() {
       setVideo((prev) => ({
         ...prev,
         likes: res.data.likes,
-        dislikes: res.dislikes,
+        dislikes: res.data.dislikes,
       }));
 
       console.log(res.data);
@@ -182,7 +182,7 @@ export default function Video() {
             onClick={handleLike}
           >
             <SlLike />
-            <span>{video.likes?.length}</span>
+            <span>{video.likes?.length||0}</span>
           </div>
 
           <div
@@ -190,7 +190,7 @@ export default function Video() {
             onClick={handleDislike}
           >
             <SlDislike />
-            <span>{video.dislikes?.length}</span>
+            <span>{video.dislikes?.length||0}</span>
           </div>
             {/**share */}
           <div className="flex items-center gap-1 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-2">
