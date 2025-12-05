@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { SlLike, SlDislike } from "react-icons/sl";
 import { IoMdShareAlt } from "react-icons/io";
 import { RiDownloadLine } from "react-icons/ri";

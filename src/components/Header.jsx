@@ -19,7 +19,7 @@ import { RiFeedbackLine } from "react-icons/ri";
 
 import { useSelector, useDispatch } from "react-redux";
 import { toggleSidebar } from "../utils/sidebarslice";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useRef, useEffect, useState } from "react";
 import { toggleTheme } from "../utils/modeSlice";
 import { logoutUser } from "../utils/userSlice";

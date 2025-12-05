@@ -1,4 +1,4 @@
-import { Link,useParams } from "react-router"
+import { Link,useParams } from "react-router-dom"
 import { useState,useEffect } from "react";
 import VideoCard from "./VideoCard";
 import axios from "axios";

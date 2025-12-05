@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState,useEffect } from "react";
 import { IoMdMore } from "react-icons/io";
 import { useSelector } from "react-redux";
-import { Link,useNavigate } from "react-router";
+import { Link,useNavigate } from "react-router-dom";
 import LoadingVideos from "./LoadingVideos";
 
 export default function ManageVideos(){
