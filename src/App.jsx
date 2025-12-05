@@ -7,7 +7,7 @@ export default function App() {
  //to check if sidebar open
   const visible=useSelector(store=>store.Sidebar.open);
     return (
-    <div className="w-full h-screen bg-primary dark:bg-primary-dark text-black dark:text-primary">
+    <div className="w-full min-h-screen bg-primary dark:bg-primary-dark text-black dark:text-primary">
       <Header />
       <div className="flex w-full h-full">
         {visible && <Aside />}
