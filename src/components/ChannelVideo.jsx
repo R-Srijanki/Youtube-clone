@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import CreateChannel from "./CreateChannel";
 import axios from "axios";
 
 export default function ChannelVideo() {
   const user = useSelector((store) => store.User.user);
   const navigate=useNavigate();
 //if user channel does not exists it goes to create channel page 
-  if (!user?.channel) return <CreateChannel />;
+  useEffect(() => {
+    if (!user?.channel) {
+      navigate("/channel"); // redirect if no channel created
+    }
+  }, [user, navigate]);
 //to store video details in useState
   const [data, setData] = useState({
     title: "",
@@ -177,7 +180,7 @@ export default function ChannelVideo() {
   {/*on click upload form submits */}
         <button
           type="submit"
-          className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
+          className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 cursor-pointer"
         >
           Upload
         </button>

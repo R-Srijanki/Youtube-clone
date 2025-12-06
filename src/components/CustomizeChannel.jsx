@@ -3,9 +3,12 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../utils/userSlice";
 
 export default function CustomizeChannel() {
   const navigate = useNavigate();
+  const dispatch=useDispatch();
   const user = useSelector(store => store.User.user);
 //store channel details from api call
   const [channel, setChannel] = useState(null);
@@ -26,9 +29,14 @@ export default function CustomizeChannel() {
   const [errors, setErrors] = useState({});
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  useEffect(() => {
-    loadChannel();
-  }, []);
+ useEffect(() => {
+  if (!user?.channel?._id) {
+    setLoading(false);
+    return;
+  }
+
+  loadChannel();
+}, [user]);
 //to get channel details from api
   async function loadChannel() {
     try {
@@ -78,15 +86,17 @@ export default function CustomizeChannel() {
   function validateForm() {
   const newErrors = {};
 
-  if (form.name.trim()&& form.name.trim().length < 3) {
+ if (!form.name.trim() || form.name.trim().length < 3) {
     newErrors.name = "Name must be at least 3 characters";
   }
 
-  if (form.handle.trim()&&!/^@[A-Za-z0-9_]{3,30}$/.test(form.handle.trim())) {
+  if (!form.handle.trim()) {
+    newErrors.handle = "Handle is required";
+  } else if (!/^@[A-Za-z0-9_]{3,30}$/.test(form.handle.trim())) {
     newErrors.handle = "Handle must start with @ and contain 3–30 letters, numbers, underscores";
   }
 
-  if (form.description.trim() && (form.description.length > 500||form.description.length<50)) {
+  if (form.description.length > 500) {
     newErrors.description = "Description cannot exceed 500 characters";
   }
 
@@ -157,27 +167,28 @@ export default function CustomizeChannel() {
     navigate("/channel");
   }
 //to delete channel 
-  async function handleDelete() {
-    setDeleteLoading(true);
-//call api to delete channel from database
-    try {
-      await axios.delete(
-        `http://localhost:8000/channels/${user.channel._id}`,
-        {
-          headers: { Authorization: `JWT ${localStorage.getItem("token")}` }
-        }
-      );
+async function handleDelete() {
+  setDeleteLoading(true);
 
-      navigate("/channel");
-    } catch (err) {
-      setErrors({ server: "Unable to delete channel" });
-    }
+  try {
+    await axios.delete(
+      `http://localhost:8000/channels/${user.channel._id}`,
+      { headers: { Authorization: `JWT ${localStorage.getItem("token")}` } }
+    );
 
-    setDeleteLoading(false);
+    // Clear user channel locally
+    const updatedUser = { ...user, channel: null };
+     // update redux state (fixes 404 problem)
+    dispatch(updateUser(updatedUser));
+    navigate('/');
+  } catch (err) {
+    setErrors({ server: "Unable to delete channel" });
   }
 
+  setDeleteLoading(false);
+}
   if (loading) {
-    <Loading/>
+    return <Loading/>;
   }
 
   return (
@@ -272,7 +283,7 @@ export default function CustomizeChannel() {
           <button
             type="button"
             onClick={() => setConfirmDelete(true)}
-            className="px-4 py-2 text-red-600 border border-red-600 rounded-full hover:bg-red-600 hover:text-white"
+            className="px-4 py-2 text-red-600 border border-red-600 rounded-full hover:bg-red-600 hover:text-white cursor-pointer"
           >
             Delete Channel
           </button>
@@ -281,7 +292,7 @@ export default function CustomizeChannel() {
             <button
               type="button"
               onClick={handleCancel}
-              className="px-5 py-2 rounded-full border hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="px-5 py-2 rounded-full border hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
             >
               Cancel
             </button>
@@ -289,7 +300,7 @@ export default function CustomizeChannel() {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
+              className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 cursor-pointer"
             >
               {saving ? "Updating..." : "Update"}
             </button>
@@ -312,7 +323,7 @@ export default function CustomizeChannel() {
             <div className="mt-5 flex justify-end gap-3">
               <button
                 onClick={() => setConfirmDelete(false)}
-                className="px-4 py-2 rounded-full border hover:bg-gray-200 dark:hover:bg-gray-700"
+                className="px-4 py-2 rounded-full border hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
               >
                 Cancel
               </button>
@@ -320,7 +331,7 @@ export default function CustomizeChannel() {
               <button
                 onClick={handleDelete}
                 disabled={deleteLoading}
-                className="px-5 py-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+                className="px-5 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 cursor-pointer"
               >
                 {deleteLoading ? "Deleting..." : "Delete"}
               </button>

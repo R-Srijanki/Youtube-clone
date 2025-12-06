@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";;
+import { Link } from "react-router-dom";
 import axios from "axios";
 export default function VideoSection({ category, currentVideoId }) {
   const [videos, setVideos] = useState([]);
@@ -43,7 +43,7 @@ export default function VideoSection({ category, currentVideoId }) {
         <Link
           key={item._id}
           to={`/video/${item._id}`}
-          className="flex gap-3 hover:bg-gray-100 dark:hover:bg-primary-dark/30 p-2 rounded-lg transition-all"
+          className="flex gap-3 hover:bg-gray-100 dark:hover:bg-primary-dark/30 p-2 rounded-lg transition-all cursor-pointer"
         >{/**thumbnail url */}
           <img
             src={item.thumbnailUrl}

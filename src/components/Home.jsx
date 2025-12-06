@@ -38,7 +38,7 @@ export default function Home() {
       }
     }
     loadVideos();
-  }, []);
+  }, [category]);
   //filter if category present
    const filteredVideos = useMemo(() => {
     if (!category || category === "All") return videos;
@@ -72,7 +72,7 @@ export default function Home() {
               <Link
                 to={to}
                 className={
-                  "border rounded-full px-4 py-1 text-sm whitespace-nowrap cursor-pointer " +
+                  "border rounded-full px-4 py-1 text-sm whitespace-nowrap cursor-pointer" +
                   (isActive
                     ? "bg-black text-white border-black dark:bg-primary dark:text-primary-dark dark:border-primary-dark"
                     : "bg-gray-100 dark:bg-primary-dark/40 hover:bg-gray-200 dark:hover:bg-primary-dark/60")
@@ -91,7 +91,7 @@ export default function Home() {
           <Link
             key={video._id}
             to={`/video/${video._id}`}
-            className="block hover:scale-105 transition-transform"
+            className="block hover:scale-105 transition-transform cursor-pointer"
           >
             <VideoCard video={video}/>
           </Link>

@@ -18,7 +18,7 @@ export default function Search(){
             const res = await axios.get("http://localhost:8000/videos");
             //search based on title
             const searchrelated = res.data.filter((item) =>
-                      item.category.toLowerCase().includes(searchtext.toLowerCase()) ||
+                      (item.category || '').toLowerCase().includes(searchtext.toLowerCase()) ||
                       item.title.toLowerCase().includes(searchtext.toLowerCase())
             );
             setVideos(searchrelated);
@@ -43,8 +43,8 @@ export default function Search(){
          {videos.map((video) => (
           <Link
             key={video._id}
-            to={`/videos/${video._id}`}
-            className="block hover:scale-105 transition-transform"
+            to={`/video/${video._id}`}
+            className="block hover:scale-105 transition-transform cursor-pointer"
           >
             <VideoCard video={video}/>
           </Link>

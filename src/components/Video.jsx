@@ -14,13 +14,13 @@ export default function Video() {
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [subscribe, setSubscribe] = useState(false);
-  //to get video details 
+  //to get video details
   useEffect(() => {
     async function loadVideo() {
       try {
         const resVideo = await axios.get(`http://localhost:8000/videos/${id}`);
         setVideo(resVideo.data);
-        //handle subscribe 
+        //handle subscribe
         if (resVideo.data.channel?.subscribers?.includes(user?.user?._id)) {
           setSubscribe(true);
         } else {
@@ -34,8 +34,8 @@ export default function Video() {
       }
     }
     loadVideo();
-  }, [id, user.user._id]);
-//to handle subscribe
+  }, [id]);
+  //to handle subscribe
   async function handleSubscribe() {
     try {
       const res = await axios.post(
@@ -69,7 +69,7 @@ export default function Video() {
       console.log("Error while subscribing", error);
     }
   }
-//handle like of video
+  //handle like of video
   async function handleLike() {
     try {
       const res = await axios.post(
@@ -82,7 +82,7 @@ export default function Video() {
           },
         }
       );
-     //update details
+      //update details
       setVideo((prev) => ({
         ...prev,
         likes: res.data.likes,
@@ -94,7 +94,7 @@ export default function Video() {
       console.log("Error while liking");
     }
   }
-//handle dislike of video
+  //handle dislike of video
   async function handleDislike() {
     try {
       const res = await axios.post(
@@ -138,7 +138,7 @@ export default function Video() {
   return (
     <div
       className="lg:flex gap-4 p-4 bg-white dark:bg-gray-900 
-                    text-gray-900 dark:text-gray-100"
+                    text-gray-900 dark:text-gray-100 md:px-10"
     >
       {/* LEFT SIDE — VIDEO PLAYER */}
       <div className="md:w-full lg:w-[70%]">
@@ -146,6 +146,7 @@ export default function Video() {
           src={video.videoUrl}
           className="w-full h-[250px] md:h-[350px] lg:h-[500px] rounded-lg"
           allowFullScreen
+          sandbox="allow-scripts allow-same-origin allow-presentation"
         />
 
         <p className="text-xl font-semibold mt-3">{video.title}</p>
@@ -168,6 +169,7 @@ export default function Video() {
           {!(video?.uploader._id == user.user._id) && (
             <button
               onClick={handleSubscribe}
+              disabled={subscribe}
               className="bg-red-600 text-white px-4 py-2 rounded-md cursor-pointer"
             >
               {subscribe ? "Subscribed" : "Subscribe"}
@@ -182,7 +184,7 @@ export default function Video() {
             onClick={handleLike}
           >
             <SlLike />
-            <span>{video.likes?.length||0}</span>
+            <span>{video.likes?.length || 0}</span>
           </div>
 
           <div
@@ -190,14 +192,14 @@ export default function Video() {
             onClick={handleDislike}
           >
             <SlDislike />
-            <span>{video.dislikes?.length||0}</span>
+            <span>{video.dislikes?.length || 0}</span>
           </div>
-            {/**share */}
+          {/**share */}
           <div className="flex items-center gap-1 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-2">
             <IoMdShareAlt />
             <span>Share</span>
           </div>
-            {/**download */}
+          {/**download */}
           <div className="flex items-center gap-1 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-2">
             <RiDownloadLine />
             <span>Download</span>
@@ -206,6 +208,10 @@ export default function Video() {
 
         {/* DESCRIPTION */}
         <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mt-4 text-gray-900 dark:text-gray-200">
+          <div className="flex gap-3 text-sm text-gray-700">
+            <span>{video.views} views</span>
+            <span>{new Date(video.createdAt)?.toDateString()}</span>
+          </div>
           <p>{video.description}</p>
         </div>
 

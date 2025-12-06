@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../utils/userSlice";
 export default function CreateChannel({onClose}) {
   //to store channel details
   const [data, setData] = useState({
@@ -9,11 +10,19 @@ export default function CreateChannel({onClose}) {
     handle: "",
     channelBanner: null
   });
-
+  const user=useSelector(store=>store.User.user);
+  const dispatch=useDispatch();
   const navigate=useNavigate();
+  const [redirect, setRedirect] = useState(false);
 //to preview channel banner
   const [previewBanner, setPreviewBanner] = useState(null);
   const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+  if (redirect) {
+    navigate("/channel");
+  }
+}, [redirect, navigate]);
 //to handle changes in input 
   function handleChange(e) {
     const { id, value, files } = e.target;
@@ -62,7 +71,10 @@ export default function CreateChannel({onClose}) {
       });
 
       console.log(res.data);
-      navigate('/channel');
+      const updatedUser = { ...user, channel: res.data.data };
+           // update redux state (fixes 404 problem)
+      dispatch(updateUser(updatedUser));
+      setRedirect(true); 
     } catch (err) {
       console.log("Error creating channel:", err);
        const serverMessage = err.response?.data?.message || "Channel creation failed";
@@ -155,14 +167,14 @@ export default function CreateChannel({onClose}) {
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="px-5 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
           >
             Cancel
           </button>
           {/**submit form on click create */}
           <button
             type="submit"
-            className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
+            className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 cursor-pointer"
           >
             Create
           </button>

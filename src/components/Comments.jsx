@@ -47,7 +47,7 @@ export default function Comments({id}){
       console.log(res.data);
       setComments((prev) =>
       prev.map((c) =>
-        c._id == commentId ? { ...c, likes: res.data.likes, dislikes: res.data.dislikes } : c
+        c._id === commentId ? { ...c, likes: res.data.likes, dislikes: res.data.dislikes } : c
       )
     );
     } catch (error) {
@@ -70,7 +70,7 @@ export default function Comments({id}){
       console.log(res.data);
       setComments((prev) =>
       prev.map((c) =>
-        c._id == commentId ? { ...c, likes: res.data.likes, dislikes: res.data.dislikes } : c
+        c._id === commentId ? { ...c, likes: res.data.likes, dislikes: res.data.dislikes } : c
       )
     );
     } catch (error) {
@@ -115,7 +115,7 @@ export default function Comments({id}){
 
       // Update UI without full reload
       setComments((prev) =>
-        prev.map((c) => (c._id == commentId ? { ...c, text: editText } : c))
+        prev.map((c) => (c._id === commentId ? { ...c, text: editText } : c))
       );
 
       setEditingCommentId(null);
@@ -188,14 +188,14 @@ export default function Comments({id}){
                 <div className="flex gap-3 justify-end mt-2">
                   <button
                     onClick={handlecancel}
-                    className="px-4 py-1 bg-gray-300 dark:bg-gray-600 rounded-md"
+                    className="px-4 py-1 bg-gray-300 dark:bg-gray-600 rounded-md cursor-pointer"
                   >
                     Cancel
                   </button>
 
                   <button
                     onClick={handlecomment}
-                    className="px-4 py-1 bg-blue-600 text-white rounded-md disabled:bg-blue-300"
+                    className="px-4 py-1 bg-blue-600 text-white rounded-md disabled:bg-blue-300 cursor-pointer"
                     disabled={!comment.trim()}
                   >
                     Comment
@@ -227,13 +227,13 @@ export default function Comments({id}){
                       <div className="flex gap-3 mt-2">
                         <button
                           onClick={() => handleCommentEdit(item._id)}
-                          className="bg-blue-600 text-white px-3 py-1 rounded-md"
+                          className="bg-blue-600 text-white px-3 py-1 rounded-md cursor-pointer"
                         >
                           Save
                         </button>
                         <button
                           onClick={cancelEditing}
-                          className="bg-gray-300 dark:bg-gray-600 px-3 py-1 rounded-md"
+                          className="bg-gray-300 dark:bg-gray-600 px-3 py-1 rounded-md cursor-pointer"
                         >
                           Cancel
                         </button>

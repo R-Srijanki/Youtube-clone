@@ -12,7 +12,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { FiFlag } from "react-icons/fi";
 import { MdHelpOutline } from "react-icons/md";
 import { MdOutlineFeedback } from "react-icons/md";
-import { Link } from "react-router-dom";;
+import { Link } from "react-router-dom";
 export default function Aside() {
   return (
     //side bar to open when click on hamburger in header (only home works)

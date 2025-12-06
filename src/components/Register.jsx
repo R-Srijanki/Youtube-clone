@@ -39,7 +39,7 @@ export default function Register() {
     }
 
     if (!username.trim() || !usernameregex.test(username.trim())) {
-      newErrors.username = "Username should contain alphabets only";
+      newErrors.username = "Username can be of alphabets,numbers,and_";
       hasError = true;
     }
 
@@ -134,7 +134,7 @@ export default function Register() {
           {/*register user*/}
           <button
             type="submit"
-            className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+            className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition cursor-pointer"
           >
             Register
           </button>
@@ -142,7 +142,7 @@ export default function Register() {
           {/*if account exists then login */}
         <p className="text-center mt-4 text-sm">
           Already have an account?
-          <Link to="/login" className="text-red-600 ml-1 font-medium">
+          <Link to="/login" className="text-red-600 ml-1 font-medium cursor-pointer">
             Login
           </Link>
         </p>

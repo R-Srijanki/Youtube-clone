@@ -52,8 +52,16 @@ export default function ManageVideos(){
   function validateVideoEdit(data) {
   const errs = {};
 
-  if (data.title.trim() && data.title.length < 3) {
+  if (!data.title.trim() || data.title.length < 3) {
     errs.title = "Title must be at least 3 characters";
+  }
+
+  if (!data.description.trim() || data.description.length > 1000) {
+    errs.description = "Description is required but cannot exceed 1000 characters";
+  }
+
+  if (!data.category.trim()) {
+    errs.category = "Category is required";
   }
 
   return errs;
@@ -109,12 +117,15 @@ if (Object.keys(v).length > 0) {
   }
     return(
           <>
+           {videos.length === 0 && (
+          <p className="text-gray-800 dark:text-gray-400 text-center text-2xl">No videos uploaded in this channel</p>
+        )}
       {/* Videos Grid */}
       <div className={!visible?"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6":"grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
         {videos.map((video) => (
           <div
             key={video._id}
-            className="rounded-lg overflow-hidden bg-white dark:bg-gray-800 shadow hover:scale-[1.02] transition"
+            className="rounded-lg overflow-hidden bg-white dark:bg-gray-800 shadow hover:scale-[1.02] transition cursor-pointer"
           >
             <Link to={`/video/${video._id}`}>
               <img
@@ -153,15 +164,15 @@ if (Object.keys(v).length > 0) {
               />
               {/**to handle edit and delete video */}
               {menuOpen === video._id && (
-                <ul className="absolute bg-white dark:bg-gray-700 shadow-md rounded-md right-2 top-8 w-28 text-sm z-20">
+                <ul className="absolute bg-white dark:bg-gray-700 shadow-md rounded-md right-2 top-7 w-26 text-sm">
                   <li
-                    className="px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
+                    className="px-3 py-1.5 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
                     onClick={() => openEditModal(video)}
                   >
                     Edit
                   </li>
                   <li
-                    className="px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer text-red-600"
+                    className="px-3 py-1.5 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer text-red-600"
                     onClick={() => handleDelete(video._id)}
                   >
                     Delete
@@ -219,14 +230,14 @@ if (Object.keys(v).length > 0) {
             {/**to not change anything */}
             <div className="flex justify-end gap-3 mt-4">
               <button
-                className="px-4 py-2 rounded bg-gray-300 dark:bg-gray-600"
+                className="px-4 py-2 rounded bg-gray-300 dark:bg-gray-600 cursor-pointer"
                 onClick={() => setEditData(null)}
               >
                 Cancel
               </button>
               {/**to update video changes */}
               <button
-                className="px-4 py-2 rounded bg-blue-600 text-white"
+                className="px-4 py-2 rounded bg-blue-600 text-white cursor-pointer"
                 onClick={handleUpdate}
               >
                 Update

@@ -13,6 +13,10 @@ export default function ChannelPage() {
   const [description,setDescription]=useState("");
   useEffect(() => {
     async function call() {
+      if (!user?.channel?._id) {
+      setLoading(false);
+      return;
+      }
       try {
         const res = await axios.get(`http://localhost:8000/channels/${user.channel._id}`, {
           headers: {
@@ -31,26 +35,26 @@ export default function ChannelPage() {
         setLoading(false);
       }
     }
-   if (user?.channel?._id) call();
+    call();
   }, [user?.channel?._id]);
 
   
-  if (!channel) return <Loading/>;
+  if (!channel||loading) return <Loading/>;
 
   return (
-    <div className="w-full flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="w-full flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-10">
 
       {/* Banner Section */}
-      <div className="w-full h-60 bg-gray-200 dark:bg-gray-700 ">
+      <div className="w-full h-60 bg-gray-200 dark:bg-gray-700 rounded-2xl">
         <img
           src={channel.channelBanner}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-2xl"
           alt="Channel Banner"
         />
       </div>
 
       {/* Channel Profile + Info */}
-      <div className="px-10 py-6 flex-col md:flex gap-6 md:items-center">
+      <div className="py-6 flex-col md:flex gap-6 items-center">
         {/* Avatar */}
         <img
           src={channel.avatar}
@@ -80,7 +84,7 @@ export default function ChannelPage() {
       <hr className="my-4 border-gray-300 dark:border-gray-600" />
 
       {/* Description */}
-      <div className="px-10">
+      <div className="">
         <h2 className="text-xl font-semibold mb-2">About</h2>
         <p className="text-gray-700 dark:text-gray-300">{channel.description || description}</p>
       </div>
@@ -88,7 +92,7 @@ export default function ChannelPage() {
       <hr className="my-6 border-gray-300 dark:border-gray-600" />
 
       {/* Videos Section */}
-      <div className="px-10 mb-10">
+      <div className="mb-10">
         <h2 className="text-2xl font-semibold mb-4">Videos</h2>
 
         {videos.length === 0 && (
@@ -99,7 +103,7 @@ export default function ChannelPage() {
           {videos.map((video) => (
             <Link
               key={video._id}
-              to={`/videos/${video._id}`}
+              to={`/video/${video._id}`}
               className="hover:scale-[1.03] transition-transform"
             >
               <div className="rounded-lg overflow-hidden shadow-sm bg-white dark:bg-gray-800">

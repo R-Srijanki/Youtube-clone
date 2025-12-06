@@ -81,12 +81,12 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => dispatch(toggleSidebar())}
-            className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
           >
             <RxHamburgerMenu size={22} />
           </button>
           {/*youtube icon */}
-          <Link to="/" className="flex items-center gap-1">
+          <Link to="/" className="flex items-center gap-1 cursor-pointer">
             <FaYoutube className="text-red-600 text-3xl" />
             <p className="text-2xl font-semibold dark:text-white font-mono hidden sm:inline">
               YouTube
@@ -98,7 +98,7 @@ export default function Header() {
           <button onClick={() => setMobileSearchOpen((prev) => !prev)}>
             <IoSearchOutline
               size={24}
-              className="text-gray-700 dark:text-white"
+              className="text-gray-700 dark:text-white cursor-pointer"
             />
           </button>
         </div>
@@ -118,7 +118,7 @@ export default function Header() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <button
-            className="px-4 border-l bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 flex items-center justify-center"
+            className="px-4 border-l bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 flex items-center justify-center cursor-pointer"
             onClick={() => {
               if (search.trim() !== "") {
                 navigate(`/search/${search}`);
@@ -141,7 +141,7 @@ export default function Header() {
               onChange={(e) => setSearch(e.target.value)}
             />
             <button
-              className="px-4 border-l bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 flex items-center justify-center"
+              className="px-4 border-l bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 flex items-center justify-center cursor-pointer"
               onClick={() => {
                 if (search.trim() !== "") {
                   navigate(`/search/${search}`);
