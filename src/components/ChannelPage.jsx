@@ -42,7 +42,7 @@ export default function ChannelPage() {
   if (!channel||loading) return <Loading/>;
 
   return (
-    <div className="w-full flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-10">
+    <div className="w-full flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-10 py-4">
 
       {/* Banner Section */}
       <div className="w-full h-60 bg-gray-200 dark:bg-gray-700 rounded-2xl">
@@ -63,14 +63,14 @@ export default function ChannelPage() {
         />
 
         {/* Channel Details */}
-        <div className="flex flex-col">
+        <div className="flex flex-col px-6">
           <h1 className="text-3xl font-bold md:text-center">{channel.name}</h1>
           <p className="text-gray-600 dark:text-gray-300 text-sm md:text-center">{channel.handle}</p>
           <p className="text-gray-500 dark:text-gray-400 text-xs md:text-center">
             {channel.subscribers?.length || 0} subscribers
           </p>
-
-          <div className="flex gap-3 mt-4">
+        </div>
+        <div className="flex gap-3 mt-4">
             <Link to="/customizechannel" className="text-center px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-full font-medium hover:bg-gray-300 dark:hover:bg-gray-600">
               Customize Channel
             </Link>
@@ -78,7 +78,6 @@ export default function ChannelPage() {
               Manage Videos
             </Link>
           </div>
-        </div>
       </div>
 
       <hr className="my-4 border-gray-300 dark:border-gray-600" />

@@ -72,9 +72,9 @@ export default function Login(){
       }
     }
     return(
-       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="bg-white p-8 rounded-xl shadow-md w-[350px]">
-        <h1 className="text-2xl font-bold text-center mb-6">
+       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md w-[350px]">
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">
           Sign In
         </h1>
 
@@ -84,13 +84,13 @@ export default function Login(){
           )}
           {/*username */}
           <div>
-            <label className="block font-medium mb-1" htmlFor="username">
+            <label className="block font-medium mb-1 text-gray-900 dark:text-gray-200" htmlFor="username">
               Username
             </label>
             <input
               id="username"
               type="text"
-              className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter your username"
               onChange={handlechange}
               value={data.username}
@@ -99,13 +99,13 @@ export default function Login(){
           </div>
           {/*email */}
           <div>
-            <label className="block font-medium mb-1" htmlFor="email">
+            <label className="block font-medium mb-1 text-gray-900 dark:text-gray-200" htmlFor="email">
               Email
             </label>
             <input
               id="email"
               type="text"
-              className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter your email"
               onChange={handlechange}
               value={data.email}
@@ -114,13 +114,13 @@ export default function Login(){
           </div>
           {/*password */}
           <div>
-            <label className="block font-medium mb-1" htmlFor="password">
+            <label className="block font-medium mb-1 text-gray-900 dark:text-gray-200" htmlFor="password">
               Password
             </label>
             <input
               id="password"
               type="password"
-              className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter your password"
               onChange={handlechange}
               value={data.password}
@@ -133,7 +133,7 @@ export default function Login(){
           </button>
         </form>
           {/**if don't have account click on register */}
-        <p className="text-center mt-4 text-sm">
+        <p className="text-center mt-4 text-sm text-gray-700 dark:text-gray-300">
           Don't have an account?
           <Link to="/register" className="text-red-600 ml-1 font-medium">
             Register

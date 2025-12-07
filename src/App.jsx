@@ -11,7 +11,7 @@ export default function App() {
       <Header />
       <div className="flex w-full h-full">
         {visible && <Aside />}
-        <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-primary-dark p-4">
+        <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-primary-dark">
           <Outlet />
         </main>
       </div>

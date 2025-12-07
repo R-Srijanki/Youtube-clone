@@ -14,7 +14,7 @@ export default function Channel(){
         navigate('/');
      }
     return(//this opens channel page if exists else create channel page
-        <div>
+        <div className="w-full h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
              {user?.channel ? (
         <ChannelPage />
       ) : (

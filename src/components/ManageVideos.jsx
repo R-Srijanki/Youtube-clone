@@ -116,7 +116,7 @@ if (Object.keys(v).length > 0) {
     return (<LoadingVideos/>)
   }
     return(
-          <>
+          <div className="py-5 px-3">
            {videos.length === 0 && (
           <p className="text-gray-800 dark:text-gray-400 text-center text-2xl">No videos uploaded in this channel</p>
         )}
@@ -125,7 +125,7 @@ if (Object.keys(v).length > 0) {
         {videos.map((video) => (
           <div
             key={video._id}
-            className="rounded-lg overflow-hidden bg-white dark:bg-gray-800 shadow hover:scale-[1.02] transition cursor-pointer"
+            className="rounded-lg bg-white dark:bg-gray-800 shadow hover:scale-[1.02] transition cursor-pointer"
           >
             <Link to={`/video/${video._id}`}>
               <img
@@ -246,6 +246,6 @@ if (Object.keys(v).length > 0) {
           </div>
         </div>
       )}
-    </>
+    </div>
     )
 }

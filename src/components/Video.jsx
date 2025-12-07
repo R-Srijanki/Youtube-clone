@@ -169,7 +169,6 @@ export default function Video() {
           {!(video?.uploader._id == user.user._id) && (
             <button
               onClick={handleSubscribe}
-              disabled={subscribe}
               className="bg-red-600 text-white px-4 py-2 rounded-md cursor-pointer"
             >
               {subscribe ? "Subscribed" : "Subscribe"}
@@ -208,7 +207,7 @@ export default function Video() {
 
         {/* DESCRIPTION */}
         <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mt-4 text-gray-900 dark:text-gray-200">
-          <div className="flex gap-3 text-sm text-gray-700">
+          <div className="flex gap-3 text-sm text-gray-700 dark:text-gray-300">
             <span>{video.views} views</span>
             <span>{new Date(video.createdAt)?.toDateString()}</span>
           </div>

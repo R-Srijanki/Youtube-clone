@@ -68,11 +68,11 @@ export default function Home() {
             cat === "All" ? "/" : `/${encodeURIComponent(cat)}`;
 
           return (
-            <li key={cat} className="">
+            <li key={cat}>
               <Link
                 to={to}
                 className={
-                  "border rounded-full px-4 py-1 text-sm whitespace-nowrap cursor-pointer" +
+                  "border rounded-full px-4 py-1 text-sm whitespace-nowrap cursor-pointer " +
                   (isActive
                     ? "bg-black text-white border-black dark:bg-primary dark:text-primary-dark dark:border-primary-dark"
                     : "bg-gray-100 dark:bg-primary-dark/40 hover:bg-gray-200 dark:hover:bg-primary-dark/60")

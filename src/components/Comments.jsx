@@ -14,7 +14,7 @@ export default function Comments({id}){
     const [editText, setEditText] = useState("");
     //to open options edit and delete on click on : near comment only on comments made by user
     const [menuOpen, setMenuOpen] = useState(null); // for per-comment menu
-
+    const [errors, setErrors] = useState({});
     const user = useSelector((store) => store.User.user);
 //to fetch comments from backend 
     useEffect(() => {
@@ -99,9 +99,13 @@ export default function Comments({id}){
 
    //handles edit on comment and saves its back to database
   async function handleCommentEdit(commentId) {
+    if (!editText.trim()) {
+    setErrors({ edit: "Comment cannot be empty" });
+    return;
+    }
     try {
       const res = await axios.patch(
-        `http://localhost:8000/videos/${id}/comments/${commentId}`,{ text: editText },
+        `http://localhost:8000/videos/${id}/comments/${commentId}`,{ text: editText.trim() },
         {
           headers: {
             "Content-Type": "application/json",
@@ -115,11 +119,12 @@ export default function Comments({id}){
 
       // Update UI without full reload
       setComments((prev) =>
-        prev.map((c) => (c._id === commentId ? { ...c, text: editText } : c))
+        prev.map((c) => (c._id === commentId ? { ...c, text: editText.trim() } : c))
       );
 
       setEditingCommentId(null);
       setEditText("");
+      setErrors({});
     } catch (error) {
       console.log("Error while editing comment",error);
     }
@@ -160,6 +165,7 @@ export default function Comments({id}){
   function cancelEditing() {
     setEditingCommentId(null);
     setEditText("");
+    setErrors({});
   }
     return(
         
@@ -221,9 +227,11 @@ export default function Comments({id}){
                     <div className="mt-1">
                       <input
                         value={editText}
-                        onChange={(e) => setEditText(e.target.value)}
-                        className="w-full border px-3 py-2 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        maxLength={500}
+                        onChange={(e) => {setEditText(e.target.value);if (errors.edit) setErrors({});}}
+                        className={`w-full border px-3 py-2 rounded-md ${errors.edit ? 'border-red-500' : 'bg-white dark:bg-gray-700'} text-gray-900 dark:text-gray-100`}
                       />
+                      {errors.edit && (<p className="text-red-500 text-xs mt-1">{errors.edit}</p>)}
                       <div className="flex gap-3 mt-2">
                         <button
                           onClick={() => handleCommentEdit(item._id)}

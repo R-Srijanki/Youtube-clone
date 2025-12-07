@@ -71,8 +71,8 @@ export default function Header() {
   //on logout
   const handlelogout = () => {
     localStorage.removeItem("token");
-    navigate("/");
     dispatch(logoutUser());
+    navigate("/"); 
   };
   return (
     <header className="flex flex-col sm:flex-row justify-between items-center w-full px-4 py-2 shadow-md bg-white dark:bg-gray-900 sticky top-0 z-50">

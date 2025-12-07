@@ -71,9 +71,9 @@ export default function Register() {
     }
   }
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="bg-white p-8 rounded-xl shadow-md w-[400px]">
-        <h1 className="text-2xl font-bold text-center mb-6">Create Account</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md w-[400px]">
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">Create Account</h1>
         {/**form */}
         <form className="space-y-4" onSubmit={handleregister}>
           {errors.server && (
@@ -81,11 +81,11 @@ export default function Register() {
           )}
           {/**full name */}
           <div>
-            <label className="block font-medium mb-1" htmlFor="fullName">Full Name</label>
+            <label className="block font-medium mb-1 text-gray-900 dark:text-gray-200" htmlFor="fullName">Full Name</label>
             <input
               id="fullName"
               type="text"
-              className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter full name"
               onChange={handlechange}
               value={data.fullName}
@@ -94,11 +94,11 @@ export default function Register() {
           </div>
             {/**username */}
           <div>
-            <label className="block font-medium mb-1" htmlFor="username">Username</label>
+            <label className="block font-medium mb-1 text-gray-900 dark:text-gray-200" htmlFor="username">Username</label>
             <input
               id="username"
               type="text"
-              className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter username"
               onChange={handlechange}
               value={data.username}
@@ -107,11 +107,11 @@ export default function Register() {
           </div>
           {/* email*/}
           <div>
-            <label className="block font-medium mb-1" htmlFor="email">Email</label>
+            <label className="block font-medium mb-1 text-gray-900 dark:text-gray-200" htmlFor="email">Email</label>
             <input
               id="email"
               type="text"
-              className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter email"
               onChange={handlechange}
               value={data.email}
@@ -120,11 +120,11 @@ export default function Register() {
           </div>
           {/*password*/}
           <div>
-            <label className="block font-medium mb-1" htmlFor="password">Password</label>
+            <label className="block font-medium mb-1 text-gray-900 dark:text-gray-200" htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
-              className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter password"
               onChange={handlechange}
               value={data.password}
@@ -140,7 +140,7 @@ export default function Register() {
           </button>
         </form>
           {/*if account exists then login */}
-        <p className="text-center mt-4 text-sm">
+        <p className="text-center mt-4 text-sm text-gray-700 dark:text-gray-300">
           Already have an account?
           <Link to="/login" className="text-red-600 ml-1 font-medium cursor-pointer">
             Login

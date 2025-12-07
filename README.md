@@ -97,7 +97,8 @@ Theme toggle and language selector
 
 * Displays video cards with:
 
-- Thumbnail
+- Thumbnail[thumbnailUrl](https://www.softr.io/tools/download-youtube-thumbnail)
+    - Website to get thumbnailUrl for youtube video. On click on download, we will get thumbnailUrl image of video.
 
 - Title
 
