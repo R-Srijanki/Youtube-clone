@@ -19,55 +19,55 @@
 
 ## ✨ Features
 
-- Home Page
+* Home Page
   - 📱 Responsive YouTube-style header
 
- - ☰ Toggleable sidebar via hamburger menu
+  - ☰ Toggleable sidebar via hamburger menu
 
- - 🔍 Real-time search by video title
+  - 🔍 Real-time search by video title
 
- - 🎨 Category filter buttons
+  - 🎨 Category filter buttons
 
- - 🏷️ Video cards: title, thumbnail, channel, views
+  - 🏷️ Video cards: title, thumbnail, channel, views
 
 - Authentication
- - 👤 Register/Login (username, email, password)
+  - 👤 Register/Login (username, email, password)
 
- - 🔐 JWT token authentication
+  - 🔐 JWT token authentication
 
- - 👑 Profile dropdown with logout + dark mode
+  - 👑 Profile dropdown with logout + dark mode
 
 - Video Player
- - 🎥 Embedded video player
+  - 🎥 Embedded video player
 
- - 👍 Like/Dislike toggle buttons
+  - 👍 Like/Dislike toggle buttons
 
- - 💬 Full comment CRUD (add, edit, delete, like/dislike)
+  - 💬 Full comment CRUD (add, edit, delete, like/dislike)
 
 - Channel Management
- - 🆕 Create channel (one per user)
+  - 🆕 Create channel (one per user)
 
- - 📺 View/manage uploaded videos
+  - 📺 View/manage uploaded videos
 
- - ✏️ Edit/delete own videos
+  - ✏️ Edit/delete own videos
 
- - 🎨 Customize channel banner/info
+  - 🎨 Customize channel banner/info
 
 - Responsive Design
- - 📱 Mobile-first 
+  - 📱 Mobile-first 
 
- - 💻 Tablet 
+  - 💻 Tablet 
 
- - 🖥️ Desktop 
+  - 🖥️ Desktop 
 
- - 🌙 Dark mode support
+  - 🌙 Dark mode support
 
-src/
-├── components/        # Reusable UI components (Header, Sidebar, VideoCard, Comments, etc.)
-├── utils/             # Redux slices, store configuration
-├── pages/             # Pages like Home, Video, Channel, Login, Register
-├── App.jsx            # Main app container with layout
-└── main.jsx           # Entry point and router setup
+- src/
+- ├── components/        # Reusable UI components (Header, Sidebar, VideoCard, Comments, etc.)
+- ├── utils/             # Redux slices, store configuration
+- ├── pages/             # Pages like Home, Video, Channel, Login, Register
+- ├── App.jsx            # Main app container with layout
+- └── main.jsx           # Entry point and router setup
 
 
 ## 📌 Installation & Setup
