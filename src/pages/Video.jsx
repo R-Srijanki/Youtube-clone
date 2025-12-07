@@ -4,8 +4,8 @@ import { IoMdShareAlt } from "react-icons/io";
 import { RiDownloadLine } from "react-icons/ri";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import Comments from "./Comments";
-import VideoSection from "./VideoSection";
+import Comments from "../components/Comments";
+import VideoSection from "../components/VideoSection";
 import axios from "axios";
 export default function Video() {
   const { id } = useParams();

@@ -1,7 +1,6 @@
 # YouTube Clone – Frontend (React + TailwindCSS)
 
-* This repository contains the frontend application of the YouTube Clone project.
-The UI is built using React, TailwindCSS, React Router, Redux Toolkit, and Axios, delivering a fully responsive and interactive user experience similar to YouTube.
+- This is the frontend application for a full-stack YouTube clone built with React. It allows users to view, search, filter, and interact with videos. The UI is responsive and supports user authentication, channel creation, video uploads, commenting, liking, and subscribing to channels.
 
 ## ⚡ Tech Stack
 - Frontend
@@ -18,292 +17,57 @@ The UI is built using React, TailwindCSS, React Router, Redux Toolkit, and Axios
 
 - React Icons (UI Icons)
 
-## 🚀 Features (Complete Functionality)
+## ✨ Features
 
-Below is a comprehensive list of all frontend modules and their implemented functionality.
+- Home Page
+  - 📱 Responsive YouTube-style header
 
-1. Authentication Module
-- User Login
+ - ☰ Toggleable sidebar via hamburger menu
 
-* JWT-based authentication.
+ - 🔍 Real-time search by video title
 
-* Stores token in localStorage.
+ - 🎨 Category filter buttons
 
-* Global auth state handled by Redux.
+ - 🏷️ Video cards: title, thumbnail, channel, views
 
-* Redirects user after login.
+- Authentication
+ - 👤 Register/Login (username, email, password)
 
-* Header menu updates automatically after login.
+ - 🔐 JWT token authentication
 
-- User Logout
+ - 👑 Profile dropdown with logout + dark mode
 
-* Clears all stored credentials.
+- Video Player
+ - 🎥 Embedded video player
 
-* Redirects to homepage.
+ - 👍 Like/Dislike toggle buttons
 
-* Redux user state reset.
+ - 💬 Full comment CRUD (add, edit, delete, like/dislike)
 
-2. Header & Navigation
+- Channel Management
+ - 🆕 Create channel (one per user)
 
-The header is designed to match YouTube’s modern UI.
+ - 📺 View/manage uploaded videos
 
-- Key Features
+ - ✏️ Edit/delete own videos
 
-* Responsive layout (mobile, tablet, desktop).
+ - 🎨 Customize channel banner/info
 
-* Dark/Light mode toggle with global theme support.
+- Responsive Design
+ - 📱 Mobile-first 
 
-* Search bar with live typing.
+ - 💻 Tablet 
 
-* Mobile Search Toggle
+ - 🖥️ Desktop 
 
-* Search icon opens a full-width input on small screens.
+ - 🌙 Dark mode support
 
-* Closes automatically after performing search.
-
-* Hamburger menu for opening sidebar.
-
-* YouTube logo navigating to homepage.
-
-* Profile Dropdown Includes:
-
- Google Account
-
-Switch Account
-
-Sign Out
-
-YouTube Studio
-
-Purchases
-
-Settings
-
-Help & Feedback
-
-Theme toggle and language selector
-
-* Channel Menu
-
-- Accessible via video camera icon:
-
-- Upload Video
-
-- View Channel
-
-3. Home Page
-
-* Fetches all videos using backend API.
-
-* Displays video cards with:
-
-- Thumbnail[thumbnailUrl](https://www.softr.io/tools/download-youtube-thumbnail)
-    - Website to get thumbnailUrl for youtube video. On click on download, we will get thumbnailUrl image of video.
-
-- Title
-
-- Channel details
-
-- Views & uploaded time
-
-- Skeleton loaders while content is loading.
-
-- Fully responsive for grid display.
-
-4. Video Watch Page
-
-* Displays a single video with all YouTube-style interactions.
-
-* Video Player Area
-
-* Embedded video using React player or HTML <video>.
-
-* Video title displayed.
-
-* Uploader/channel info displayed.
-
-* Channel avatar, name, handle, and subscriber count.
-
-* Subscribe/Unsubscribe
-
-* Button toggles based on current user subscription.
-
-* Prevents subscribing to own channel.
-
-* Updates UI instantly after API call.
-
-* Video Stats
-
-* Likes/Dislikes count 
-
-* Views
-
-* Uploaded date
-
-* Comments Section
-
-* Add new comment (JWT protected)
-
-* Edit your comment
-
-* Delete your comment
-
-* Real-time UI update without reload
-
-* Error handling for unauthorized users
-
-* Comments display:
-
-- User avatar
-
-- Username
-
-- Comment text
-
-- Timestamp
-
-5. Search Functionality
-
-* Global search from Header.
-
-Search results page:
-
-- List of videos matching keyword.
-
-- The URL structure:
-/search/:query
-
-- Search works on both desktop & mobile search bar.
-
-6. Channel System
-* Your Channel Page (/channel)
-
-Displays:
-
-- Channel name, handle, and avatar
-
-- Channel cover image (optional)
-
-- Uploaded videos
-
-- Subscribers count
-
-- Channel details
-
-- Customize Channel Page Includes:
-
-* Update channel name
-
-* Update channel handle
-
-* Update about/description
-
-* Update profile avatar
-
-* Update channel banner/cover image
-
-* Save changes button
-
-* Cancel button (reverts UI and navigates back)
-
-7. Video Upload Module
-- Upload Page (/channel/upload)
-
-- Features:
-
-* Upload video file
-
-* Upload thumbnail
-
-* Set title
-
-* Set description
-
-* Set category/tags
-
-* Preview video before upload
-
-Error validation for:
-
-* Missing title
-
-* Missing video file
-
-* Invalid formats
-
-* Protected route: requires login
-
-8. Sidebar Navigation
-
-* Collapsible sidebar for mobile & desktop.
-
-* Opens using hamburger icon.
-
-Contains:
-
-- Home, Subscriptions, Your Channel, Watch Later, History,Trending, Settings
-
-- Sidebar state controlled via Redux (sidebarslice).
-
-9. Dark Mode (Global Theme System)
-
-- Uses Tailwind’s dark: classes.
-
-- Stores theme mode in Redux + localStorage.
-
-- Consistent dark mode across:
-
-* Header, Sidebar, Video cards, Profile menu, Forms and inputs
-
-10. User State Management (Redux)
-
-- Slices implemented:
-
-* User Slice – user info, token, login state
-
-* Theme Slice – light/dark mode
-
-* Sidebar Slice – open/close sidebar
-
-* Fully integrated across app.
-
-11. Responsive Design
-
-- Fully mobile-responsive
-
-- Grid adjusts dynamically
-
-- Mobile search bar
-
-- Mobile sidebar
-
-- Mobile header alignment
-
-12. Error Handling
-
-* Frontend handles:
-
-- Invalid token (auto logout)
-
-- API errors from backend
-
-- 404 video not found
-
-- Failed video upload alerts
-
-- Unauthorized access (login required)
-
-- Comment edit/submit errors
-
-13. Optimizations
-
-- No full page reload after actions (React state updates)
-
-- Debounced search typing (optional)
-
-- Lazy-loaded pages using LazyWrapper
-
-- Automatic dropdown closing on outside click
+src/
+├── components/        # Reusable UI components (Header, Sidebar, VideoCard, Comments, etc.)
+├── utils/             # Redux slices, store configuration
+├── pages/             # Pages like Home, Video, Channel, Login, Register
+├── App.jsx            # Main app container with layout
+└── main.jsx           # Entry point and router setup
 
 
 ## 📌 Installation & Setup
@@ -325,7 +89,9 @@ npm run dev
 
 Open http://localhost:5173 in your browser.
 
-# Project Github Link
+- ThumbnailUrl :[ThumbnailUrl Site](https://www.softr.io/tools/download-youtube-thumbnail)
+    - To get youtube thumbnail, click on above site paste youtube video url and click on download. It gives us thumbnail of it. Copy and use url in upload video thumbnailUrl field.
+## Project Github Link
 Github Link: [Project](https://github.com/R-Srijanki/Youtube-clone.git)
 
 ## Author

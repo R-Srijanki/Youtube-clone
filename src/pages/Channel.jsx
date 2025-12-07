@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
-import ChannelPage from "./ChannelPage";
-import CreateChannel from "./CreateChannel";
+import ChannelPage from "../components/ChannelPage";
+import CreateChannel from "../components/CreateChannel";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 export default function Channel(){

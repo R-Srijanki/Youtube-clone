@@ -1,9 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import VideoCard from "./VideoCard";
+import VideoCard from "../components/VideoCard";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import LoadingVideos from "./LoadingVideos";
+import LoadingVideos from "../components/LoadingVideos";
 
 export default function Home() {
   const visible=useSelector(store=>store.Sidebar.open);

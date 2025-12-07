@@ -8,12 +8,12 @@ import { lazy,Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 const NotFound = lazy(() => import('./components/NotFound.jsx'));
 const CustomizeChannel = lazy(() => import('./components/CustomizeChannel.jsx'));
-const Home = lazy(() => import('./components/Home.jsx'));
-const Login = lazy(() => import('./components/Login.jsx'));
-const Register = lazy(() => import('./components/Register.jsx'));
-const Video = lazy(() => import('./components/Video.jsx'));
+const Home = lazy(() => import('./pages/Home.jsx'));
+const Login = lazy(() => import('./pages/Login.jsx'));
+const Register = lazy(() => import('./pages/Register.jsx'));
+const Video = lazy(() => import('./pages/Video.jsx'));
 const Search = lazy(() => import('./components/Search.jsx'));
-const Channel = lazy(() => import('./components/Channel.jsx'));
+const Channel = lazy(() => import('./pages/Channel.jsx'));
 const ChannelVideo = lazy(() => import('./components/ChannelVideo.jsx'));
 const ManageVideos = lazy(() => import('./components/ManageVideos.jsx'))
 
