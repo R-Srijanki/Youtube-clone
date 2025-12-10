@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import Comments from "../components/Comments";
 import VideoSection from "../components/VideoSection";
 import axios from "axios";
+import NotFound from "../components/NotFound";
 export default function Video() {
   const { id } = useParams();
   //get video data by id from url
@@ -15,6 +16,9 @@ export default function Video() {
   const [loading, setLoading] = useState(true);
   const [subscribe, setSubscribe] = useState(false);
   //to get video details
+  if (!user?.user) {
+    return <NotFound />;
+  }
   useEffect(() => {
     async function loadVideo() {
       try {
@@ -26,10 +30,9 @@ export default function Video() {
         } else {
           setSubscribe(false);
         }
-
-        setLoading(false);
       } catch (err) {
         console.log("Error while fetching video", err);
+      } finally {
         setLoading(false);
       }
     }
@@ -48,7 +51,7 @@ export default function Video() {
           },
         }
       );
-      console.log(res.data);
+      //console.log(res.data);
       //to get updated subscribers details
       const updatedSubscribers = res.data.subscribers || [];
 
@@ -89,7 +92,7 @@ export default function Video() {
         dislikes: res.data.dislikes,
       }));
 
-      console.log(res.data);
+      //console.log(res.data);
     } catch (error) {
       console.log("Error while liking");
     }
@@ -107,7 +110,7 @@ export default function Video() {
           },
         }
       );
-      console.log(res.data);
+      //console.log(res.data);
       //update details
       setVideo((prev) => ({
         ...prev,
@@ -136,10 +139,7 @@ export default function Video() {
   }
 
   return (
-    <div
-      className="lg:flex gap-4 p-4 bg-white dark:bg-gray-900 
-                    text-gray-900 dark:text-gray-100 md:px-10"
-    >
+    <div className="lg:flex overflow-y-auto gap-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 md:px-10">
       {/* LEFT SIDE — VIDEO PLAYER */}
       <div className="md:w-full lg:w-[70%]">
         <iframe

@@ -1,40 +1,42 @@
 import axios from "axios";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { IoMdMore } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import LoadingVideos from "./LoadingVideos";
 
-export default function ManageVideos(){
+export default function ManageVideos() {
   const user = useSelector((store) => store.User.user);
-  const visible=useSelector(store=>store.Sidebar.open);
+  const visible = useSelector((store) => store.Sidebar.open);
   const [loading, setLoading] = useState(true);
-  //store channel,videos details 
+  //store channel,videos details
   const [channel, setChannel] = useState(null);
   const [videos, setVideos] = useState([]);
   //to open menu for edit , delete options on video
   const [menuOpen, setMenuOpen] = useState(null);
   const [editData, setEditData] = useState(null);
-  const [errors,setErrors]=useState({});
+  const [errors, setErrors] = useState({});
   //to get channel details and store
   useEffect(() => {
     if (!user?.channel?._id) return;
 
     async function loadChannel() {
       try {
-        const res = await axios.get(`http://localhost:8000/channels/${user.channel._id}`,{
-          headers: {
-            'Authorization': `JWT ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json"
-          },
-        });
+        const res = await axios.get(
+          `http://localhost:8000/channels/${user.channel._id}`,
+          {
+            headers: {
+              Authorization: `JWT ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         setChannel(res.data.data);
-        setVideos(res.data?.data.videos||[]); 
+        setVideos(res.data?.data.videos || []);
       } catch (err) {
         console.log(err.message);
-      }
-      finally{
+      } finally {
         setLoading(false);
       }
     }
@@ -50,51 +52,60 @@ export default function ManageVideos(){
     setMenuOpen(null);
   }
   function validateVideoEdit(data) {
-  const errs = {};
+    const errs = {};
 
-  if (!data.title.trim() || data.title.length < 3) {
-    errs.title = "Title must be at least 3 characters";
+    if (!data.title.trim() || data.title.length < 3) {
+      errs.title = "Title must be at least 3 characters";
+    }
+
+    if (!data.description.trim() || data.description.length > 1000) {
+      errs.description =
+        "Description is required but cannot exceed 1000 characters";
+    }
+
+    if (!data.category.trim()) {
+      errs.category = "Category is required";
+    }
+
+    return errs;
   }
-
-  if (!data.description.trim() || data.description.length > 1000) {
-    errs.description = "Description is required but cannot exceed 1000 characters";
-  }
-
-  if (!data.category.trim()) {
-    errs.category = "Category is required";
-  }
-
-  return errs;
-}
-  //to change video details 
+  //to change video details
   async function handleUpdate() {
     const v = validateVideoEdit(editData);
-if (Object.keys(v).length > 0) {
-  setErrors(v);
-  return;
-}
-  try {
+    if (Object.keys(v).length > 0) {
+      setErrors(v);
+      return;
+    }
+    try {
+      const cleanData = {
+        ...editData,
+        title: editData.title?.trim(),
+        description: editData.description?.trim(),
+        category:
+          editData.category?.trim().charAt(0).toUpperCase() +
+          editData.category?.trim().slice(1).toLowerCase(),
+      };
+
       const res = await axios.patch(
-        `http://localhost:8000/videos/${editData._id}`,editData,
+        `http://localhost:8000/videos/${editData._id}`,
+        cleanData,
         {
           headers: {
             "Content-Type": "application/json",
-            'Authorization': `JWT ${localStorage.getItem("token")}`,
-          }
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+          },
         }
       );
 
-     setVideos((prev) =>
-        prev.map((v) =>
-          v._id === editData._id ? { ...v, ...editData } : v
-        )
-      )
+      setVideos((prev) =>
+        prev.map((v) => (v._id === editData._id ? { ...v, ...cleanData } : v))
+      );
       setEditData(null);
     } catch (err) {
       console.log(err.message);
     }
   }
-//to delete video from channel
+  //to delete video from channel
   async function handleDelete(id) {
     const confirmDelete = window.confirm("Delete this video permanently?");
     if (!confirmDelete) return;
@@ -102,8 +113,8 @@ if (Object.keys(v).length > 0) {
     try {
       const res = await axios.delete(`http://localhost:8000/videos/${id}`, {
         headers: {
-          'Authorization': `JWT ${localStorage.getItem("token")}`,
-           "Content-Type": "application/json"
+          Authorization: `JWT ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
         },
       });
 
@@ -112,16 +123,24 @@ if (Object.keys(v).length > 0) {
       console.log(err.message);
     }
   }
-  if(loading){
-    return (<LoadingVideos/>)
+  if (loading) {
+    return <LoadingVideos />;
   }
-    return(
-          <div className="py-5 px-3">
-           {videos.length === 0 && (
-          <p className="text-gray-800 dark:text-gray-400 text-center text-2xl">No videos uploaded in this channel</p>
-        )}
+  return (
+    <div className="py-5 px-3">
+      {videos.length === 0 && (
+        <p className="text-gray-800 dark:text-gray-400 text-center text-2xl font-semibold">
+          No videos uploaded in this channel
+        </p>
+      )}
       {/* Videos Grid */}
-      <div className={!visible?"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6":"grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
+      <div
+        className={
+          !visible
+            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+            : "grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        }
+      >
         {videos.map((video) => (
           <div
             key={video._id}
@@ -200,8 +219,8 @@ if (Object.keys(v).length > 0) {
               className="border w-full p-2 rounded mb-3 dark:bg-gray-700"
             />
             {errors.title && (
-            <p className="text-red-600 text-sm">{errors.title}</p>
-          )}
+              <p className="text-red-600 text-sm">{errors.title}</p>
+            )}
             {/**description */}
             <label className="text-sm">Description</label>
             <textarea
@@ -212,8 +231,8 @@ if (Object.keys(v).length > 0) {
               className="border w-full p-2 rounded mb-3 dark:bg-gray-700"
             />
             {errors.description && (
-            <p className="text-red-600 text-sm">{errors.description}</p>
-          )}
+              <p className="text-red-600 text-sm">{errors.description}</p>
+            )}
             {/**category */}
             <label className="text-sm">Category</label>
             <input
@@ -225,8 +244,8 @@ if (Object.keys(v).length > 0) {
               className="border w-full p-2 rounded mb-3 dark:bg-gray-700"
             />
             {errors.category && (
-            <p className="text-red-600 text-sm">{errors.category}</p>
-          )}
+              <p className="text-red-600 text-sm">{errors.category}</p>
+            )}
             {/**to not change anything */}
             <div className="flex justify-end gap-3 mt-4">
               <button
@@ -247,5 +266,5 @@ if (Object.keys(v).length > 0) {
         </div>
       )}
     </div>
-    )
+  );
 }

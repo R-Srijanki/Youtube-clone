@@ -1,84 +1,95 @@
 import axios from "axios";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../utils/userSlice";
-export default function CreateChannel({onClose}) {
+export default function CreateChannel({ onClose }) {
   //to store channel details
   const [data, setData] = useState({
     name: "",
     handle: "",
-    channelBanner: null
+    channelBanner: null,
   });
-  const user=useSelector(store=>store.User.user);
-  const dispatch=useDispatch();
-  const navigate=useNavigate();
+  const user = useSelector((store) => store.User.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [redirect, setRedirect] = useState(false);
-//to preview channel banner
+  //to preview channel banner
   const [previewBanner, setPreviewBanner] = useState(null);
   const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-  if (redirect) {
-    navigate("/channel");
-  }
-}, [redirect, navigate]);
-//to handle changes in input 
+  useEffect(() => {
+    if (redirect) {
+      navigate("/channel");
+    }
+  }, [redirect, navigate]);
+  //to handle changes in input
   function handleChange(e) {
     const { id, value, files } = e.target;
 
     if (id === "channelBanner") {
       const file = files[0];
+      if (!file) return;
+
+      if (file.size > 6 * 1024 * 1024) {
+        setErrors({ channelBanner: "File must be under 6MB" });
+        return;
+      }
       setData({ ...data, channelBanner: file });
       setPreviewBanner(URL.createObjectURL(file));
     } else {
       setData({ ...data, [id]: value });
     }
   }
-// functions when we click on submit form
+  // functions when we click on submit form
   async function handleSubmit(e) {
     e.preventDefault();
     const error = {};
     let hasError = false;
-//to check errors in details
-    if (!data.name.trim()) {
-      error.name = "Enter valid channel name";
+    //to check errors in details
+    if (!data.name.trim() || data.name.trim().length < 3) {
+      error.name = "Name must be at least 3 characters";
       hasError = true;
     }
-    if (!data.handle.trim() || data.handle[0] !== "@") {
-      error.handle = "Handle must start with @";
-      hasError = true;
-    }
-    if (!data.channelBanner) {
-      error.channelBanner = "Select a channel banner";
-      hasError = true;
+
+    if (!data.handle.trim()) {
+      error.handle = "Handle is required";
+    } else if (!/^@[A-Za-z0-9_]{3,30}$/.test(data.handle.trim())) {
+      error.handle =
+        "Handle must start with @ and contain 3–30 letters, numbers, underscores";
     }
 
     setErrors(error);
     if (hasError) return;
-//after error check
+    //after error check
     try {
+      const cleanData = {
+        ...data,
+        name: data.name?.trim(),
+        handle: data.handle?.trim(),
+      };
       const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("handle", data.handle);
-      formData.append("channelBanner", data.channelBanner);
-//send data to backend 
-      const res = await axios.post("http://localhost:8000/channels", formData,{
+      formData.append("name", cleanData.name);
+      formData.append("handle", cleanData.handle);
+      formData.append("channelBanner", cleanData.channelBanner);
+      //send data to backend
+      const res = await axios.post("http://localhost:8000/channels", formData, {
         headers: {
-          'Authorization': `JWT ${localStorage.getItem("token")}`,
-          'Content-Type': 'multipart/form-data'
-        } 
+          Authorization: `JWT ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      console.log(res.data);
+      //console.log(res.data);
       const updatedUser = { ...user, channel: res.data.data };
-           // update redux state (fixes 404 problem)
+      // update redux state (fixes 404 problem)
       dispatch(updateUser(updatedUser));
-      setRedirect(true); 
+      setRedirect(true);
     } catch (err) {
       console.log("Error creating channel:", err);
-       const serverMessage = err.response?.data?.message || "Channel creation failed";
-         setErrors({ server: serverMessage });
+      const serverMessage =
+        err.response?.data?.message || "Channel creation failed";
+      setErrors({ server: serverMessage });
     }
   }
 
@@ -113,7 +124,7 @@ export default function CreateChannel({onClose}) {
             className="w-28 h-28 rounded-full border-4 border-white shadow-md"
           />
         </div>
-            {/**channel banner */}
+        {/**channel banner */}
         <div className="mt-6">
           <label className="font-medium">Channel Banner</label>
           <input
@@ -128,7 +139,7 @@ export default function CreateChannel({onClose}) {
           )}
         </div>
 
-            {/**channel name */}
+        {/**channel name */}
         <div className="mt-4">
           <label className="font-medium">Name</label>
           <input
@@ -140,7 +151,7 @@ export default function CreateChannel({onClose}) {
           {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
         </div>
 
-            {/**channel handle */}
+        {/**channel handle */}
         <div className="mt-4">
           <label className="font-medium">Handle</label>
           <input
@@ -162,7 +173,7 @@ export default function CreateChannel({onClose}) {
         {errors.server && (
           <p className="text-red-600 text-sm mt-2">{errors.server}</p>
         )}
-         {/*cancel on no creation */}
+        {/*cancel on no creation */}
         <div className="flex justify-end gap-3 mt-6">
           <button
             type="button"

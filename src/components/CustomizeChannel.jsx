@@ -8,18 +8,18 @@ import { updateUser } from "../utils/userSlice";
 
 export default function CustomizeChannel() {
   const navigate = useNavigate();
-  const dispatch=useDispatch();
-  const user = useSelector(store => store.User.user);
-//store channel details from api call
+  const dispatch = useDispatch();
+  const user = useSelector((store) => store.User.user);
+  //store channel details from api call
   const [channel, setChannel] = useState(null);
   //store channel details values to be changed
   const [form, setForm] = useState({
     name: "",
     handle: "",
     description: "",
-    channelBanner: null
+    channelBanner: null,
   });
-//preview of banner
+  //preview of banner
   const [previewBanner, setPreviewBanner] = useState(null);
 
   const [loading, setLoading] = useState(true);
@@ -29,15 +29,15 @@ export default function CustomizeChannel() {
   const [errors, setErrors] = useState({});
   const [confirmDelete, setConfirmDelete] = useState(false);
 
- useEffect(() => {
-  if (!user?.channel?._id) {
-    setLoading(false);
-    return;
-  }
+  useEffect(() => {
+    if (!user?.channel?._id) {
+      setLoading(false);
+      return;
+    }
 
-  loadChannel();
-}, [user]);
-//to get channel details from api
+    loadChannel();
+  }, [user]);
+  //to get channel details from api
   async function loadChannel() {
     try {
       const res = await axios.get(
@@ -53,7 +53,7 @@ export default function CustomizeChannel() {
         name: c.name || "",
         handle: c.handle || "",
         description: c.description || "",
-        channelBanner: c.channelBanner || null
+        channelBanner: c.channelBanner || null,
       });
 
       setPreviewBanner(c.channelBanner || null);
@@ -63,55 +63,64 @@ export default function CustomizeChannel() {
       setLoading(false);
     }
   }
-//to handle change on input
+  //to handle change on input
   function handleChange(e) {
     const { id, value, files } = e.target;
 
     if (id === "channelBanner") {
       const file = files[0];
-      if (!file) return;
+      if (!file) {
+        // If user removed the file, revert to original URL (not an error)
+        setForm((prev) => ({
+          ...prev,
+          channelBanner: channel?.channelBanner || null,
+        }));
+        setPreviewBanner(channel?.channelBanner || null);
+        return;
+      }
 
       if (file.size > 6 * 1024 * 1024) {
         setErrors({ channelBanner: "File must be under 6MB" });
         return;
       }
 
-      setForm(prev => ({ ...prev, channelBanner: file }));
+      setForm((prev) => ({ ...prev, channelBanner: file }));
       setPreviewBanner(URL.createObjectURL(file));
       return;
     }
 
-    setForm(prev => ({ ...prev, [id]: value }));
+    setForm((prev) => ({ ...prev, [id]: value }));
   }
   function validateForm() {
-  const newErrors = {};
+    const newErrors = {};
 
- if (!form.name.trim() || form.name.trim().length < 3) {
-    newErrors.name = "Name must be at least 3 characters";
+    if (!form.name.trim() || form.name.trim().length < 3) {
+      newErrors.name = "Name must be at least 3 characters";
+    }
+
+    if (!form.handle.trim()) {
+      newErrors.handle = "Handle is required";
+    } else if (!/^@[A-Za-z0-9_]{3,30}$/.test(form.handle.trim())) {
+      newErrors.handle =
+        "Handle must start with @ and contain 3–30 letters, numbers, underscores";
+    }
+
+    if (form.description.length > 500) {
+      newErrors.description = "Description cannot exceed 500 characters";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   }
-
-  if (!form.handle.trim()) {
-    newErrors.handle = "Handle is required";
-  } else if (!/^@[A-Za-z0-9_]{3,30}$/.test(form.handle.trim())) {
-    newErrors.handle = "Handle must start with @ and contain 3–30 letters, numbers, underscores";
-  }
-
-  if (form.description.length > 500) {
-    newErrors.description = "Description cannot exceed 500 characters";
-  }
-
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-}
-//to handle on submit of form
+  //to handle on submit of form
   async function handleSubmit(e) {
     e.preventDefault();
     if (!validateForm()) {
-    setSaving(false);
-    return;
-  }
-  setSaving(true);
-    
+      setSaving(false);
+      return;
+    }
+    setSaving(true);
+
     try {
       const fd = new FormData();
       //store trim values
@@ -124,7 +133,7 @@ export default function CustomizeChannel() {
       if (safeDesc) fd.append("description", safeDesc);
 
       if (form.channelBanner instanceof File) {
-        fd.append("banner", form.channelBanner);
+        fd.append("channelBanner", form.channelBanner);
       }
       console.log(fd);
       //to save changes back to database
@@ -133,18 +142,16 @@ export default function CustomizeChannel() {
         fd,
         {
           headers: {
-            "Authorization": `JWT ${localStorage.getItem("token")}`,
-            "Content-Type": "multipart/form-data"
-          }
+            Authorization: `JWT ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       navigate("/channel");
     } catch (err) {
       console.log(err.response.data.error);
       setErrors({
-        server:
-          err.response?.data?.message ||
-          `Update failed: ${err.message}`
+        server: err.response?.data?.message || `Update failed: ${err.message}`,
       });
     }
 
@@ -159,36 +166,35 @@ export default function CustomizeChannel() {
       name: channel.name || "",
       handle: channel.handle || "",
       description: channel.description || "",
-      channelBanner: channel.channelBanner || null
+      channelBanner: channel.channelBanner || null,
     });
 
     setPreviewBanner(channel.channelBanner || null);
 
     navigate("/channel");
   }
-//to delete channel 
-async function handleDelete() {
-  setDeleteLoading(true);
+  //to delete channel
+  async function handleDelete() {
+    setDeleteLoading(true);
 
-  try {
-    await axios.delete(
-      `http://localhost:8000/channels/${user.channel._id}`,
-      { headers: { Authorization: `JWT ${localStorage.getItem("token")}` } }
-    );
+    try {
+      await axios.delete(`http://localhost:8000/channels/${user.channel._id}`, {
+        headers: { Authorization: `JWT ${localStorage.getItem("token")}` },
+      });
 
-    // Clear user channel locally
-    const updatedUser = { ...user, channel: null };
-     // update redux state (fixes 404 problem)
-    dispatch(updateUser(updatedUser));
-    navigate('/');
-  } catch (err) {
-    setErrors({ server: "Unable to delete channel" });
+      // Clear user channel locally
+      const updatedUser = { ...user, channel: null };
+      // update redux state (fixes 404 problem)
+      dispatch(updateUser(updatedUser));
+      navigate("/");
+    } catch (err) {
+      setErrors({ server: "Unable to delete channel" });
+    }
+
+    setDeleteLoading(false);
   }
-
-  setDeleteLoading(false);
-}
   if (loading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   return (
@@ -200,7 +206,6 @@ async function handleDelete() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-10">
-
         {/* Banner */}
         <div>
           <h2 className="text-lg font-semibold">Banner Image</h2>
@@ -238,9 +243,7 @@ async function handleDelete() {
             onChange={handleChange}
             className="w-full border p-2 rounded mt-3 bg-white dark:bg-gray-700"
           />
-          {errors.name && (
-            <p className="text-red-600 text-sm">{errors.name}</p>
-          )}
+          {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
         </div>
 
         {/* Handle */}
@@ -255,11 +258,11 @@ async function handleDelete() {
             placeholder="@handle"
             className="w-full border p-2 rounded mt-3 bg-white dark:bg-gray-700"
           />
-            {errors.handle && (
+          {errors.handle && (
             <p className="text-red-600 text-sm">{errors.handle}</p>
           )}
-           </div>
-           <div>
+        </div>
+        <div>
           {/**description */}
           <label className="text-lg font-semibold mt-4 block">
             Description

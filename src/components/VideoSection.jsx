@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 export default function VideoSection({ category, currentVideoId }) {
   const [videos, setVideos] = useState([]);
-//get videos details by api call
+  //get videos details by api call
   useEffect(() => {
     async function loadVideos() {
       try {
@@ -38,13 +38,14 @@ export default function VideoSection({ category, currentVideoId }) {
 
   return (
     <div className="space-y-4">
-        <h3 className="text-lg font-semibold mb-3">Related Videos</h3>
+      <h3 className="text-lg font-semibold mb-3">Related Videos</h3>
       {filteredVideos.map((item) => (
         <Link
           key={item._id}
           to={`/video/${item._id}`}
           className="flex gap-3 hover:bg-gray-100 dark:hover:bg-primary-dark/30 p-2 rounded-lg transition-all cursor-pointer"
-        >{/**thumbnail url */}
+        >
+          {/**thumbnail url */}
           <img
             src={item.thumbnailUrl}
             alt={item.title}

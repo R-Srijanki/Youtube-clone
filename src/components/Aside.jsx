@@ -16,12 +16,12 @@ import { Link } from "react-router-dom";
 export default function Aside() {
   return (
     //side bar to open when click on hamburger in header (only home works)
-    <aside
-      className="w-60 absolute z-40 md:static min-h-screen bg-white dark:bg-gray-900 border-r dark:border-gray-700 px-4 py-4 overflow-y-auto">
+    <aside className="w-60 absolute z-40 md:static min-h-screen bg-white dark:bg-gray-900 border-r dark:border-gray-700 px-4 py-4 overflow-y-auto">
       <ul className="space-y-3 mb-4">
         <Link
           to="/"
-          className="flex gap-3 items-center hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg p-2 cursor-pointer text-gray-900 dark:text-gray-100">
+          className="flex gap-3 items-center hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg p-2 cursor-pointer text-gray-900 dark:text-gray-100"
+        >
           <TiHomeOutline /> Home
         </Link>
         <li className="flex gap-3 items-center hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg p-2 cursor-pointer text-gray-900 dark:text-gray-100">

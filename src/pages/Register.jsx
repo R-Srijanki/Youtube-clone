@@ -56,24 +56,37 @@ export default function Register() {
 
     setErrors(newErrors);
     if (hasError) return;
-    //if no errors it sends data 
+    //if no errors it sends data
     try {
-      const res = await axios.post("http://localhost:8000/register",data, {
-        headers: {
-          "Content-Type": "application/json",
+      const cleanData = {
+        fullName: data.fullName.trim(),
+        username: data.username.trim(),
+        email: data.email.trim(),
+        password: data.password,
+      };
+      const res = await axios.post(
+        "http://localhost:8000/register",
+        cleanData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
       navigate("/login");
     } catch (err) {
       console.log("error while register");
-      const serverMessage = err.response?.data?.message || "Registration failed";
+      const serverMessage =
+        err.response?.data?.message || "Registration failed";
       setErrors({ server: serverMessage });
     }
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
       <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md w-[400px]">
-        <h1 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">Create Account</h1>
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">
+          Create Account
+        </h1>
         {/**form */}
         <form className="space-y-4" onSubmit={handleregister}>
           {errors.server && (
@@ -81,7 +94,12 @@ export default function Register() {
           )}
           {/**full name */}
           <div>
-            <label className="block font-medium mb-1 text-gray-900 dark:text-gray-200" htmlFor="fullName">Full Name</label>
+            <label
+              className="block font-medium mb-1 text-gray-900 dark:text-gray-200"
+              htmlFor="fullName"
+            >
+              Full Name
+            </label>
             <input
               id="fullName"
               type="text"
@@ -90,11 +108,18 @@ export default function Register() {
               onChange={handlechange}
               value={data.fullName}
             />
-            {errors.fullName&&<p className="mt-1 text-sm text-red-500">{errors.fullName}</p>}
+            {errors.fullName && (
+              <p className="mt-1 text-sm text-red-500">{errors.fullName}</p>
+            )}
           </div>
-            {/**username */}
+          {/**username */}
           <div>
-            <label className="block font-medium mb-1 text-gray-900 dark:text-gray-200" htmlFor="username">Username</label>
+            <label
+              className="block font-medium mb-1 text-gray-900 dark:text-gray-200"
+              htmlFor="username"
+            >
+              Username
+            </label>
             <input
               id="username"
               type="text"
@@ -103,11 +128,18 @@ export default function Register() {
               onChange={handlechange}
               value={data.username}
             />
-            {errors.username&&<p className="mt-1 text-sm text-red-500">{errors.username}</p>}
+            {errors.username && (
+              <p className="mt-1 text-sm text-red-500">{errors.username}</p>
+            )}
           </div>
           {/* email*/}
           <div>
-            <label className="block font-medium mb-1 text-gray-900 dark:text-gray-200" htmlFor="email">Email</label>
+            <label
+              className="block font-medium mb-1 text-gray-900 dark:text-gray-200"
+              htmlFor="email"
+            >
+              Email
+            </label>
             <input
               id="email"
               type="text"
@@ -116,11 +148,18 @@ export default function Register() {
               onChange={handlechange}
               value={data.email}
             />
-            {errors.email&&<p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+            )}
           </div>
           {/*password*/}
           <div>
-            <label className="block font-medium mb-1 text-gray-900 dark:text-gray-200" htmlFor="password">Password</label>
+            <label
+              className="block font-medium mb-1 text-gray-900 dark:text-gray-200"
+              htmlFor="password"
+            >
+              Password
+            </label>
             <input
               id="password"
               type="password"
@@ -129,7 +168,9 @@ export default function Register() {
               onChange={handlechange}
               value={data.password}
             />
-            {errors.password&&<p className="mt-1 text-sm text-red-500">{errors.password}</p>}
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+            )}
           </div>
           {/*register user*/}
           <button
@@ -139,10 +180,13 @@ export default function Register() {
             Register
           </button>
         </form>
-          {/*if account exists then login */}
+        {/*if account exists then login */}
         <p className="text-center mt-4 text-sm text-gray-700 dark:text-gray-300">
           Already have an account?
-          <Link to="/login" className="text-red-600 ml-1 font-medium cursor-pointer">
+          <Link
+            to="/login"
+            className="text-red-600 ml-1 font-medium cursor-pointer"
+          >
             Login
           </Link>
         </p>
