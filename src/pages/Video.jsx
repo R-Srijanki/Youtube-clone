@@ -15,10 +15,10 @@ export default function Video() {
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [subscribe, setSubscribe] = useState(false);
-  //to get video details
+  //before login can't access page
   if (!user?.user) {
     return <NotFound />;
-  }
+  }//to get video details
   useEffect(() => {
     async function loadVideo() {
       try {

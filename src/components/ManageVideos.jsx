@@ -50,7 +50,7 @@ export default function ManageVideos() {
   function openEditModal(video) {
     setEditData({ ...video });
     setMenuOpen(null);
-  }
+  }//check errors in data
   function validateVideoEdit(data) {
     const errs = {};
 
@@ -75,7 +75,7 @@ export default function ManageVideos() {
     if (Object.keys(v).length > 0) {
       setErrors(v);
       return;
-    }
+    }//trim data
     try {
       const cleanData = {
         ...editData,
@@ -85,7 +85,7 @@ export default function ManageVideos() {
           editData.category?.trim().charAt(0).toUpperCase() +
           editData.category?.trim().slice(1).toLowerCase(),
       };
-
+//patch request
       const res = await axios.patch(
         `http://localhost:8000/videos/${editData._id}`,
         cleanData,
@@ -96,7 +96,7 @@ export default function ManageVideos() {
           },
         }
       );
-
+      //update details
       setVideos((prev) =>
         prev.map((v) => (v._id === editData._id ? { ...v, ...cleanData } : v))
       );
@@ -117,7 +117,7 @@ export default function ManageVideos() {
           "Content-Type": "application/json",
         },
       });
-
+      //update details
       setVideos((prev) => prev.filter((v) => v._id != id));
     } catch (err) {
       console.log(err.message);

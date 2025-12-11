@@ -58,7 +58,7 @@ export default function ChannelVideo() {
 
     setErrors(error);
     if (hasError) return;
-
+//trim data
     try {
       const trimmeddata = {
         title: data.title.trim(),

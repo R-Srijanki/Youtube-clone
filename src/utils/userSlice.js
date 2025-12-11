@@ -7,18 +7,18 @@ const userSlice = createSlice({
     loggedIn: false,
   },
   reducers: {
-    toggleLogin: (state) => {
+    toggleLogin: (state) => { //toggle login
       state.loggedIn = !state.loggedIn;
     },
-    loginUser: (state, action) => {
+    loginUser: (state, action) => { //adds details of user
       state.user = action.payload;
       state.loggedIn = true;
     },
-    logoutUser: (state, action) => {
+    logoutUser: (state, action) => {//removes details of user 
       state.loggedIn = false;
       state.user = null;
     },
-    updateUser: (state, action) => {
+    updateUser: (state, action) => {//update user
       state.user = action.payload;
     },
   },

@@ -11,7 +11,7 @@ export default function Search() {
   //get searchtext from url
   //store videos
   const [videos, setVideos] = useState([]);
-  //get videos from api
+  
   const filters = [
     "All",
     "Videos",
@@ -23,6 +23,7 @@ export default function Search() {
   ];
 
   const [activeFilter, setActiveFilter] = useState("All");
+  //get videos from api
   useEffect(() => {
     async function loadVideos() {
       try {
@@ -76,6 +77,7 @@ export default function Search() {
           </p>
         </div>
       )}
+      {/*videos */}
       <div
         className={
           !visible

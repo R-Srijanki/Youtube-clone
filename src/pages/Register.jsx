@@ -27,7 +27,7 @@ export default function Register() {
     const { fullName, username, email, password } = data;
     const newErrors = {};
     let hasError = false;
-
+//check errors
     const emailregex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordregex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -73,7 +73,7 @@ export default function Register() {
           },
         }
       );
-      navigate("/login");
+      navigate("/login"); //success then navigate to login page
     } catch (err) {
       console.log("error while register");
       const serverMessage =

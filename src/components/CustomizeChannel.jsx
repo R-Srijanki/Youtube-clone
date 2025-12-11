@@ -25,7 +25,7 @@ export default function CustomizeChannel() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-
+//to handle errors and delete channel
   const [errors, setErrors] = useState({});
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -90,7 +90,7 @@ export default function CustomizeChannel() {
     }
 
     setForm((prev) => ({ ...prev, [id]: value }));
-  }
+  }//to check for errors
   function validateForm() {
     const newErrors = {};
 
@@ -147,7 +147,7 @@ export default function CustomizeChannel() {
           },
         }
       );
-      navigate("/channel");
+      navigate("/channel");//go to channel page
     } catch (err) {
       console.log(err.response.data.error);
       setErrors({

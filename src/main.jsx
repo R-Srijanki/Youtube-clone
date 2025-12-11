@@ -18,7 +18,7 @@ const Search = lazy(() => import("./components/Search.jsx"));
 const Channel = lazy(() => import("./pages/Channel.jsx"));
 const ChannelVideo = lazy(() => import("./components/ChannelVideo.jsx"));
 const ManageVideos = lazy(() => import("./components/ManageVideos.jsx"));
-
+//suspense on lazy components
 const LazyWrapper = ({ Component }) => {
   return (
     <Suspense
@@ -30,6 +30,7 @@ const LazyWrapper = ({ Component }) => {
     </Suspense>
   );
 };
+//router
 const router = createBrowserRouter([
   {
     path: "/",
@@ -81,7 +82,7 @@ const router = createBrowserRouter([
 ]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Provider store={appStore}>
+    <Provider store={appStore}> 
       <RouterProvider router={router} />
     </Provider>
   </StrictMode>

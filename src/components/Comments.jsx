@@ -45,7 +45,7 @@ export default function Comments({ id }) {
         }
       );
 
-      //console.log(res.data);
+      //console.log(res.data);//update details
       setComments((prev) =>
         prev.map((c) =>
           c._id === commentId
@@ -70,7 +70,7 @@ export default function Comments({ id }) {
           },
         }
       );
-
+      //update details
       //console.log(res.data);
       setComments((prev) =>
         prev.map((c) =>
@@ -95,7 +95,7 @@ export default function Comments({ id }) {
           },
         }
       );
-
+      //update details
       setComments((prev) => prev.filter((c) => c._id !== commentId));
       //console.log(res);
     } catch (error) {

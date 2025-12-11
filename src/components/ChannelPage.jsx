@@ -6,11 +6,14 @@ import Loading from "./Loading";
 
 export default function ChannelPage() {
   const visible = useSelector((store) => store.Sidebar.open);
+  //get visible from sidebar
   const [loading, setLoading] = useState(true);
   const user = useSelector((store) => store.User.user);
   const [channel, setChannel] = useState(null);
   const [videos, setVideos] = useState([]);
+  //channel and videos data in state
   const [description, setDescription] = useState("");
+  //to get channel details using api call
   useEffect(() => {
     async function call() {
       if (!user?.channel?._id) {
